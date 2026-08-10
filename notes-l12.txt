@@ -1,4 +1,4 @@
-Free Starter Kit Laravel 12 Admin Template menggunakan stisla admin dashboard
+Free Starter Kit Laravel 13 Admin Template menggunakan stisla admin dashboard
 
 Beberapa fitur atau komponen yang ada
 
@@ -69,6 +69,6 @@ Web Pribadi https://anamapp.my.id
 
 Youtube Channel https://www.youtube.com/channel/UCwF-njZKFE30pZwWFtp84fA
 
-Link Repository https://github.com/Anamcoollzz/laravel-12-template
+Link Repository https://github.com/Anamcoollzz/laravel-13-template
 
 php artisan make:module Faculty --columns=name --icon="fa fa-university" --title="Fakultas"
