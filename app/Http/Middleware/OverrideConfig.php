@@ -2,23 +2,19 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Setting;
-use App\Repositories\SettingRepository;
 use App\Services\GeneralService;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OverrideConfig
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $isMobile = (new GeneralService)->isMobile();
         config(['app.is_mobile' => $isMobile]);
