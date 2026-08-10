@@ -8,7 +8,7 @@ $app = AppEnum::APP_BLANK;
 // $app = AppEnum::APP_FINGERPRINT;
 // $app = AppEnum::APP_POCARI;
 // $app = AppEnum::APP_SIAGA_DESA;
-$appName = 'Laravel 12 Template';
+$appName = 'Laravel 13 Template';
 $appDesc = 'Ini adalah template laravel versi 12 terbaru dengan menggunakan Stisla sebagai dashboard adminnya. Silakan kembangkan sesuai dengan kebutuhan aplikasi Anda.';
 $table_excludes = [];
 $permissionExcludes = [];
@@ -19,7 +19,7 @@ $additionalUsers = [
 
     [
         'name'              => 'Hairul Anam Admin',
-        'email'             => 'admin@laravel12template.com',
+        'email'             => 'admin@laravel13template.com',
         'password'          => 'admin',
         'roles'             => ['admin'],
         'email_verified_at' => '2025-04-06 04:06:00',
@@ -29,7 +29,7 @@ $additionalUsers = [
     ],
     [
         'name'              => 'Hairul Anam User',
-        'email'             => 'user@laravel12template.com',
+        'email'             => 'user@laravel13template.com',
         'password'          => 'user',
         'roles'             => ['user'],
         'email_verified_at' => '2025-04-06 04:06:00',
@@ -39,7 +39,7 @@ $additionalUsers = [
     ],
     [
         'name'              => 'Ahfa User',
-        'email'             => 'ahfauser@laravel12template.com',
+        'email'             => 'ahfauser@laravel13template.com',
         'password'          => 'user',
         'roles'             => ['user'],
         'email_verified_at' => '2025-04-06 04:06:00',
@@ -49,7 +49,7 @@ $additionalUsers = [
     ],
     [
         'name'              => 'Hairul Anam Banker',
-        'email'             => 'banker@laravel12template.com',
+        'email'             => 'banker@laravel13template.com',
         'password'          => 'banker',
         'roles'             => ['banker'],
         'email_verified_at' => '2025-04-06 04:06:00',
@@ -59,7 +59,7 @@ $additionalUsers = [
     ],
     [
         'name'              => 'Hairul Anam Admin Pendidikan',
-        'email'             => 'adminpendidikan@laravel12template.com',
+        'email'             => 'adminpendidikan@laravel13template.com',
         'password'          => 'adminpendidikan',
         'roles'             => ['admin pendidikan'],
         'email_verified_at' => '2025-04-06 04:06:00',
@@ -68,7 +68,7 @@ $additionalUsers = [
         'address'           => 'Jember'
     ],
 ];
-$superadminEmail = 'superadmin@laravel12template.com';
+$superadminEmail = 'superadmin@laravel13template.com';
 $dashboard = [
     'menu_name' => 'Dashboard',
     'route_name' => 'dashboard.index',
@@ -490,7 +490,7 @@ if (is_app_chat($app)) {
         'Permission',
         'Group Permission',
     ];
-    $appName = 'Laravel 12 Template';
+    $appName = 'Laravel 13 Template';
     $appDesc = 'Aplikasi Peminjaman Mobil Desa adalah sistem manajemen kendaraan yang memfasilitasi proses peminjaman mobil desa oleh masyarakat. Fitur utama mencakup pendaftaran kendaraan, pengajuan peminjaman dengan detail lengkap, persetujuan peminjaman, tracking status real-time, notifikasi otomatis, jadwal peminjaman, riwayat peminjaman, manajemen driver, laporan penggunaan kendaraan, serta dokumentasi pemeliharaan. Sistem dirancang untuk meningkatkan efisiensi pengelolaan aset desa, transparansi data peminjaman, dan pelayanan masyarakat dengan antarmuka yang user-friendly dan terintegrasi.';
     $additionalUsers = [];
 }
@@ -1377,13 +1377,13 @@ return [
         ['key' => 'meta_geo_placename', 'value' => 'Indonesia'],
         ['key' => 'meta_og_locale', 'value' => 'id_ID'],
         ['key' => 'meta_og_type', 'value' => 'website'],
-        ['key' => 'meta_og_title', 'value' => 'Laravel 12 Template'],
+        ['key' => 'meta_og_title', 'value' => 'Laravel 13 Template'],
         ['key' => 'meta_og_description', 'value' => $appDesc],
         ['key' => 'meta_og_url', 'value' => env('APP_URL')],
         ['key' => 'meta_og_image', 'value' => 'assets/images/logo.png', 'is_url' => true],
         // twitter
         ['key' => 'meta_twitter_card', 'value' => 'summary_large_image'],
-        ['key' => 'meta_twitter_title', 'value' => 'Laravel 12 Template'],
+        ['key' => 'meta_twitter_title', 'value' => 'Laravel 13 Template'],
         ['key' => 'meta_twitter_description', 'value' => $appDesc],
         ['key' => 'meta_twitter_image', 'value' => 'assets/images/logo.png', 'is_url' => true],
         ['key' => 'meta_twitter_domain', 'value' => domain()],
@@ -1409,7 +1409,7 @@ return [
         ['key' => 'debugbar', 'value' => 1],
 
         ['key' => 'mail_provider', 'value' => 'mailtrap'],
-        ['key' => 'mail_from_address', 'value' => 'anamkun@laravel12template.com'],
+        ['key' => 'mail_from_address', 'value' => 'anamkun@laravel13template.com'],
         ['key' => 'mail_from_name', 'value' => 'Superadmin'],
 
         ['key' => 'mail_mailtrap_host', 'value' => 'sandbox.smtp.mailtrap.io'],
@@ -1496,13 +1496,13 @@ return [
         ['key' => 'meta_geo_placename', 'value' => 'Indonesia'],
         ['key' => 'meta_og_locale', 'value' => 'id_ID'],
         ['key' => 'meta_og_type', 'value' => 'website'],
-        ['key' => 'meta_og_title', 'value' => 'Laravel 12 Template'],
+        ['key' => 'meta_og_title', 'value' => 'Laravel 13 Template'],
         ['key' => 'meta_og_description', 'value' => $appDesc],
         ['key' => 'meta_og_url', 'value' => env('APP_URL')],
         ['key' => 'meta_og_image', 'value' => 'assets/images/logo.png', 'is_url' => true],
         // twitter
         ['key' => 'meta_twitter_card', 'value' => 'summary_large_image'],
-        ['key' => 'meta_twitter_title', 'value' => 'Laravel 12 Template'],
+        ['key' => 'meta_twitter_title', 'value' => 'Laravel 13 Template'],
         ['key' => 'meta_twitter_description', 'value' => $appDesc],
         ['key' => 'meta_twitter_image', 'value' => 'assets/images/logo.png', 'is_url' => true],
         ['key' => 'meta_twitter_domain', 'value' => domain()],
@@ -1528,7 +1528,7 @@ return [
         ['key' => 'debugbar', 'value' => 2],
 
         ['key' => 'mail_provider', 'value' => 'mailtrap'],
-        ['key' => 'mail_from_address', 'value' => 'anamkun@laravel12template.com'],
+        ['key' => 'mail_from_address', 'value' => 'anamkun@laravel13template.com'],
         ['key' => 'mail_from_name', 'value' => 'Superadmin'],
 
         ['key' => 'mail_mailtrap_host', 'value' => 'sandbox.smtp.mailtrap.io'],

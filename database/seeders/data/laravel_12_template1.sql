@@ -1256,7 +1256,7 @@ CREATE TABLE `settings` (
 INSERT INTO `settings` (`key`, `value`) VALUES
 ('app_description', 'Deskripsi sistem tulis disini'),
 ('app_is_demo', '0'),
-('application_name', 'Laravel 12 Template'),
+('application_name', 'Laravel 13 Template'),
 ('application_version', '1.0.0'),
 ('city', 'Jember'),
 ('company_name', 'PT Anam Developer'),
@@ -1282,7 +1282,7 @@ INSERT INTO `settings` (`key`, `value`) VALUES
 ('is_register_with_twitter', '1'),
 ('logo', 'http://localhost:8000/assets/images/logo.png'),
 ('mail_encryption', 'tls'),
-('mail_from_address', 'anamkun@laravel12template.com'),
+('mail_from_address', 'anamkun@laravel13template.com'),
 ('mail_from_name', 'Superadmin'),
 ('mail_host', 'smtp'),
 ('mail_mailgun_api_key', 'test'),
@@ -1579,11 +1579,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `avatar`, `email_verified_at`, `password`, `last_login`, `email_token`, `verification_code`, `is_locked`, `phone_number`, `birth_date`, `address`, `last_password_change`, `twitter_id`, `file_upload`, `wrong_login`, `is_active`, `blocked_reason`, `deleted_at`, `remember_token`, `created_at`, `updated_at`, `created_by_id`, `last_updated_by_id`, `deleted_by_id`) VALUES
-(1, 'Hairul Anam Superadmin', 'superadmin@laravel12template.com', NULL, '2021-04-05 21:06:00', '$2y$12$l7ajcg/dvmUjZ8k1D0Q0yeHSaZicE0agQV6UwX4gL0dRxM2KwDPwy', NULL, NULL, NULL, 1, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:27', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:27', '2025-09-02 14:08:27', 1, NULL, NULL),
-(2, 'Hairul Anam Admin', 'admin@laravel12template.com', NULL, '2021-04-05 21:06:00', '$2y$12$rNx9y2m.Cy7eQhoGEWnDPepuipmc1.thcM4Q8En8xfS7Pl1nuBbgy', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:28', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:28', '2025-09-02 14:08:28', 1, NULL, NULL),
-(3, 'Hairul Anam User', 'user@laravel12template.com', NULL, '2021-04-05 21:06:00', '$2y$12$W/wrCR/s05qpqlfy1pAY5.z4Uz.mxX.7nNYbw9aAQ4d2.YZfdd/XK', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:29', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:29', '2025-09-02 14:08:29', 1, NULL, NULL),
-(4, 'Hairul Anam Banker', 'banker@laravel12template.com', NULL, '2021-04-05 21:06:00', '$2y$12$MxynJZquBD/W45KoYUgnmuLIYGr.M.hhK7SButt3gfUX62amp946C', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:29', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:29', '2025-09-02 14:08:29', 1, NULL, NULL),
-(5, 'Hairul Anam Admin Pendidikan', 'adminpendidikan@laravel12template.com', NULL, '2021-04-05 21:06:00', '$2y$12$j.kbviUfYOMqDPO.D9ZsZOg0jpI.vhKaWByBgLFqlqDQBk/9SOKce', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:30', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:30', '2025-09-02 14:08:30', 1, NULL, NULL);
+(1, 'Hairul Anam Superadmin', 'superadmin@laravel13template.com', NULL, '2021-04-05 21:06:00', '$2y$12$l7ajcg/dvmUjZ8k1D0Q0yeHSaZicE0agQV6UwX4gL0dRxM2KwDPwy', NULL, NULL, NULL, 1, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:27', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:27', '2025-09-02 14:08:27', 1, NULL, NULL),
+(2, 'Hairul Anam Admin', 'admin@laravel13template.com', NULL, '2021-04-05 21:06:00', '$2y$12$rNx9y2m.Cy7eQhoGEWnDPepuipmc1.thcM4Q8En8xfS7Pl1nuBbgy', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:28', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:28', '2025-09-02 14:08:28', 1, NULL, NULL),
+(3, 'Hairul Anam User', 'user@laravel13template.com', NULL, '2021-04-05 21:06:00', '$2y$12$W/wrCR/s05qpqlfy1pAY5.z4Uz.mxX.7nNYbw9aAQ4d2.YZfdd/XK', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:29', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:29', '2025-09-02 14:08:29', 1, NULL, NULL),
+(4, 'Hairul Anam Banker', 'banker@laravel13template.com', NULL, '2021-04-05 21:06:00', '$2y$12$MxynJZquBD/W45KoYUgnmuLIYGr.M.hhK7SButt3gfUX62amp946C', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:29', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:29', '2025-09-02 14:08:29', 1, NULL, NULL),
+(5, 'Hairul Anam Admin Pendidikan', 'adminpendidikan@laravel13template.com', NULL, '2021-04-05 21:06:00', '$2y$12$j.kbviUfYOMqDPO.D9ZsZOg0jpI.vhKaWByBgLFqlqDQBk/9SOKce', NULL, NULL, NULL, 0, '6285322778935', '1998-04-08', 'Jember', '2025-09-02 21:08:30', NULL, NULL, 0, 1, NULL, NULL, NULL, '2025-09-02 14:08:30', '2025-09-02 14:08:30', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables

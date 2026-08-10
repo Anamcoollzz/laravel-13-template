@@ -9,33 +9,33 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "barryvdh/laravel-dompdf": "*",
         "buzz/laravel-google-captcha": "*",
-        "cloudinary-labs/cloudinary-laravel": "*",
         "guzzlehttp/guzzle": "^7.9",
         "jenssegers/agent": "^2.6",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.8",
         "laravel/socialite": "*",
-        "laravel/tinker": "^2.10.1",
+        "laravel/tinker": "^3.0",
         "maatwebsite/excel": "*",
         "milon/barcode": "*",
         "rap2hpoutre/laravel-log-viewer": "*",
         "spatie/laravel-permission": "^6.21",
         "tymon/jwt-auth": "*",
         "unisharp/laravel-filemanager": "*",
-        "yajra/laravel-datatables": "^12.0"
+        "yajra/laravel-datatables": "^13.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "*",
         "fakerphp/faker": "^1.23",
-        "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.13",
-        "laravel/sail": "^1.41",
+        "laravel/boost": "^2.2",
+        "laravel/pail": "^1.2.5",
+        "laravel/pao": "^1.0.6",
+        "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3",
-        "spatie/laravel-ignition": "*"
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-laravel": "^4.1"
     },
     "autoload": {
         "psr-4": {
@@ -54,13 +54,29 @@
         }
     },
     "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan migrate --force",
+            "npm install --ignore-scripts",
+            "npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi @no_additional_args",
+            "@php artisan test"
+        ],
         "post-autoload-dump": [
-            "@php artisan config:clear",
-            "@php artisan clear-compiled",
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan boost:update --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -70,13 +86,8 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
-        "dev": [
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
-        ],
-        "test": [
-            "@php artisan config:clear --ansi",
-            "@php artisan test"
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
     },
     "extra": {
