@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,18 +21,10 @@ use Illuminate\Support\Facades\Route;
     'uri',
     'menu_group_id',
 ])]
+#[Appends(['fix_url'])]
 class Menu extends Model
 {
     use HasFactory;
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'fix_url',
-    ];
 
     /**
      * Default with relationship

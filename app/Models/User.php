@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\StringHelper;
 use App\Traits\UserTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -99,6 +100,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
     // siaga desa
     'dusun_rt_rw',
 ])]
+#[Appends(['avatar_url', 'is_online', 'age'])]
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, HasRoles, Notifiable, UserTrait;
@@ -132,17 +134,6 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'avatar_url',
-        'is_online',
-        'age',
-    ];
 
     /**
      * Get the user's age.
@@ -229,12 +220,12 @@ class User extends Authenticatable implements JWTSubject
             if (StringHelper::isUrl($this->avatar)) {
                 return $this->avatar;
             }
-            if (Storage::exists('public/avatars/'.$this->avatar)) {
-                return asset('storage/avatars/'.$this->avatar);
+            if (Storage::exists('public/avatars/' . $this->avatar)) {
+                return asset('storage/avatars/' . $this->avatar);
             }
         }
 
-        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=random&size=128';
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random&size=128';
 
         return null;
     }

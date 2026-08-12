@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
@@ -17,22 +19,21 @@ use Illuminate\Support\Facades\Storage;
     'read_at',
     'deleted_at',
 ])]
+#[Appends(['time', 'side', 'avatar', 'is_left', 'file_url'])]
+#[Table('chat_messages')]
 class ChatMessage extends Model
 {
-    protected $table = 'chat_messages';
-
-    protected $casts = [
-        'message' => 'string',
-    ];
-
-    protected $appends = [
-        // Add any accessors you want to append to the model's array form
-        'time',
-        'side',
-        'avatar',
-        'is_left',
-        'file_url',
-    ];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'message' => 'string',
+        ];
+    }
 
     /**
      * Get the file URL for the chat message.
@@ -65,7 +66,7 @@ class ChatMessage extends Model
                 return $this->fromUser->avatar_url;
             }
 
-            return url('stisla').'/assets/img/avatar/avatar-1.png';
+            return url('stisla') . '/assets/img/avatar/avatar-1.png';
         }
         if ($this->toUser && $this->toUser->avatar_url) {
             // dd($this->toUser->avatar_url);
@@ -73,7 +74,7 @@ class ChatMessage extends Model
         }
 
         // Return a default avatar or implement logic to fetch user avatar
-        return url('stisla').'/assets/img/avatar/avatar-3.png';
+        return url('stisla') . '/assets/img/avatar/avatar-3.png';
     }
 
     /**
