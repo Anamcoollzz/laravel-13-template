@@ -21,11 +21,9 @@ class Notification extends Model
     use HasFactory;
 
     /**
-     * relation with user
-     *
-     * @return BelongsTo
+     * Get the user that owns the notification.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }

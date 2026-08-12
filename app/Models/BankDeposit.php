@@ -29,10 +29,11 @@ class BankDeposit extends Model
 
     /**
      * Get the bank
-     *
-     * @return BelongsTo
      */
-    public function bank()
+    /**
+     * Get the bank that owns the BankDeposit.
+     */
+    public function bank(): BelongsTo
     {
         return $this->belongsTo(Bank::class, 'bank_id');
     }

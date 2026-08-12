@@ -20,20 +20,16 @@ class Role extends SpatieRole
 
     /**
      * Get the user that created the role.
-     *
-     * @return BelongsTo
      */
-    public function createdBy()
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
     /**
      * Get the user that last updated the role.
-     *
-     * @return BelongsTo
      */
-    public function lastUpdatedBy()
+    public function lastUpdatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'last_updated_by_id');
     }

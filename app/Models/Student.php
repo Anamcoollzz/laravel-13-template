@@ -29,26 +29,25 @@ class Student extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [];
+    protected function casts(): array
+    {
+        return [];
+    }
 
     /**
      * Get the study program that the Student belongs to.
-     *
-     * @return BelongsTo
      */
-    public function studyProgram()
+    public function studyProgram(): BelongsTo
     {
         return $this->belongsTo(StudyProgram::class);
     }
 
     /**
      * Get the work that the Student belongs to.
-     *
-     * @return BelongsTo
      */
-    public function work()
+    public function work(): BelongsTo
     {
         return $this->belongsTo(Work::class);
     }

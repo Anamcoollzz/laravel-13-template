@@ -19,7 +19,10 @@ class Ormawa extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [];
+    protected function casts(): array
+    {
+        return [];
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Permission\Models\Permission;
 
 #[Fillable([
@@ -14,7 +15,10 @@ class PermissionGroup extends Model
 {
     use HasFactory;
 
-    public function permissions()
+    /**
+     * Get the permissions for the permission group.
+     */
+    public function permissions(): HasMany
     {
         return $this->hasMany(Permission::class, 'permission_group_id');
     }

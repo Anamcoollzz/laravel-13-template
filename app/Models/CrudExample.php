@@ -57,11 +57,14 @@ class CrudExample extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 }

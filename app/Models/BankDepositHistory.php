@@ -29,10 +29,11 @@ class BankDepositHistory extends Model
 
     /**
      * Get the bank
-     *
-     * @return BelongsTo
      */
-    public function bankdeposit()
+    /**
+     * Get the bank deposit that owns the history row.
+     */
+    public function bankdeposit(): BelongsTo
     {
         return $this->belongsTo(BankDeposit::class, 'bank_deposit_id');
     }

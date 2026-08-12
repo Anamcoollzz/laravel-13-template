@@ -6,6 +6,7 @@ use App\Traits\UserTrait;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
@@ -72,35 +73,53 @@ class Pica extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
-    public function pocarifunction()
+    /**
+     * Get the function that owns the Pica.
+     */
+    public function pocarifunction(): BelongsTo
     {
         return $this->belongsTo(PocariFunction::class, 'function_id');
     }
 
-    public function category()
+    /**
+     * Get the category that owns the Pica.
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function workfield()
+    /**
+     * Get the work field that owns the Pica.
+     */
+    public function workfield(): BelongsTo
     {
         return $this->belongsTo(WorkField::class, 'work_field_id');
     }
 
-    public function status()
+    /**
+     * Get the status that owns the Pica.
+     */
+    public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function assignedto()
+    /**
+     * Get the assigned user for the Pica.
+     */
+    public function assignedto(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }

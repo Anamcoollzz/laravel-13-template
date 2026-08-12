@@ -64,13 +64,16 @@ class FingerPrintX105Id extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
     /**
      * Get the machine that owns the FingerPrintX105Id

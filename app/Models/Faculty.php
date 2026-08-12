@@ -20,20 +20,21 @@ class Faculty extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
     /**
      * Get the programs associated with the Faculty.
-     *
-     * @return HasMany
      */
-    public function programs()
+    public function programs(): HasMany
     {
         return $this->hasMany(StudyProgram::class);
     }

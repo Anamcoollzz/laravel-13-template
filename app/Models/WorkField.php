@@ -6,7 +6,6 @@ use App\Traits\UserTrait;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     // ini bisa dicomment kalau gak dipakai
@@ -53,16 +52,17 @@ class WorkField extends Model
 {
     use HasFactory, UserTrait;
 
-    // softdeletes
-
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 }

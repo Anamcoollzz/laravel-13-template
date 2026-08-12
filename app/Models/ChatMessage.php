@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -33,7 +34,10 @@ class ChatMessage extends Model
         'file_url',
     ];
 
-    public function getFileUrlAttribute()
+    /**
+     * Get the file URL for the chat message.
+     */
+    public function getFileUrlAttribute(): ?string
     {
         if ($this->file_path) {
             return url(Storage::url($this->file_path));
@@ -42,12 +46,18 @@ class ChatMessage extends Model
         return null;
     }
 
-    public function getIsLeftAttribute()
+    /**
+     * Determine whether the message should render on the left side.
+     */
+    public function getIsLeftAttribute(): bool
     {
         return $this->from_user_id !== auth_user()->id;
     }
 
-    public function getAvatarAttribute()
+    /**
+     * Get the avatar URL for the message.
+     */
+    public function getAvatarAttribute(): string
     {
         if ($this->side === 'right') {
             return auth_user()->avatar_url;
@@ -66,12 +76,18 @@ class ChatMessage extends Model
         return url('stisla').'/assets/img/avatar/avatar-3.png';
     }
 
-    public function getSideAttribute()
+    /**
+     * Get the message side for the current user.
+     */
+    public function getSideAttribute(): string
     {
         return $this->from_user_id === auth_user()->id ? 'right' : 'left';
     }
 
-    public function getTimeAttribute()
+    /**
+     * Get the formatted message time.
+     */
+    public function getTimeAttribute(): string
     {
         if ($this->created_at->format('Y-m-d') !== now()->format('Y-m-d')) {
             return $this->created_at->format('d M Y H:i:s');
@@ -81,12 +97,18 @@ class ChatMessage extends Model
     }
 
     // Define relationships, accessors, or other model methods as needed
-    public function fromUser()
+    /**
+     * Get the sender of the message.
+     */
+    public function fromUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'from_user_id');
     }
 
-    public function toUser()
+    /**
+     * Get the recipient of the message.
+     */
+    public function toUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'to_user_id');
     }

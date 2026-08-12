@@ -22,30 +22,35 @@ class StudyProgram extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
     /**
      * Get the faculty that owns the StudyProgram.
-     *
-     * @return BelongsTo
      */
-    public function faculty()
+    /**
+     * Get the faculty that owns the StudyProgram.
+     */
+    public function faculty(): BelongsTo
     {
         return $this->belongsTo(Faculty::class);
     }
 
     /**
      * Get the students associated with the StudyProgram.
-     *
-     * @return HasMany
      */
-    public function students()
+    /**
+     * Get the students associated with the StudyProgram.
+     */
+    public function students(): HasMany
     {
         return $this->hasMany(Student::class);
     }

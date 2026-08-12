@@ -45,16 +45,17 @@ class Menu extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [];
+    protected function casts(): array
+    {
+        return [];
+    }
 
     /**
-     * Get the fix_url attribute.
-     *
-     * @return string
+     * Get the fix URL for the menu.
      */
-    public function getFixUrlAttribute()
+    public function getFixUrlAttribute(): string
     {
         if ($this->uri) {
             return url($this->uri);
@@ -67,31 +68,25 @@ class Menu extends Model
     }
 
     /**
-     * Get all of the Menu's childs.
-     *
-     * @return HasMany
+     * Get the child menus.
      */
-    public function childs()
+    public function childs(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_menu_id');
     }
 
     /**
-     * Get the group that owns the Menu
-     *
-     * @return BelongsTo
+     * Get the group that owns the menu.
      */
-    public function group()
+    public function group(): BelongsTo
     {
         return $this->belongsTo(MenuGroup::class, 'menu_group_id');
     }
 
     /**
-     * Get the parent that owns the Menu
-     *
-     * @return BelongsTo
+     * Get the parent menu.
      */
-    public function parentMenu()
+    public function parentMenu(): BelongsTo
     {
         return $this->belongsTo(Menu::class, 'parent_menu_id');
     }

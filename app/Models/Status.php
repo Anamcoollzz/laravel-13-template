@@ -6,6 +6,7 @@ use App\Traits\UserTrait;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
@@ -58,15 +59,21 @@ class Status extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox' => 'array',
-        'checkbox2' => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
-    public function picas()
+    /**
+     * Get the picas that belong to the status.
+     */
+    public function picas(): HasMany
     {
         return $this->hasMany(Pica::class, 'status_id', 'id');
     }
@@ -92,7 +99,10 @@ class Status extends Model
         self::STATUS_DONE => 'Done',
     ];
 
-    public function getColorAttribute()
+    /**
+     * Get the status color value.
+     */
+    public function getColorAttribute(): string
     {
         $id = $this->attributes['id'];
         $color = '#b71c2e';
