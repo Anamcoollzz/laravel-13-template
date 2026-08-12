@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FacultyLeaderController extends StislaController
 {
-
     private int $user_id;
 
     /**
@@ -25,9 +24,9 @@ class FacultyLeaderController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-user-plus';
+        $this->icon = 'fa fa-user-plus';
         $this->repository = new FacultyLeaderRepository;
-        $this->prefix     = $this->viewFolder            = 'faculty-leaders';
+        $this->prefix = $this->viewFolder = 'faculty-leaders';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new FacultyLeaderImport;
 
@@ -48,8 +47,9 @@ class FacultyLeaderController extends StislaController
             'address',
             'birth_date',
         ]);
-        if ($request->password)
+        if ($request->password) {
             $user['password'] = bcrypt($request->password);
+        }
         if ($this->user_id) {
             $user = $this->userRepository->update($user, $this->user_id);
         } else {
@@ -85,7 +85,6 @@ class FacultyLeaderController extends StislaController
     /**
      * showing data page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -98,18 +97,16 @@ class FacultyLeaderController extends StislaController
     /**
      * showing add new data page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
     {
-        return $this->prepareCreateForm($request, ['faculty_options' => (new FacultyRepository)->getSelectOptions(),]);
+        return $this->prepareCreateForm($request, ['faculty_options' => (new FacultyRepository)->getSelectOptions()]);
     }
 
     /**
      * save new data to db
      *
-     * @param FacultyLeaderRequest $request
      * @return Response
      */
     public function store(FacultyLeaderRequest $request)
@@ -120,44 +117,38 @@ class FacultyLeaderController extends StislaController
     /**
      * showing edit data page
      *
-     * @param Request $request
-     * @param FacultyLeader $facultyLeader
      * @return Response
      */
     public function edit(Request $request, FacultyLeader $facultyLeader)
     {
-        return $this->prepareDetailForm($request, $facultyLeader, false, ['faculty_options' => (new FacultyRepository)->getSelectOptions(),]);
+        return $this->prepareDetailForm($request, $facultyLeader, false, ['faculty_options' => (new FacultyRepository)->getSelectOptions()]);
     }
 
     /**
      * update data to db
      *
-     * @param FacultyLeaderRequest $request
-     * @param FacultyLeader $facultyLeader
      * @return Response
      */
     public function update(FacultyLeaderRequest $request, FacultyLeader $facultyLeader)
     {
         $this->user_id = $facultyLeader->user_id;
+
         return $this->executeUpdate($request, $facultyLeader, withUser: true);
     }
 
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param FacultyLeader $facultyLeader
      * @return Response
      */
     public function show(Request $request, FacultyLeader $facultyLeader)
     {
-        return $this->prepareDetailForm($request, $facultyLeader, true, ['faculty_options' => (new FacultyRepository)->getSelectOptions(),]);
+        return $this->prepareDetailForm($request, $facultyLeader, true, ['faculty_options' => (new FacultyRepository)->getSelectOptions()]);
     }
 
     /**
      * delete data from db
      *
-     * @param FacultyLeader $facultyLeader
      * @return Response
      */
     public function destroy(FacultyLeader $facultyLeader)
@@ -168,8 +159,6 @@ class FacultyLeaderController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

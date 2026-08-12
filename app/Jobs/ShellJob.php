@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\CommandHistory;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,6 +14,7 @@ class ShellJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $command;
+
     public $path;
 
     /**
@@ -35,8 +35,9 @@ class ShellJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->path)
+        if ($this->path) {
             chdir($this->path);
+        }
         $output = exec($this->command);
 
         CommandHistory::create([

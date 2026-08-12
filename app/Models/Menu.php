@@ -2,30 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Route;
 
+#[Fillable([
+    'menu_name',
+    'route_name',
+    'icon',
+    'parent_menu_id',
+    'permission',
+    'is_active_if_url_includes',
+    'is_blank',
+    'uri',
+    'menu_group_id',
+])]
 class Menu extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'menu_name',
-        'route_name',
-        'icon',
-        'parent_menu_id',
-        'permission',
-        'is_active_if_url_includes',
-        'is_blank',
-        'uri',
-        'menu_group_id',
-    ];
 
     /**
      * The accessors to append to the model's array form.
@@ -42,7 +39,7 @@ class Menu extends Model
      * @var array
      */
     protected $with = [
-        'childs'
+        'childs',
     ];
 
     /**
@@ -65,13 +62,14 @@ class Menu extends Model
         if ($this->route_name && Route::has($this->route_name)) {
             return route($this->route_name);
         }
+
         return '#';
     }
 
     /**
      * Get all of the Menu's childs.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function childs()
     {
@@ -81,7 +79,7 @@ class Menu extends Model
     /**
      * Get the group that owns the Menu
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function group()
     {
@@ -91,7 +89,7 @@ class Menu extends Model
     /**
      * Get the parent that owns the Menu
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parentMenu()
     {

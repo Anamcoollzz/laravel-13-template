@@ -15,8 +15,9 @@ class EnsureAppKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (config('app.header_key') === $request->header('App-Key'))
+        if (config('app.header_key') === $request->header('App-Key')) {
             return $next($request);
+        }
         abort(404);
     }
 }

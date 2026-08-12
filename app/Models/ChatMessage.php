@@ -2,22 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+#[Fillable([
+    'from_user_id',
+    'to_user_id',
+    'message',
+    'category',
+    'file_path',
+    'is_read',
+    'read_at',
+    'deleted_at',
+])]
 class ChatMessage extends Model
 {
-    protected $fillable = [
-        'from_user_id',
-        'to_user_id',
-        'message',
-        'category',
-        'file_path',
-        'is_read',
-        'read_at',
-        'deleted_at',
-    ];
-
     protected $table = 'chat_messages';
 
     protected $casts = [
@@ -38,6 +38,7 @@ class ChatMessage extends Model
         if ($this->file_path) {
             return url(Storage::url($this->file_path));
         }
+
         return null;
     }
 
@@ -53,14 +54,16 @@ class ChatMessage extends Model
             if ($this->fromUser && $this->fromUser->avatar_url) {
                 return $this->fromUser->avatar_url;
             }
-            return url('stisla') . '/assets/img/avatar/avatar-1.png';
+
+            return url('stisla').'/assets/img/avatar/avatar-1.png';
         }
         if ($this->toUser && $this->toUser->avatar_url) {
             // dd($this->toUser->avatar_url);
             return $this->toUser->avatar_url;
         }
+
         // Return a default avatar or implement logic to fetch user avatar
-        return url('stisla') . '/assets/img/avatar/avatar-3.png';
+        return url('stisla').'/assets/img/avatar/avatar-3.png';
     }
 
     public function getSideAttribute()
@@ -73,6 +76,7 @@ class ChatMessage extends Model
         if ($this->created_at->format('Y-m-d') !== now()->format('Y-m-d')) {
             return $this->created_at->format('d M Y H:i:s');
         }
+
         return $this->created_at->format('H:i:s');
     }
 
@@ -88,6 +92,8 @@ class ChatMessage extends Model
     }
 
     const CATEGORY_CURHAT = 'curhat';
+
     const CATEGORY_KELUHAN_PENYAKIT = 'keluhan-penyakit';
+
     const CATEGORY_PERTANYAAN_LAINNYA = 'pertanyaan-lainnya';
 }

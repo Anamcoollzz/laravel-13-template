@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Bank;
-use App\Models\BankDeposit;
-use App\Models\BankDepositHistory;
 use App\Repositories\BankDepositRepository;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +14,9 @@ class BankSeeder extends Seeder
 {
     private function generate()
     {
-        if (!Schema::hasTable('banks')) return;
+        if (! Schema::hasTable('banks')) {
+            return;
+        }
         Schema::disableForeignKeyConstraints();
         DB::table('banks')->truncate();
         DB::table('bank_deposits')->truncate();
@@ -61,6 +62,7 @@ class BankSeeder extends Seeder
         DB::unprepared($sql);
         (new BankDepositRepository)->saveToHistory();
     }
+
     /**
      * Run the database seeds.
      */
@@ -73,8 +75,8 @@ class BankSeeder extends Seeder
 
     private function normal(): void
     {
-        $data         = [];
-        $faker        = \Faker\Factory::create('id_ID');
+        $data = [];
+        $faker = Factory::create('id_ID');
         // $options      = array_values(get_options());
         // $radioOptions = array_values(get_options(4));
         // $now          = now();
@@ -109,7 +111,7 @@ class BankSeeder extends Seeder
             'BSI',
             'CIMBS',
             // 'MEGA SYARIAH',
-            'CIMB'
+            'CIMB',
         ];
 
         $types = [
@@ -139,7 +141,7 @@ class BankSeeder extends Seeder
             'SYARIAH',
             'SYARIAH',
             // 'SYARIAH',
-            'KONVENSIONAL'
+            'KONVENSIONAL',
         ];
 
         foreach ($banks as $i => $bank_name) {
@@ -180,10 +182,10 @@ class BankSeeder extends Seeder
                 // 'qr_code'            => $faker->ean13,
                 'name' => $bank_name,
                 'bank_type' => isset($types[$i]) ? ucwords(strtolower($types[$i])) : 'Konvensional',
-                'created_at'         => $faker->dateTimeBetween('-1 month', 'now'),
-                'updated_at'         => $faker->dateTimeBetween('-1 month', 'now'),
+                'created_at' => $faker->dateTimeBetween('-1 month', 'now'),
+                'updated_at' => $faker->dateTimeBetween('-1 month', 'now'),
                 // 'created_by_id'      => Arr::random([null, 1]),
-                'created_by_id'      => 1,
+                'created_by_id' => 1,
                 // 'last_updated_by_id' => Arr::random([null, 1]),
                 // 'last_updated_by_id' => 1,
             ]);

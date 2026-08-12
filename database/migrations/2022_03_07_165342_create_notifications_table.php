@@ -13,7 +13,7 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        if (!in_array('notifications', config('stisla.table_excludes')))
+        if (! in_array('notifications', config('stisla.table_excludes'))) {
             Schema::create('notifications', function (Blueprint $table) {
                 $table->id();
                 $table->string('title');
@@ -26,6 +26,7 @@ class CreateNotificationsTable extends Migration
                 $table->string('icon')->default('bell');
                 $table->timestamps();
             });
+        }
     }
 
     /**

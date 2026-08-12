@@ -13,7 +13,7 @@ class MenuSeeder extends Seeder
     /**
      * ini ganti aja ke false jika tidak ingin menampilkan menu2 contoh lainnya
      *
-     * @var boolean
+     * @var bool
      */
     private $withMockup = true;
 
@@ -38,7 +38,7 @@ class MenuSeeder extends Seeder
         if (file_exists($path)) {
             $files = getFileNamesFromDir($path);
             foreach ($files as $file) {
-                $item = json_decode(file_get_contents(database_path('seeders/data/menu-modules/' . $file)), true);
+                $item = json_decode(file_get_contents(database_path('seeders/data/menu-modules/'.$file)), true);
                 $this->execute($item);
             }
         }
@@ -47,35 +47,35 @@ class MenuSeeder extends Seeder
     public function execute(array $item)
     {
         $group = MenuGroup::updateOrCreate([
-            'group_name' => $item['group_name']
+            'group_name' => $item['group_name'],
         ]);
         foreach ($item['menus'] as $menu) {
-            if ((isset($menu['is_mockup']) && $menu['is_mockup'] === true && $this->withMockup) || !isset($menu['is_mockup'])) {
+            if ((isset($menu['is_mockup']) && $menu['is_mockup'] === true && $this->withMockup) || ! isset($menu['is_mockup'])) {
                 // if ($menu['menu_name'] === 'Notifikasi' || $menu['menu_name'] === 'Profil') {
                 //     continue;
                 // }
-                if (!isset($menu['menu_name'])) {
+                if (! isset($menu['menu_name'])) {
                     continue;
                 }
                 $menuObj = Menu::create([
-                    'menu_name'                 => $menu['menu_name'],
-                    'icon'                      => $menu['icon'],
-                    'route_name'                => $menu['route_name'] ?? null,
-                    'uri'                       => $menu['uri'] ?? null,
-                    'permission'                => $menu['permission'],
-                    'is_blank'                  => $menu['is_blank'] ?? false,
-                    'menu_group_id'             => $group->id,
+                    'menu_name' => $menu['menu_name'],
+                    'icon' => $menu['icon'],
+                    'route_name' => $menu['route_name'] ?? null,
+                    'uri' => $menu['uri'] ?? null,
+                    'permission' => $menu['permission'],
+                    'is_blank' => $menu['is_blank'] ?? false,
+                    'menu_group_id' => $group->id,
                     'is_active_if_url_includes' => $menu['is_active_if_url_includes'],
                 ]);
                 foreach ($menu['childs'] ?? [] as $child) {
                     Menu::create([
-                        'menu_name'                 => $child['menu_name'],
-                        'icon'                      => $child['icon'],
-                        'route_name'                => $child['route_name'] ?? null,
-                        'uri'                       => $child['uri'] ?? null,
-                        'permission'                => $child['permission'],
-                        'is_blank'                  => $child['is_blank'] ?? false,
-                        'parent_menu_id'            => $menuObj->id,
+                        'menu_name' => $child['menu_name'],
+                        'icon' => $child['icon'],
+                        'route_name' => $child['route_name'] ?? null,
+                        'uri' => $child['uri'] ?? null,
+                        'permission' => $child['permission'],
+                        'is_blank' => $child['is_blank'] ?? false,
+                        'parent_menu_id' => $menuObj->id,
                         'is_active_if_url_includes' => $child['is_active_if_url_includes'],
                     ]);
                 }
@@ -86,12 +86,12 @@ class MenuSeeder extends Seeder
         $permissionNames = $permissions->pluck('name')->toArray();
 
         Menu::all()->each(function ($menu) use ($permissionNames) {
-            if ($menu->permission && !in_array($menu->permission, $permissionNames)) {
+            if ($menu->permission && ! in_array($menu->permission, $permissionNames)) {
                 $menu->delete();
             }
         });
 
-        Menu::all()->each(function ($menu) use ($permissionNames) {
+        Menu::all()->each(function ($menu) {
             if ($menu->route_name === null && $menu->childs()->count() === 0) {
                 $menu->delete();
             }

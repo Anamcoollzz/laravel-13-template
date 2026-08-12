@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pica;
+use App\Models\Status;
+use App\Repositories\DashboardRepository;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Repositories\DashboardRepository;
-use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends StislaController
 {
-
     private DashboardRepository $dashboardRepository;
 
     /**
@@ -34,16 +34,16 @@ class DashboardController extends StislaController
      */
     public function index()
     {
-        $user    = auth_user();
+        $user = auth_user();
         $widgets = $this->dashboardRepository->getWidgets();
-        $logs    = $this->activityLogRepository->getMineLatest();
+        $logs = $this->activityLogRepository->getMineLatest();
         $is_chat = is_app_chat() && is_user();
 
         // \Debugbar::enable();
         // \Debugbar::disable();
 
-        if (is_app_pocari())
-            $statuses = \App\Models\Status::with(['picas.category', 'picas.assignedto', 'picas' => function ($query) {
+        if (is_app_pocari()) {
+            $statuses = Status::with(['picas.category', 'picas.assignedto', 'picas' => function ($query) {
                 $query
                     ->when(is_cabang(), function ($query) {
                         $query->where('assigned_to', auth_id());
@@ -73,21 +73,23 @@ class DashboardController extends StislaController
                 //     $item->type = 'secondary';
                 //     $item->color = 'green';
                 // }
-                $item->count = \App\Models\Pica::when(is_cabang(), function ($query) {
+                $item->count = Pica::when(is_cabang(), function ($query) {
                     $query->where('assigned_to', auth_id());
                 })
                     ->when(request('filter_assigned_to'), function ($query) {
                         $query->where('assigned_to', request('filter_assigned_to'));
                     })
                     ->where('status_id', $item->id)->count();
+
                 return $item;
             });
+        }
 
         return view('stisla.dashboard.index', [
-            'widgets'  => $widgets,
-            'logs'     => $logs,
-            'user'     => $user,
-            'is_chat'  => $is_chat,
+            'widgets' => $widgets,
+            'logs' => $logs,
+            'user' => $user,
+            'is_chat' => $is_chat,
             'statuses' => $statuses ?? [],
         ]);
     }
@@ -95,7 +97,6 @@ class DashboardController extends StislaController
     /**
      * upload file
      *
-     * @param Request $request
      * @return Response
      */
     public function post(Request $request)
@@ -105,6 +106,7 @@ class DashboardController extends StislaController
         ]);
         $link = $this->fileService->uploadFile($request->file('file_upload'), 'file_upload');
         auth_user()->update(['file_upload' => $link]);
+
         return redirect()->back()->with('successMessage', 'File berhasil diupload');
     }
 
@@ -117,6 +119,7 @@ class DashboardController extends StislaController
     {
         if (is_app_chat()) {
             return view('welcome-chat2');
+
             return view('welcome-chat');
         }
 
@@ -127,7 +130,7 @@ class DashboardController extends StislaController
         }
 
         return view('stisla.homes.index', [
-            'title' => __('Selamat datang di ') . SettingRepository::applicationName(),
+            'title' => __('Selamat datang di ').SettingRepository::applicationName(),
         ]);
     }
 }

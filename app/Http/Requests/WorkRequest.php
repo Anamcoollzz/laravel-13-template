@@ -52,8 +52,7 @@ class WorkRequest extends FormRequest
             // 'password'          => $this->isMethod('put') ? 'nullable|min:6' : 'required|min:6',
             // 'avatar'            => $this->isMethod('put') ? 'nullable|image' : 'required|image',
 
-
-            'job_name'   => 'required|string|regex:/^[\pL\s.,]+$/u|max:50',
+            'job_name' => 'required|string|regex:/^[\pL\s.,]+$/u|max:50',
             'department' => 'nullable|string|regex:/^[\pL\s.,]+$/u|max:50',
         ];
     }

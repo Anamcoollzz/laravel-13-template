@@ -18,54 +18,54 @@ $additionalUser = [];
 $additionalUsers = [
 
     [
-        'name'              => 'Hairul Anam Admin',
-        'email'             => 'admin@laravel13template.com',
-        'password'          => 'admin',
-        'roles'             => ['admin'],
+        'name' => 'Hairul Anam Admin',
+        'email' => 'admin@laravel13template.com',
+        'password' => 'admin',
+        'roles' => ['admin'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ],
     [
-        'name'              => 'Hairul Anam User',
-        'email'             => 'user@laravel13template.com',
-        'password'          => 'user',
-        'roles'             => ['user'],
+        'name' => 'Hairul Anam User',
+        'email' => 'user@laravel13template.com',
+        'password' => 'user',
+        'roles' => ['user'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ],
     [
-        'name'              => 'Ahfa User',
-        'email'             => 'ahfauser@laravel13template.com',
-        'password'          => 'user',
-        'roles'             => ['user'],
+        'name' => 'Ahfa User',
+        'email' => 'ahfauser@laravel13template.com',
+        'password' => 'user',
+        'roles' => ['user'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ],
     [
-        'name'              => 'Hairul Anam Banker',
-        'email'             => 'banker@laravel13template.com',
-        'password'          => 'banker',
-        'roles'             => ['banker'],
+        'name' => 'Hairul Anam Banker',
+        'email' => 'banker@laravel13template.com',
+        'password' => 'banker',
+        'roles' => ['banker'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ],
     [
-        'name'              => 'Hairul Anam Admin Pendidikan',
-        'email'             => 'adminpendidikan@laravel13template.com',
-        'password'          => 'adminpendidikan',
-        'roles'             => ['admin pendidikan'],
+        'name' => 'Hairul Anam Admin Pendidikan',
+        'email' => 'adminpendidikan@laravel13template.com',
+        'password' => 'adminpendidikan',
+        'roles' => ['admin pendidikan'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ],
 ];
 $superadminEmail = 'superadmin@laravel13template.com';
@@ -74,7 +74,7 @@ $dashboard = [
     'route_name' => 'dashboard.index',
     'icon' => 'fas fa-fire',
     'permission' => null,
-    'is_active_if_url_includes' => 'dashboard*'
+    'is_active_if_url_includes' => 'dashboard*',
 ];
 $roles = [
     'superadmin',
@@ -98,13 +98,13 @@ if (is_app_chat($app)) {
         'faculties',
         'study_programs',
         'students',
-        'notifications'
+        'notifications',
     ];
     $roles = [
         'superadmin',
         'user',
     ];
-} else if (is_app_bank($app)) {
+} elseif (is_app_bank($app)) {
     $table_excludes = [
         'faculty_leaders',
         'ormawas',
@@ -112,14 +112,14 @@ if (is_app_chat($app)) {
         'faculties',
         'study_programs',
         'students',
-        'notifications'
+        'notifications',
     ];
     $roles = [
         'superadmin',
         'admin',
         'banker',
     ];
-} else if (is_app_education($app)) {
+} elseif (is_app_education($app)) {
     $table_excludes = ['banks', 'bank_deposits', 'bank_deposit_histories', 'notifications'];
     $roles = [
         'superadmin',
@@ -129,7 +129,7 @@ if (is_app_chat($app)) {
         'ormawa',
         'pimpinan fakultas',
     ];
-} else if (is_app_blank($app)) {
+} elseif (is_app_blank($app)) {
     $table_excludes = [
         'banks',
         'bank_deposits',
@@ -155,7 +155,7 @@ if (is_app_chat($app)) {
         'admin',
         'user',
     ];
-} else if (is_app_dataku($app)) {
+} elseif (is_app_dataku($app)) {
     $table_excludes = [
         'banks',
         'bank_deposits',
@@ -213,7 +213,7 @@ if (is_app_chat($app)) {
                 'route_name' => 'class-levels.index',
                 'icon' => 'fa fa-arrow-turn-down',
                 'permission' => 'Level Kelas',
-                'is_active_if_url_includes' => 'class-levels*'
+                'is_active_if_url_includes' => 'class-levels*',
             ],
             [
                 'menu_name' => 'Pekerjaan',
@@ -227,38 +227,38 @@ if (is_app_chat($app)) {
                 'route_name' => 'school-years.index',
                 'icon' => 'fa fa-calendar',
                 'permission' => 'Tahun Pelajaran',
-                'is_active_if_url_includes' => 'school-years*'
+                'is_active_if_url_includes' => 'school-years*',
             ],
             [
                 'menu_name' => 'Jenjang Pendidikan',
                 'route_name' => 'education-levels.index',
                 'icon' => 'fa fa-graduation-cap',
                 'permission' => 'Jenjang Pendidikan',
-                'is_active_if_url_includes' => 'education-levels*'
+                'is_active_if_url_includes' => 'education-levels*',
             ],
             [
                 'menu_name' => 'Semester',
                 'route_name' => 'semesters.index',
                 'icon' => 'fa fa-clock',
                 'permission' => 'Semester',
-                'is_active_if_url_includes' => 'semesters*'
+                'is_active_if_url_includes' => 'semesters*',
             ],
-        ]
+        ],
     ];
     $additionalUser = [
-        'name'              => 'Hairul Anam Admin Kepala Sekolah',
-        'email'             => 'kepalasekolah@dataku.com',
-        'password'          => 'kepalasekolah',
-        'roles'             => ['kepala sekolah'],
+        'name' => 'Hairul Anam Admin Kepala Sekolah',
+        'email' => 'kepalasekolah@dataku.com',
+        'password' => 'kepalasekolah',
+        'roles' => ['kepala sekolah'],
         'email_verified_at' => '2025-04-06 04:06:00',
-        'phone_number'      => '6285322778935',
-        'birth_date'        => '1998-04-08',
-        'address'           => 'Jember'
+        'phone_number' => '6285322778935',
+        'birth_date' => '1998-04-08',
+        'address' => 'Jember',
     ];
     $superadminEmail = 'superadmin@dataku.com';
     $appName = 'DataKu';
     $appDesc = 'Web Dataku adalah aplikasi pengelolaan data siswa dan guru yang mencakup input data, validasi, pencarian, filter, serta manajemen kelas dan jenjang. Sistem dilengkapi dashboard, grafik, import/export Excel, cetak PDF, dan pengaturan role seperti Super Admin, Kepala Sekolah, dan Guru. Fokus pada kemudahan penggunaan, akurasi data, dan workflow administrasi sekolah.';
-} else if (is_app_fingerprint($app)) {
+} elseif (is_app_fingerprint($app)) {
     $table_excludes = [
         'banks',
         'bank_deposits',
@@ -312,7 +312,7 @@ if (is_app_chat($app)) {
                 'permission' => 'X105-ID',
                 'is_active_if_url_includes' => 'fingerprint-x105-id*',
             ],
-        ]
+        ],
     ];
     // $additionalUser = [
     //     'name'              => 'Hairul Anam Admin Kepala Sekolah',
@@ -328,7 +328,7 @@ if (is_app_chat($app)) {
     $appName = 'Fingerpint';
     $appDesc = 'Aplikasi Fingerprint untuk manajemen perangkat sidik jari (misal X105-ID): mencakup pendaftaran sidik jari (enrollment), sinkronisasi pengguna, absensi real-time, log kehadiran, monitoring status perangkat, jadwal & shift, ekspor laporan (Excel/PDF), serta pengaturan role Super Admin. Fokus pada keakuratan data presensi, kemudahan integrasi, dan automasi administrasi.';
     $additionalUsers = [];
-} else if (is_app_pocari($app)) {
+} elseif (is_app_pocari($app)) {
     $table_excludes = [
         'banks',
         'bank_deposits',
@@ -397,30 +397,30 @@ if (is_app_chat($app)) {
                 'route_name' => 'pocari-functions.index',
                 'icon' => 'fas fa-cubes',
                 'permission' => 'Function',
-                'is_active_if_url_includes' => 'pocari-functions*'
+                'is_active_if_url_includes' => 'pocari-functions*',
             ],
             [
                 'menu_name' => 'Focus Item',
                 'route_name' => 'focus-items.index',
                 'icon' => 'fas fa-cubes',
                 'permission' => 'Focus Item',
-                'is_active_if_url_includes' => 'focus-items*'
+                'is_active_if_url_includes' => 'focus-items*',
             ],
             [
                 'menu_name' => 'Work Field',
                 'route_name' => 'work-fields.index',
                 'icon' => 'fas fa-cubes',
                 'permission' => 'Work Field',
-                'is_active_if_url_includes' => 'work-fields*'
+                'is_active_if_url_includes' => 'work-fields*',
             ],
             [
                 'menu_name' => 'Status',
                 'route_name' => 'statuses.index',
                 'icon' => 'fas fa-cubes',
                 'permission' => 'Status',
-                'is_active_if_url_includes' => 'statuses*'
+                'is_active_if_url_includes' => 'statuses*',
             ],
-        ]
+        ],
     ];
     $additionalMenus = [];
     // $additionalUser = [
@@ -437,10 +437,10 @@ if (is_app_chat($app)) {
     $appName = 'Pocari';
     $appDesc = 'Aplikasi approval pekerjaan adalah sistem manajemen persetujuan proyek yang memfasilitasi alur kerja approval dari cabang ke pusat. Fitur utama mencakup pengajuan pekerjaan dengan detail lengkap, tracking status real-time, notifikasi otomatis, dashboard analytics, manajemen user dengan role berbeda (cabang, supervisor, pusat), ekspor laporan (Excel/PDF), riwayat approval, dan audit trail lengkap. Sistem dirancang untuk meningkatkan efisiensi persetujuan, transparansi data, dan koordinasi antar cabang dengan antarmuka yang user-friendly.';
     $additionalUsers = [];
-} else if (is_app_siaga_desa($app)) {
+} elseif (is_app_siaga_desa($app)) {
     $roles = [
         'superadmin',
-        'masyarakat'
+        'masyarakat',
     ];
     $table_excludes = [
         'banks',
@@ -505,7 +505,7 @@ return [
     'email' => 'kpakmajalengka@yahoo.co.id',
     'address' => 'Jl. Jendral Ahmad Yani No. 1 Majalengka 45418',
     'colors' => [
-        'primary' => '#1d90ff'
+        'primary' => '#1d90ff',
     ],
     'menus' => [
         [
@@ -526,7 +526,7 @@ return [
                     'route_name' => 'finger-print-x105-ids.index',
                     'icon' => 'fas fa-fingerprint',
                     'permission' => 'Sidik Jari X105 ID',
-                    'is_active_if_url_includes' => 'finger-print-x105-ids*'
+                    'is_active_if_url_includes' => 'finger-print-x105-ids*',
                 ],
 
                 [
@@ -534,7 +534,7 @@ return [
                     'route_name' => 'fingerprint-machines.index',
                     'icon' => 'fas fa-users-viewfinder',
                     'permission' => 'Mesin Sidik Jari',
-                    'is_active_if_url_includes' => 'fingerprint-machines*'
+                    'is_active_if_url_includes' => 'fingerprint-machines*',
                 ],
 
                 [
@@ -542,28 +542,28 @@ return [
                     'route_name' => 'picas.index',
                     'icon' => 'fas fa-note-sticky',
                     'permission' => 'Pica',
-                    'is_active_if_url_includes' => 'picas*'
+                    'is_active_if_url_includes' => 'picas*',
                 ],
                 [
                     'menu_name' => 'On Progress',
                     'route_name' => 'picas.on-progress',
                     'icon' => 'fas fa-note-sticky',
                     'permission' => 'Pica',
-                    'is_active_if_url_includes' => 'on-progress-picas*'
+                    'is_active_if_url_includes' => 'on-progress-picas*',
                 ],
                 [
                     'menu_name' => 'Done',
                     'route_name' => 'picas.done',
                     'icon' => 'fas fa-note-sticky',
                     'permission' => 'Pica',
-                    'is_active_if_url_includes' => 'done-picas*'
+                    'is_active_if_url_includes' => 'done-picas*',
                 ],
                 [
                     'menu_name' => 'Action Needed',
                     'route_name' => 'picas.action-needed',
                     'icon' => 'fas fa-note-sticky',
                     'permission' => 'Pica',
-                    'is_active_if_url_includes' => 'action-needed-picas*'
+                    'is_active_if_url_includes' => 'action-needed-picas*',
                 ],
 
                 [
@@ -571,7 +571,7 @@ return [
                     'route_name' => 'siaga-cars.index',
                     'icon' => 'fas fa-car',
                     'permission' => 'Mobil Siaga',
-                    'is_active_if_url_includes' => 'siaga-cars*'
+                    'is_active_if_url_includes' => 'siaga-cars*',
                 ],
                 // additionalmenus
                 $additionalMenus,
@@ -606,7 +606,7 @@ return [
                     'icon' => 'fas fa-atom',
                     'permission' => 'Contoh CRUD',
                     'is_active_if_url_includes' => 'crud-examples*',
-                    'is_mockup' => true
+                    'is_mockup' => true,
                 ],
                 [
                     'menu_name' => 'Contoh CRUD Simple',
@@ -614,7 +614,7 @@ return [
                     'icon' => 'fas fa-atom',
                     'permission' => 'Contoh CRUD',
                     'is_active_if_url_includes' => 'contoh-crud*',
-                    'is_mockup' => true
+                    'is_mockup' => true,
                 ],
                 [
                     'menu_name' => 'Contoh CRUD Yajra',
@@ -622,7 +622,7 @@ return [
                     'icon' => 'fas fa-atom',
                     'permission' => 'Contoh CRUD Yajra',
                     'is_active_if_url_includes' => 'yajra-crud-examples*',
-                    'is_mockup' => true
+                    'is_mockup' => true,
                 ],
                 [
                     'menu_name' => 'Contoh CRUD Ajax',
@@ -630,7 +630,7 @@ return [
                     'icon' => 'fas fa-atom',
                     'permission' => 'Contoh CRUD Yajra',
                     'is_active_if_url_includes' => 'ajax-crud-examples*',
-                    'is_mockup' => true
+                    'is_mockup' => true,
                 ],
                 [
                     'menu_name' => 'Contoh CRUD Ajax Yajra',
@@ -638,7 +638,7 @@ return [
                     'icon' => 'fas fa-atom',
                     'permission' => 'Contoh CRUD Ajax Yajra',
                     'is_active_if_url_includes' => 'yajra-ajax-crud-examples*',
-                    'is_mockup' => true
+                    'is_mockup' => true,
                 ],
                 [
                     'menu_name' => 'Chat',
@@ -671,7 +671,7 @@ return [
                             'permission' => 'Pertanyaan Lainnya',
                             'is_active_if_url_includes' => 'chatting-yuk/pertanyaan-lainnya*',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'menu_name' => 'Bank',
@@ -701,7 +701,7 @@ return [
                             'permission' => 'Riwayat Deposito Bank',
                             'is_active_if_url_includes' => 'bank-deposit-histories*',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'menu_name' => 'Pendidikan',
@@ -759,7 +759,7 @@ return [
                         //     'permission' => 'Pekerjaan',
                         //     'is_active_if_url_includes' => 'works*',
                         // ],
-                    ]
+                    ],
                 ],
                 [
                     'menu_name' => 'Stisla Example',
@@ -775,7 +775,7 @@ return [
                             'icon' => 'fas fa-table',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'datatable*',
-                            'is_mockup' => true
+                            'is_mockup' => true,
                         ],
                         [
                             'menu_name' => 'Form',
@@ -783,7 +783,7 @@ return [
                             'icon' => 'fas fa-file-alt',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'form*',
-                            'is_mockup' => true
+                            'is_mockup' => true,
                         ],
                         [
                             'menu_name' => 'Chart JS',
@@ -791,7 +791,7 @@ return [
                             'icon' => 'fas fa-chart-line',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'chart-js*',
-                            'is_mockup' => true
+                            'is_mockup' => true,
                         ],
                         [
                             'menu_name' => 'Pricing',
@@ -799,7 +799,7 @@ return [
                             'icon' => 'fas fa-dollar',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'pricing*',
-                            'is_mockup' => true
+                            'is_mockup' => true,
                         ],
                         [
                             'menu_name' => 'Invoice',
@@ -807,7 +807,7 @@ return [
                             'icon' => 'fas fa-dollar',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'invoice*',
-                            'is_mockup' => true
+                            'is_mockup' => true,
                         ],
                         [
                             'menu_name' => 'Galeri',
@@ -815,11 +815,11 @@ return [
                             'icon' => 'fas fa-image',
                             'permission' => 'Stisla Example',
                             'is_active_if_url_includes' => 'gallery-blade*',
-                            'is_mockup' => true
-                        ]
-                    ]
-                ]
-            ]
+                            'is_mockup' => true,
+                        ],
+                    ],
+                ],
+            ],
         ],
 
         [
@@ -837,30 +837,30 @@ return [
                             'route_name' => 'user-management.users.index',
                             'icon' => null,
                             'permission' => 'Pengguna',
-                            'is_active_if_url_includes' => 'user-management/users*'
+                            'is_active_if_url_includes' => 'user-management/users*',
                         ],
                         [
                             'menu_name' => 'Role',
                             'route_name' => 'user-management.roles.index',
                             'icon' => null,
                             'permission' => 'Role',
-                            'is_active_if_url_includes' => 'user-management/roles*'
+                            'is_active_if_url_includes' => 'user-management/roles*',
                         ],
                         [
                             'menu_name' => 'Permission',
                             'route_name' => 'user-management.permissions.index',
                             'icon' => null,
                             'permission' => 'Permission',
-                            'is_active_if_url_includes' => 'user-management/permissions*'
+                            'is_active_if_url_includes' => 'user-management/permissions*',
                         ],
                         [
                             'menu_name' => 'Group Permission',
                             'route_name' => 'user-management.permission-groups.index',
                             'icon' => null,
                             'permission' => 'Group Permission',
-                            'is_active_if_url_includes' => 'user-management/permission-groups*'
-                        ]
-                    ]
+                            'is_active_if_url_includes' => 'user-management/permission-groups*',
+                        ],
+                    ],
                 ],
 
                 [
@@ -876,16 +876,16 @@ return [
                             'route_name' => 'menu-managements.index',
                             'icon' => null,
                             'permission' => 'Menu',
-                            'is_active_if_url_includes' => 'menu-managements*'
+                            'is_active_if_url_includes' => 'menu-managements*',
                         ],
                         [
                             'menu_name' => 'Grup Menu',
                             'route_name' => 'group-menus.index',
                             'icon' => null,
                             'permission' => 'Grup Menu',
-                            'is_active_if_url_includes' => 'group-menus*'
-                        ]
-                    ]
+                            'is_active_if_url_includes' => 'group-menus*',
+                        ],
+                    ],
                 ],
                 [
                     'menu_name' => 'Unisharp File',
@@ -893,7 +893,7 @@ return [
                     'icon' => 'fas fa-folder',
                     'permission' => 'Unisharp File',
                     'is_blank' => true,
-                    'is_active_if_url_includes' => 'unisharp-files*'
+                    'is_active_if_url_includes' => 'unisharp-files*',
                 ],
                 [
                     'menu_name' => 'Galeri',
@@ -902,14 +902,14 @@ return [
                     'permission' => 'Galeri',
                     'is_blank' => false,
                     'route_name' => 'galleries.index',
-                    'is_active_if_url_includes' => 'galleries*'
+                    'is_active_if_url_includes' => 'galleries*',
                 ],
                 [
                     'menu_name' => 'Notifikasi',
                     'route_name' => 'notifications.index',
                     'icon' => 'fas fa-bell',
                     'permission' => 'Notifikasi',
-                    'is_active_if_url_includes' => 'notifications*'
+                    'is_active_if_url_includes' => 'notifications*',
                 ],
                 [
                     'menu_name' => 'Log',
@@ -923,14 +923,14 @@ return [
                             'route_name' => 'activity-logs.index',
                             'icon' => 'fas fa-clock-rotate-left',
                             'permission' => 'Log Aktivitas',
-                            'is_active_if_url_includes' => 'activity-logs*'
+                            'is_active_if_url_includes' => 'activity-logs*',
                         ],
                         [
                             'menu_name' => 'Log Request',
                             'route_name' => 'request-logs.index',
                             'icon' => 'fas fa-clock-rotate-left',
                             'permission' => 'Log Request',
-                            'is_active_if_url_includes' => 'request-logs*'
+                            'is_active_if_url_includes' => 'request-logs*',
                         ],
                         [
                             'menu_name' => 'Laravel Log Viewer',
@@ -938,9 +938,9 @@ return [
                             'icon' => 'fas fa-circle-exclamation',
                             'permission' => 'Laravel Log Viewer',
                             'is_active_if_url_includes' => 'logs*',
-                            'is_blank' => true
-                        ]
-                    ]
+                            'is_blank' => true,
+                        ],
+                    ],
                 ],
 
                 [
@@ -948,14 +948,14 @@ return [
                     'route_name' => 'profile.index',
                     'icon' => 'fas fa-user',
                     'permission' => 'Profil',
-                    'is_active_if_url_includes' => 'profile*'
+                    'is_active_if_url_includes' => 'profile*',
                 ],
                 [
                     'menu_name' => 'Pengaturan',
                     'route_name' => 'settings.all',
                     'icon' => 'fas fa-cogs',
                     'permission' => 'Pengaturan',
-                    'is_active_if_url_includes' => 'settings*'
+                    'is_active_if_url_includes' => 'settings*',
                 ],
                 [
                     'menu_name' => 'Server',
@@ -969,33 +969,33 @@ return [
                             'route_name' => 'ubuntu.index',
                             'icon' => 'fab fa-ubuntu',
                             'permission' => 'Ubuntu',
-                            'is_active_if_url_includes' => 'ubuntu*'
+                            'is_active_if_url_includes' => 'ubuntu*',
                         ],
                         [
                             'menu_name' => 'MySql',
                             'route_name' => 'ubuntu.mysql-all',
                             'icon' => 'fas fa-database',
                             'permission' => 'MySql',
-                            'is_active_if_url_includes' => 'mysql-all'
+                            'is_active_if_url_includes' => 'mysql-all',
                         ],
                         [
                             'menu_name' => 'Backup Database',
                             'route_name' => 'backup-databases.index',
                             'icon' => 'fas fa-database',
                             'permission' => 'Backup Database',
-                            'is_active_if_url_includes' => 'backup-databases*'
+                            'is_active_if_url_includes' => 'backup-databases*',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'menu_name' => 'Keluar',
                     'route_name' => 'logout',
                     'icon' => 'fas fa-sign-out-alt',
                     'permission' => null,
-                    'is_active_if_url_includes' => null
-                ]
-            ]
-        ]
+                    'is_active_if_url_includes' => null,
+                ],
+            ],
+        ],
     ],
 
     'permissions' => [
@@ -1022,255 +1022,255 @@ return [
         [
             'name' => 'Profil',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas', 'kepala sekolah', 'guru', 'pusat', 'cabang'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Ubah',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas', 'kepala sekolah', 'guru', 'pusat', 'cabang'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Perbarui Email',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas', 'kepala sekolah', 'guru', 'pusat', 'cabang'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Perbarui Password',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas', 'kepala sekolah', 'guru', 'pusat', 'cabang'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Hapus Akun',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas', 'kepala sekolah', 'guru'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
 
         [
             'name' => 'Stisla Example',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Stisla Example'
+            'group' => 'Stisla Example',
         ],
 
         [
             'name' => 'Log Aktivitas',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Log Aktivitas'
+            'group' => 'Log Aktivitas',
         ],
         [
             'name' => 'Log Aktivitas Ekspor',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Log Aktivitas'
+            'group' => 'Log Aktivitas',
         ],
 
         [
             'name' => 'Log Request',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Log Request'
+            'group' => 'Log Request',
         ],
         [
             'name' => 'Log Request Ekspor',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Log Request'
+            'group' => 'Log Request',
         ],
 
         [
             'name' => 'Role',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Impor Excel',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Detail',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
         [
             'name' => 'Role Ekspor',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Role'
+            'group' => 'Role',
         ],
 
         [
             'name' => 'Permission',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Impor Excel',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Detail',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
         [
             'name' => 'Permission Ekspor',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Permission'
+            'group' => 'Permission',
         ],
 
         [
             'name' => 'Group Permission',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Impor Excel',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Detail',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
         [
             'name' => 'Group Permission Ekspor',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Group Permission'
+            'group' => 'Group Permission',
         ],
 
         [
             'name' => 'Pengguna',
             'roles' => ['superadmin', 'kepala sekolah', 'guru'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Tambah',
             'roles' => ['superadmin', 'kepala sekolah'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Impor Excel',
             'roles' => ['superadmin', 'kepala sekolah'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Ubah',
             'roles' => ['superadmin', 'kepala sekolah', 'guru'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Detail',
             'roles' => ['superadmin', 'kepala sekolah', 'guru'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Hapus',
             'roles' => ['superadmin', 'kepala sekolah'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Ekspor',
             'roles' => ['superadmin', 'kepala sekolah'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Force Login',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Blokir',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
 
         [
             'name' => 'Pengaturan',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Pengaturan'
+            'group' => 'Pengaturan',
         ],
 
         [
             'name' => 'Reset Sistem',
             'roles' => ['superadmin'],
-            'group' => 'Pengaturan'
+            'group' => 'Pengaturan',
         ],
 
         [
             'name' => 'Unisharp File',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Manajemen File'
+            'group' => 'Manajemen File',
         ],
         [
             'name' => 'Galeri',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Manajemen File'
+            'group' => 'Manajemen File',
         ],
 
         [
             'name' => 'Ubuntu',
             'roles' => ['superadmin'],
-            'group' => 'Ubuntu'
+            'group' => 'Ubuntu',
         ],
         [
             'name' => 'MySql',
             'roles' => ['superadmin'],
-            'group' => 'Ubuntu'
+            'group' => 'Ubuntu',
         ],
 
         [
             'name' => 'Backup Database',
             'roles' => ['superadmin'],
-            'group' => 'Backup Database'
+            'group' => 'Backup Database',
         ],
 
         [
             'name' => 'Laravel Log Viewer',
             'roles' => ['superadmin'],
-            'group' => 'Laravel Log Viewer'
+            'group' => 'Laravel Log Viewer',
         ],
 
         [
@@ -1283,63 +1283,63 @@ return [
         [
             'name' => 'Menu',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Detail',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Ekspor',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
         [
             'name' => 'Menu Impor Excel',
             'roles' => ['superadmin'],
-            'group' => 'Menu'
+            'group' => 'Menu',
         ],
 
         [
             'name' => 'Grup Menu',
             'roles' => ['superadmin'],
-            'group' => 'Grup Menu'
+            'group' => 'Grup Menu',
         ],
         [
             'name' => 'Grup Menu Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Grup Menu'
+            'group' => 'Grup Menu',
         ],
         [
             'name' => 'Grup Menu Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Grup Menu'
+            'group' => 'Grup Menu',
         ],
         [
             'name' => 'Grup Menu Detail',
             'roles' => ['superadmin'],
-            'group' => 'Grup Menu'
+            'group' => 'Grup Menu',
         ],
         [
             'name' => 'Grup Menu Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Grup Menu'
+            'group' => 'Grup Menu',
         ],
     ],
 
@@ -1357,19 +1357,19 @@ return [
         [
             'key' => 'favicon',
             'value' => 'assets/icons/favicon_siaga_desa.ico',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'logo', 'value' => 'assets/images/logo.png', 'is_url' => true],
         ['key' => 'since', 'value' => '2025'],
 
         [
             'key' => 'meta_author',
-            'value' => 'Hairul Anam'
+            'value' => 'Hairul Anam',
         ],
         ['key' => 'meta_description', 'value' => 'CV Anam Techno'],
         [
             'key' => 'meta_keywords',
-            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL'
+            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL',
         ],
         // new
         ['key' => 'meta_language', 'value' => 'id'],
@@ -1391,17 +1391,17 @@ return [
         // itemprop
         ['key' => 'meta_itemprop_headline', 'value' => $appDesc],
         ['key' => 'meta_itemprop_description', 'value' => $appDesc],
-        ['key' => 'meta_itemprop_thumbnailUrl', 'value' =>  'assets/images/logo.png', 'is_url' => true],
+        ['key' => 'meta_itemprop_thumbnailUrl', 'value' => 'assets/images/logo.png', 'is_url' => true],
 
         [
             'key' => 'stisla_bg_home',
             'value' => 'stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg',
-            'is_url' => true
+            'is_url' => true,
         ],
         [
             'key' => 'stisla_bg_login',
             'value' => 'stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'stisla_sidebar_mini', 'value' => '0'],
         ['key' => 'stisla_login_template', 'value' => 'default'],
@@ -1462,7 +1462,7 @@ return [
 
         ['key' => 'sso_github_client_id', 'value' => '-'],
         ['key' => 'sso_github_client_secret', 'value' => '-'],
-        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true]
+        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true],
     ],
 
     'settings2' => [
@@ -1476,19 +1476,19 @@ return [
         [
             'key' => 'favicon',
             'value' => 'assets/icons/favicon_siaga_desa.ico',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'logo', 'value' => 'assets/images/logo.png', 'is_url' => true],
         ['key' => 'since', 'value' => '2025'],
 
         [
             'key' => 'meta_author',
-            'value' => 'Hairul Anam'
+            'value' => 'Hairul Anam',
         ],
         ['key' => 'meta_description', 'value' => 'CV Anam Techno'],
         [
             'key' => 'meta_keywords',
-            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL'
+            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL',
         ],
         // new
         ['key' => 'meta_language', 'value' => 'id'],
@@ -1515,12 +1515,12 @@ return [
         [
             'key' => 'stisla_bg_home',
             'value' => 'stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg',
-            'is_url' => true
+            'is_url' => true,
         ],
         [
             'key' => 'stisla_bg_login',
             'value' => 'stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'stisla_sidebar_mini', 'value' => '0'],
         ['key' => 'stisla_login_template', 'value' => 'default'],
@@ -1581,23 +1581,22 @@ return [
 
         ['key' => 'sso_github_client_id', 'value' => '-'],
         ['key' => 'sso_github_client_secret', 'value' => '-'],
-        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true]
+        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true],
     ],
 
     'users' => array_merge([
         [
-            'name'              => 'Hairul Anam Superadmin',
-            'email'             => $superadminEmail,
-            'password'          => 'superadmin',
-            'roles'             => ['superadmin'],
+            'name' => 'Hairul Anam Superadmin',
+            'email' => $superadminEmail,
+            'password' => 'superadmin',
+            'roles' => ['superadmin'],
             'email_verified_at' => '2025-04-06 04:06:00',
-            'is_locked'         => 1,
-            'phone_number'      => '6285322778935',
-            'birth_date'        => '1998-04-08',
-            'address'           => 'Jember'
+            'is_locked' => 1,
+            'phone_number' => '6285322778935',
+            'birth_date' => '1998-04-08',
+            'address' => 'Jember',
         ],
         $additionalUser,
-    ], $additionalUsers)
-
+    ], $additionalUsers),
 
 ];

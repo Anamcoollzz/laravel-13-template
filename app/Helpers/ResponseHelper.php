@@ -5,13 +5,15 @@ use Illuminate\Http\RedirectResponse;
 /**
  * response422
  *
- * @param mixed $errors
- * @param string $message
+ * @param  mixed  $errors
  * @return JsonResponse
  */
-function response422($errors, string $message = null)
+function response422($errors, ?string $message = null)
 {
-    if ($message === null) $message = __('Form tidak valid');
+    if ($message === null) {
+        $message = __('Form tidak valid');
+    }
+
     return response()->json([
         'errors' => $errors,
         'message' => $message,
@@ -21,13 +23,15 @@ function response422($errors, string $message = null)
 /**
  * response200
  *
- * @param mixed $errors
- * @param string $message
+ * @param  mixed  $errors
  * @return JsonResponse
  */
-function response200($data = null, string $message = null)
+function response200($data = null, ?string $message = null)
 {
-    if ($message === null) $message = __('Berhasil');
+    if ($message === null) {
+        $message = __('Berhasil');
+    }
+
     return response()->json([
         'data' => $data,
         'message' => $message,
@@ -37,13 +41,15 @@ function response200($data = null, string $message = null)
 /**
  * response404
  *
- * @param mixed $errors
- * @param string $message
+ * @param  mixed  $errors
  * @return JsonResponse
  */
-function response404($data = null, string $message = null)
+function response404($data = null, ?string $message = null)
 {
-    if ($message === null) $message = __('Data tidak ditemukan.');
+    if ($message === null) {
+        $message = __('Data tidak ditemukan.');
+    }
+
     return response()->json([
         'data' => $data,
         'message' => $message,
@@ -53,13 +59,15 @@ function response404($data = null, string $message = null)
 /**
  * response200
  *
- * @param mixed $errors
- * @param string $message
+ * @param  mixed  $errors
  * @return JsonResponse
  */
-function response500($data = null, string $message = null)
+function response500($data = null, ?string $message = null)
 {
-    if ($message === null) $message = __('Server Error');
+    if ($message === null) {
+        $message = __('Server Error');
+    }
+
     return response()->json([
         'data' => $data,
         'message' => $message,
@@ -69,7 +77,6 @@ function response500($data = null, string $message = null)
 /**
  * back success
  *
- * @param string $successMessage
  * @return RedirectResponse
  */
 function backSuccess(string $successMessage)
@@ -80,7 +87,6 @@ function backSuccess(string $successMessage)
 /**
  * back error
  *
- * @param string $errorMessage
  * @return RedirectResponse
  */
 function backError(string $errorMessage)
@@ -91,8 +97,8 @@ function backError(string $errorMessage)
 /**
  * redirect success
  *
- * @param string $routeInstance
- * @param string $successMessage
+ * @param  string  $routeInstance
+ * @param  string  $successMessage
  * @return RedirectResponse
  */
 function redirectSuccess($routeInstance, $successMessage)
@@ -103,8 +109,7 @@ function redirectSuccess($routeInstance, $successMessage)
 /**
  * redirect error
  *
- * @param string $routeInstance
- * @param string $errorMessage
+ * @param  string  $routeInstance
  * @return RedirectResponse
  */
 function redirectError($routeInstance, string $errorMessage)

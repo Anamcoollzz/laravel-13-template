@@ -23,12 +23,14 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->isMethod('put'))
+        if ($this->isMethod('put')) {
             return [
-                'name' => 'required|unique:roles,name,' . $this->role->id . ',id'
+                'name' => 'required|unique:roles,name,'.$this->role->id.',id',
             ];
+        }
+
         return [
-            'name' => 'required|unique:roles,name'
+            'name' => 'required|unique:roles,name',
         ];
     }
 }

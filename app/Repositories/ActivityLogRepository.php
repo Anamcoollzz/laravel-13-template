@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\ActivityLog;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ActivityLogRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -15,13 +15,13 @@ class ActivityLogRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new ActivityLog();
+        $this->model = new ActivityLog;
     }
 
     /**
      * getFilter
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return Collection|static[]
      */
     public function getFilter()
     {
@@ -41,7 +41,7 @@ class ActivityLogRepository extends Repository
             ->when(request('filter_browser'), function ($query) {
                 $query->whereBrowser(request('filter_browser'));
             })
-            ->when(!auth_user()->hasRole('superadmin'), function ($query) {
+            ->when(! auth_user()->hasRole('superadmin'), function ($query) {
                 $query->where('user_id', auth_user()->id);
             })
             ->with([
@@ -59,8 +59,9 @@ class ActivityLogRepository extends Repository
      */
     public function getActivityTypeOptions()
     {
-        $query = "SELECT DISTINCT activity_type FROM `activity_logs`;";
+        $query = 'SELECT DISTINCT activity_type FROM `activity_logs`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('activity_type', 'activity_type')->toArray();
     }
 
@@ -71,8 +72,9 @@ class ActivityLogRepository extends Repository
      */
     public function getBrowserOptions()
     {
-        $query = "SELECT DISTINCT browser FROM `activity_logs`;";
+        $query = 'SELECT DISTINCT browser FROM `activity_logs`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('browser', 'browser')->toArray();
     }
 
@@ -83,8 +85,9 @@ class ActivityLogRepository extends Repository
      */
     public function getDeviceOptions()
     {
-        $query = "SELECT DISTINCT device FROM `activity_logs`;";
+        $query = 'SELECT DISTINCT device FROM `activity_logs`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('device', 'device')->toArray();
     }
 
@@ -95,16 +98,17 @@ class ActivityLogRepository extends Repository
      */
     public function getPlatformOptions()
     {
-        $query = "SELECT DISTINCT platform FROM `activity_logs`;";
+        $query = 'SELECT DISTINCT platform FROM `activity_logs`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('platform', 'platform')->toArray();
     }
 
     /**
      * getMineLatest
      *
-     * @param integer $limit
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  int  $limit
+     * @return Collection|static[]
      */
     public function getMineLatest($limit = 10)
     {

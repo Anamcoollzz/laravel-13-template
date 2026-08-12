@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             $this->call(MenuSeeder::class);
             $this->call(UserSeeder::class);
         } catch (\Exception $e) {
-            echo 'Error seeding database from SQL file: ' . $e->getMessage();
+            echo 'Error seeding database from SQL file: '.$e->getMessage();
         } finally {
             Schema::enableForeignKeyConstraints();
         }
@@ -76,6 +76,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusSeeder::class);
         // $this->call(PicaSeeder::class);
         $this->call(SiagaCarSeeder::class);
-        // seeders 
+        // seeders
     }
 }

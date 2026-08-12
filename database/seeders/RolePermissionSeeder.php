@@ -3,20 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\PermissionGroup;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Permission;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
     private $groupNames = [];
+
     private $groups = [];
+
     private $rolesArray = [];
+
     private $isPerModule = false;
 
     /**
@@ -28,6 +31,7 @@ class RolePermissionSeeder extends Seeder
     {
         if (is_app_dataku()) {
             $this->fromSql();
+
             return;
         }
         DB::enableQueryLog();
@@ -40,8 +44,9 @@ class RolePermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $roles = config('stisla.roles');
-        if (is_app_chat())
+        if (is_app_chat()) {
             $roles = config('stisla-chat.roles');
+        }
         $rolesData = [];
         foreach ($roles as $role) {
             // $roleObj = Role::create([
@@ -50,15 +55,15 @@ class RolePermissionSeeder extends Seeder
 
             if ($role === 'superadmin') {
                 $rolesData[] = [
-                    'name'       => $role,
+                    'name' => $role,
                     'guard_name' => 'web',
-                    'is_locked'  => 1,
+                    'is_locked' => 1,
                 ];
             } else {
                 $rolesData[] = [
-                    'name'       => $role,
+                    'name' => $role,
                     'guard_name' => 'web',
-                    'is_locked'  => 0,
+                    'is_locked' => 0,
                 ];
             }
         }
@@ -86,12 +91,12 @@ class RolePermissionSeeder extends Seeder
         }
         $files = getFileNamesFromDir($path);
         foreach ($files as $file) {
-            $permissions = json_decode(file_get_contents(database_path('seeders/data/permission-modules/' . $file)), true);
+            $permissions = json_decode(file_get_contents(database_path('seeders/data/permission-modules/'.$file)), true);
             foreach ($permissions as $permission) {
-                if (!in_array($permission['group'], $this->groupNames)) {
+                if (! in_array($permission['group'], $this->groupNames)) {
                     $this->groupNames[] = $permission['group'];
                     $group = PermissionGroup::create([
-                        'group_name' => $permission['group']
+                        'group_name' => $permission['group'],
                     ]);
                     $this->groups[$permission['group']] = $group;
                     $roles = $this->rolesArray[$permission['group']] = Role::whereIn('name', $permission['roles'])->get();
@@ -100,10 +105,10 @@ class RolePermissionSeeder extends Seeder
                     $roles = $this->rolesArray[$permission['group']];
                 }
 
-                if (!in_array($permission['name'], $permissionExcludes)) {
+                if (! in_array($permission['name'], $permissionExcludes)) {
                     $perm = Permission::create([
-                        'name'                => $permission['name'],
-                        'permission_group_id' => $group->id
+                        'name' => $permission['name'],
+                        'permission_group_id' => $group->id,
                     ]);
                     // foreach ($permission['roles'] as $role)
                     //     if (in_array($role, $this->rolesArray))
@@ -117,7 +122,7 @@ class RolePermissionSeeder extends Seeder
     /**
      * generate permission
      *
-     * @param boolean $permissions
+     * @param  bool  $permissions
      * @return void
      */
     private function generatePermission($permissions = false)
@@ -135,12 +140,12 @@ class RolePermissionSeeder extends Seeder
         // }
         foreach ($permissions as $permission) {
             if (
-                !in_array($permission['group'], $this->groupNames) &&
-                (!isset($permission['table']) || (isset($permission['table']) && Schema::hasTable($permission['table'])))
+                ! in_array($permission['group'], $this->groupNames) &&
+                (! isset($permission['table']) || (isset($permission['table']) && Schema::hasTable($permission['table'])))
             ) {
                 $this->groupNames[] = $permission['group'];
                 $group = PermissionGroup::create([
-                    'group_name' => $permission['group']
+                    'group_name' => $permission['group'],
                 ]);
                 $this->groups[$permission['group']] = $group;
                 $roles = $this->rolesArray[$permission['group']] = Role::whereIn('name', $permission['roles'])->get();
@@ -154,8 +159,8 @@ class RolePermissionSeeder extends Seeder
             if (isset($permission['table'])) {
                 if (Schema::hasTable($permission['table'])) {
                     $perm = Permission::create([
-                        'name'                => $name = $permission['name'],
-                        'permission_group_id' => $group->id
+                        'name' => $name = $permission['name'],
+                        'permission_group_id' => $group->id,
                     ]);
                     // foreach ($permission['roles'] as $role) {
                     //     if (in_array($role, $this->rolesArray))
@@ -169,10 +174,10 @@ class RolePermissionSeeder extends Seeder
                 }
             } else {
                 try {
-                    if (!in_array($permission['name'], $permissionExcludes)) {
+                    if (! in_array($permission['name'], $permissionExcludes)) {
                         $perm = Permission::create([
-                            'name'                => $name = $permission['name'],
-                            'permission_group_id' => $group->id
+                            'name' => $name = $permission['name'],
+                            'permission_group_id' => $group->id,
                         ]);
                         $roles = Role::whereIn('name', $permission['roles'])->get();
                         $perm->syncRoles($roles);
@@ -193,8 +198,9 @@ class RolePermissionSeeder extends Seeder
     private function perModule()
     {
         $this->isPerModule = true;
-        if (is_app_chat())
+        if (is_app_chat()) {
             return;
+        }
         $files = File::allFiles(base_path('config'));
         foreach ($files as $file) {
             if (

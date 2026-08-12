@@ -10,6 +10,6 @@
 */
 
 return [
-    'key'        => env('YOUTUBE_API_KEY', 'YOUR_API_KEY'),
+    'key' => env('YOUTUBE_API_KEY', 'YOUR_API_KEY'),
     'channel_id' => env('YOUTUBE_CHANNEL_ID', 'UCwF-njZKFE30pZwWFtp84fA'),
 ];

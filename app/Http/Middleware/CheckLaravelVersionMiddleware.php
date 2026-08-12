@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\LaravelVersionCheckerService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class CheckLaravelVersionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $checker = app()->make(\App\Services\LaravelVersionCheckerService::class);
+        $checker = app()->make(LaravelVersionCheckerService::class);
         view()->share('isLaravelOutdated', $checker->isOutdated());
         view()->share('laravelCurrentVersion', $checker->getCurrentVersion());
         view()->share('laravelLatestVersion', $checker->getLatestVersion());

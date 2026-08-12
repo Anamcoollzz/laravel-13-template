@@ -54,5 +54,5 @@ return [
         'roles' => ['superadmin', 'admin', 'user'],
         'group' => 'Pimpinan Fakultas',
         'table' => 'faculty_leaders',
-    ]
+    ],
 ];

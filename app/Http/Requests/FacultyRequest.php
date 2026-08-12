@@ -46,8 +46,7 @@ class FacultyRequest extends FormRequest
             // "barcode"           => "required",
             // "qr_code"           => "required",
 
-
-            'name'        => 'required',
+            'name' => 'required',
         ];
     }
 }

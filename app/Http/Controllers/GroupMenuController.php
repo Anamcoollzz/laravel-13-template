@@ -9,11 +9,8 @@ use Illuminate\Http\Response;
 
 class GroupMenuController extends StislaController
 {
-
     /**
      * menu group repository
-     *
-     * @var MenuGroupRepository
      */
     private MenuGroupRepository $menuGroupRepository;
 
@@ -26,9 +23,9 @@ class GroupMenuController extends StislaController
     {
         parent::__construct();
 
-        $this->icon                = 'fa fa-bars';
+        $this->icon = 'fa fa-bars';
         $this->menuGroupRepository = new MenuGroupRepository;
-        $this->viewFolder          = 'group-menus';
+        $this->viewFolder = 'group-menus';
 
         $this->defaultMiddleware('Grup Menu');
     }
@@ -45,7 +42,7 @@ class GroupMenuController extends StislaController
         $defaultData = $this->getDefaultDataIndex(__('Grup Menu'), 'Grup Menu', 'group-menus');
 
         return view('stisla.group-menus.index', array_merge($defaultData, [
-            'data'    => $data,
+            'data' => $data,
         ]));
     }
 
@@ -56,19 +53,18 @@ class GroupMenuController extends StislaController
      */
     public function create()
     {
-        $title         = __('Grup Menu');
-        $fullTitle     = __('Tambah Grup Menu');
-        $defaultData   = $this->getDefaultDataCreate($title, 'group-menus');
+        $title = __('Grup Menu');
+        $fullTitle = __('Tambah Grup Menu');
+        $defaultData = $this->getDefaultDataCreate($title, 'group-menus');
 
         return view('stisla.group-menus.form', array_merge($defaultData, [
-            'fullTitle'     => $fullTitle,
+            'fullTitle' => $fullTitle,
         ]));
     }
 
     /**
      * save new group menu to db
      *
-     * @param GroupMenuRequest $request
      * @return Response
      */
     public function store(GroupMenuRequest $request)
@@ -79,25 +75,24 @@ class GroupMenuController extends StislaController
         ]);
 
         $result = $this->menuGroupRepository->create($data);
-        logCreate("Grup Menu", $result);
-        $successMessage = successMessageCreate("Grup Menu");
+        logCreate('Grup Menu', $result);
+        $successMessage = successMessageCreate('Grup Menu');
+
         return backSuccess($successMessage);
     }
 
     /**
      * get detail data
      *
-     * @param MenuGroup $groupMenu
-     * @param bool $isDetail
      * @return array
      */
     protected function getDetailDataOld(MenuGroup $groupMenu, bool $isDetail = false)
     {
-        $title         = __('Grup Menu');
-        $defaultData   = $this->getDefaultDataDetail($title, 'group-menus', $groupMenu, $isDetail);
+        $title = __('Grup Menu');
+        $defaultData = $this->getDefaultDataDetail($title, 'group-menus', $groupMenu, $isDetail);
 
         return array_merge($defaultData, [
-            'title'     => $title,
+            'title' => $title,
             'fullTitle' => $isDetail ? __('Detail Grup Menu') : __('Ubah Grup Menu'),
         ]);
     }
@@ -105,20 +100,18 @@ class GroupMenuController extends StislaController
     /**
      * showing edit group menu page
      *
-     * @param MenuGroup $groupMenu
      * @return Response
      */
     public function edit(MenuGroup $groupMenu)
     {
         $data = $this->getDetailDataOld($groupMenu);
+
         return view('stisla.group-menus.form', $data);
     }
 
     /**
      * update data to db
      *
-     * @param GroupMenuRequest $request
-     * @param MenuGroup $groupMenu
      * @return Response
      */
     public function update(GroupMenuRequest $request, MenuGroup $groupMenu)
@@ -129,34 +122,35 @@ class GroupMenuController extends StislaController
         ]);
 
         $newData = $this->menuGroupRepository->update($data, $groupMenu->id);
-        logUpdate("Grup Menu", $groupMenu, $newData);
-        $successMessage = successMessageUpdate("Grup Menu");
+        logUpdate('Grup Menu', $groupMenu, $newData);
+        $successMessage = successMessageUpdate('Grup Menu');
+
         return backSuccess($successMessage);
     }
 
     /**
      * showing detail group menu page
      *
-     * @param MenuGroup $groupMenu
      * @return Response
      */
     public function show(MenuGroup $groupMenu)
     {
         $data = $this->getDetailDataOld($groupMenu, true);
+
         return view('stisla.group-menus.form', $data);
     }
 
     /**
      * delete group menu from db
      *
-     * @param MenuGroup $groupMenu
      * @return Response
      */
     public function destroy(MenuGroup $groupMenu)
     {
         $this->menuGroupRepository->delete($groupMenu->id);
-        logDelete("Grup Menu", $groupMenu);
-        $successMessage = successMessageDelete("Grup Menu");
+        logDelete('Grup Menu', $groupMenu);
+        $successMessage = successMessageDelete('Grup Menu');
+
         return backSuccess($successMessage);
     }
 }

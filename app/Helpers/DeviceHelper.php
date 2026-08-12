@@ -1,23 +1,27 @@
 <?php
 
+use Jenssegers\Agent\Agent;
+
 /**
  * check if device is desktop
  *
- * @return boolean
+ * @return bool
  */
 function is_desktop()
 {
-    $agent = new \Jenssegers\Agent\Agent();
+    $agent = new Agent;
+
     return $agent->isDesktop();
 }
 
 /**
  * check if device is mobile
  *
- * @return boolean
+ * @return bool
  */
 function is_mobile()
 {
-    $agent = new \Jenssegers\Agent\Agent();
+    $agent = new Agent;
+
     return $agent->isMobile();
 }

@@ -3,15 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\YoutubeService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class YoutubeController extends Controller
 {
-    /**
-     * @var YoutubeService
-     *
-     */
     private YoutubeService $youtubeService;
 
     /**

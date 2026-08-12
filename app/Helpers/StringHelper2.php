@@ -1,21 +1,23 @@
 <?php
 
-if (!function_exists('encode_id')) {
+use Illuminate\Support\Str;
+
+if (! function_exists('encode_id')) {
     /**
      * make secure id
      *
-     * @param $val
      * @return string
      */
     function encode_id($val = '')
     {
         $params = ['val' => $val];
         $secure = preg_replace('/[=]+$/', '', base64_encode(serialize($params)));
+
         return $secure;
     }
 }
 
-if (!function_exists('decode_id')) {
+if (! function_exists('decode_id')) {
     /**
      * decode encrypted id
      *
@@ -25,6 +27,7 @@ if (!function_exists('decode_id')) {
     function decode_id($val = '')
     {
         $secure = unserialize(base64_decode($val));
+
         return $secure['val'];
     }
 }
@@ -36,31 +39,32 @@ if (!function_exists('decode_id')) {
  */
 function uuid()
 {
-    return \Illuminate\Support\Str::uuid()->toString();
+    return Str::uuid()->toString();
 }
 
 /**
  * generate image url from name
  *
- * @param string $name
+ * @param  string  $name
  * @return string
  */
 function generate_avatar($name)
 {
-    return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=random&size=128';
+    return 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=random&size=128';
 }
 
 /**
  * limit words in a string
  *
- * @param string $text
- * @param int $limit
+ * @param  string  $text
+ * @param  int  $limit
  * @return string
  */
 function limit_words($text, $limit = 10)
 {
     $words = preg_split('/\s+/', trim($text));
+
     return count($words) > $limit
-        ? implode(' ', array_slice($words, 0, $limit)) . '...'
+        ? implode(' ', array_slice($words, 0, $limit)).'...'
         : $text;
 }

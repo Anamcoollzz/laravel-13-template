@@ -16,7 +16,7 @@ function active_template()
 /**
  * check if active template is stisla
  *
- * @return boolean
+ * @return bool
  */
 function is_stisla_template()
 {
@@ -76,140 +76,150 @@ function developer_whatsapp()
 /**
  * check if app type is chat
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_chat($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_CHAT;
     }
+
     return config('stisla.app') === AppEnum::APP_CHAT;
 }
 
 /**
  * check if app type is siaga desa
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_siaga_desa($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_SIAGA_DESA;
     }
+
     return config('stisla.app') === AppEnum::APP_SIAGA_DESA;
 }
 
 /**
  * check if app type is bank
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_bank($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_BANK;
     }
+
     return config('stisla.app') === AppEnum::APP_BANK;
 }
 
 /**
  * check if app type is education
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_education($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_EDUCATION;
     }
+
     return config('stisla.app') === AppEnum::APP_EDUCATION;
 }
 
 /**
  * check if app type is blank
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_blank($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_BLANK;
     }
+
     return config('stisla.app') === AppEnum::APP_BLANK;
 }
 
 /**
  * check if app type is default
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_default($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_DEFAULT;
     }
+
     return config('stisla.app') === AppEnum::APP_DEFAULT;
 }
 
 /**
  * check if app type is ecommerce
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_ecommerce($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_ECOMMERCE;
     }
+
     return config('stisla.app') === AppEnum::APP_ECOMMERCE;
 }
 
 /**
  * check if app type is dataku
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_dataku($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_DATAKU;
     }
+
     return config('stisla.app') === AppEnum::APP_DATAKU;
 }
 
 /**
  * check if app type is fingerprint
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_fingerprint($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_FINGERPRINT;
     }
+
     return config('stisla.app') === AppEnum::APP_FINGERPRINT;
 }
 
 /**
  * check if app type is pocari
  *
- * @param AppEnum|null $app
- * @return boolean
+ * @param  AppEnum|null  $app
+ * @return bool
  */
 function is_app_pocari($app = null)
 {
     if ($app) {
         return $app === AppEnum::APP_POCARI;
     }
+
     return config('stisla.app') === AppEnum::APP_POCARI;
 }
 

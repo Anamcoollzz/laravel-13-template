@@ -25,9 +25,10 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         $isGoogleCaptcha = SettingRepository::isGoogleCaptchaForgotPassword();
+
         return [
-            'email'                => 'required|email|exists:users',
-            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable'
+            'email' => 'required|email|exists:users',
+            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable',
         ];
     }
 }

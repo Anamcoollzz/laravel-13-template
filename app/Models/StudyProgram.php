@@ -3,24 +3,21 @@
 namespace App\Models;
 
 use App\Traits\UserTrait;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'name',
+    'faculty_id',
+    'created_by_id',
+    'last_updated_by_id',
+])]
 class StudyProgram extends Model
 {
     use HasFactory, UserTrait;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'faculty_id',
-        'created_by_id',
-        'last_updated_by_id',
-    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -28,15 +25,15 @@ class StudyProgram extends Model
      * @var array
      */
     protected $casts = [
-        'checkbox'         => 'array',
-        'checkbox2'        => 'array',
+        'checkbox' => 'array',
+        'checkbox2' => 'array',
         'select2_multiple' => 'array',
     ];
 
     /**
      * Get the faculty that owns the StudyProgram.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function faculty()
     {
@@ -46,7 +43,7 @@ class StudyProgram extends Model
     /**
      * Get the students associated with the StudyProgram.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function students()
     {

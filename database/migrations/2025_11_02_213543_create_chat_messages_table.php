@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!in_array('chat_messages', config('stisla.table_excludes')))
+        if (! in_array('chat_messages', config('stisla.table_excludes'))) {
             Schema::create('chat_messages', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('from_user_id');
@@ -26,6 +26,7 @@ return new class extends Migration
                 $table->dateTime('deleted_at')->nullable();
                 $table->timestamps();
             });
+        }
     }
 
     /**

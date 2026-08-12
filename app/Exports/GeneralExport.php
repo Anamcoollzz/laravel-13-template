@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class GeneralExport implements FromView, ShouldAutoSize
@@ -20,16 +20,13 @@ class GeneralExport implements FromView, ShouldAutoSize
 
     /**
      * view
-     *
-     * @var string
      */
     private string $view;
 
     /**
      * constructor method
      *
-     * @param string $view
-     * @param mixed $data
+     * @param  mixed  $data
      * @return void
      */
     public function __construct(string $view, $data)
@@ -40,8 +37,6 @@ class GeneralExport implements FromView, ShouldAutoSize
 
     /**
      * export from view
-     *
-     * @return View
      */
     // public function view(): View
     // {
@@ -56,12 +51,11 @@ class GeneralExport implements FromView, ShouldAutoSize
 
     /**
      * export from view
-     *
-     * @return View
      */
     public function view(): View
     {
         $view = view($this->view, $this->data);
+
         return $view;
     }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::dropIfExists('finger_print_x105_ids');
-        if (!in_array('finger_print_x105_ids', config('stisla.table_excludes')))
+        if (! in_array('finger_print_x105_ids', config('stisla.table_excludes'))) {
             Schema::create('finger_print_x105_ids', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('machine_id')->nullable()->comment('Nama Mesin');
@@ -31,6 +31,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

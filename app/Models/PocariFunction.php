@@ -3,72 +3,57 @@
 namespace App\Models;
 
 use App\Traits\UserTrait;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[Fillable([
+    // ini bisa dicomment kalau gak dipakai
+    'text',
+    'email',
+    'number',
+    'currency',
+    'currency_idr',
+    'select',
+    'select2',
+    'select2_multiple',
+    'textarea',
+    'radio',
+    'checkbox',
+    'checkbox2',
+    'tags',
+    'file',
+    'image',
+    'date',
+    'time',
+    'color',
+    'summernote_simple',
+    'summernote',
+    'barcode',
+    'qr_code',
+    'name',
+    'phone_number',
+    'birthdate',
+    'address',
+    'avatar',
+    'password',
+    'tinymce',
+    'ckeditor',
+    'is_active',
+
+    // ini hasil generate dari create:module command
+
+    'name',
+    'created_by_id',
+    'last_updated_by_id',
+    'deleted_at',
+])]
 class PocariFunction extends Model
 {
     use HasFactory, UserTrait;
 
-    //softdeletes
-
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'pocari_functions';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        // ini bisa dicomment kalau gak dipakai
-        "text",
-        "email",
-        "number",
-        "currency",
-        "currency_idr",
-        "select",
-        "select2",
-        "select2_multiple",
-        "textarea",
-        "radio",
-        "checkbox",
-        "checkbox2",
-        "tags",
-        "file",
-        "image",
-        "date",
-        "time",
-        "color",
-        "summernote_simple",
-        "summernote",
-        "barcode",
-        "qr_code",
-        'name',
-        'phone_number',
-        'birthdate',
-        'address',
-        'avatar',
-        'password',
-        'tinymce',
-        'ckeditor',
-        'is_active',
-
-
-
-        // ini hasil generate dari create:module command
-        
-            'name',
-        "created_by_id",
-        "last_updated_by_id",
-        'deleted_at',
-    ];
+    // softdeletes
 
     /**
      * The attributes that should be cast to native types.
@@ -76,8 +61,8 @@ class PocariFunction extends Model
      * @var array
      */
     protected $casts = [
-        'checkbox'         => 'array',
-        'checkbox2'        => 'array',
+        'checkbox' => 'array',
+        'checkbox2' => 'array',
         'select2_multiple' => 'array',
     ];
 }

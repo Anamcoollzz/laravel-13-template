@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::as('api.')->prefix('v1')->group(function () {
-    # AUTH MODULES
+    // AUTH MODULES
     Route::post('auth/login', [AuthController::class, 'login'])->name('login');
     Route::post('auth/register', [AuthController::class, 'register'])->name('register');
     Route::post('auth/verify', [AuthController::class, 'verify'])->name('verify');
@@ -18,24 +18,24 @@ Route::as('api.')->prefix('v1')->group(function () {
     Route::post('auth/logout', [AuthController::class, 'logout'])->middleware('auth:api')->name('logout');
 
     Route::middleware('auth:api')->group(function () {
-        # PROFILES
+        // PROFILES
         Route::get('profiles', [AuthController::class, 'profile'])->name('profiles');
         Route::post('profiles', [AuthController::class, 'updateProfile'])->name('profiles.update');
         Route::put('profiles/update-password', [AuthController::class, 'updatePassword'])->name('profiles.update-password');
         Route::get('profiles/log-activities', [AuthController::class, 'logActivities'])->name('profiles.log-activities');
 
-        # SETTINGS
+        // SETTINGS
         Route::get('settings', [AuthController::class, 'settings'])->name('profiles.settings');
 
-        # USERS
+        // USERS
         Route::put('users/update-password/{user}', [UserManagementController::class, 'updatePassword'])->name('users.update-password');
         Route::apiResource('users', UserManagementController::class);
 
-        # ROLES
+        // ROLES
         Route::get('permissions', [RoleController::class, 'permissions'])->name('permissions');
         Route::apiResource('roles', RoleController::class);
 
-        # GENERAL API
+        // GENERAL API
         Route::apiResource('general', GeneralController::class);
     });
 });

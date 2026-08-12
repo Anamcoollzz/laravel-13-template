@@ -4,15 +4,15 @@ namespace App\Repositories;
 
 use App\Models\ActivityLog;
 use App\Models\PermissionGroup;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
-use Spatie\Permission\Models\Permission;
 use App\Models\Role;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 
 class UserRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -20,7 +20,7 @@ class UserRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new User();
+        $this->model = new User;
     }
 
     /**
@@ -43,13 +43,13 @@ class UserRepository extends Repository
         Auth::login($user, request()->filled('remember'));
         $user->update(['last_login' => now()]);
         logLogin();
+
         return $user;
     }
 
     /**
      * find user by email
      *
-     * @param string $email
      * @return User
      */
     public function findByEmail(string $email)
@@ -60,7 +60,6 @@ class UserRepository extends Repository
     /**
      * find user by phone
      *
-     * @param string $phone
      * @return User
      */
     public function findByPhone(string $phone)
@@ -71,8 +70,7 @@ class UserRepository extends Repository
     /**
      * find user by field
      *
-     * @param string $field
-     * @param mixed $value
+     * @param  mixed  $value
      * @return User
      */
     public function findBy(string $field, $value)
@@ -83,7 +81,6 @@ class UserRepository extends Repository
     /**
      * find user by twitter id
      *
-     * @param string $twitterId
      * @return User
      */
     public function findByTwitterId(string $twitterId)
@@ -94,7 +91,6 @@ class UserRepository extends Repository
     /**
      * find user by email token
      *
-     * @param string $emailToken
      * @return User
      */
     public function findByEmailToken(string $emailToken)
@@ -105,13 +101,13 @@ class UserRepository extends Repository
     /**
      * update profile by user login
      *
-     * @param array $data
      * @return int
      */
     public function updateProfile(array $data)
     {
         $userId = $this->getUserIdLogin();
         $this->model->where('id', $userId)->update($data);
+
         return $this->find($userId);
     }
 
@@ -140,6 +136,7 @@ class UserRepository extends Repository
             'schoolyear',
             'semester',
         ])->get();
+
         return $users;
     }
 
@@ -158,25 +155,25 @@ class UserRepository extends Repository
     /**
      * get user data as pagination
      *
-     * @param integer $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  int  $perPage
+     * @return LengthAwarePaginator
      */
     public function getPaginateUsers($perPage = 20)
     {
         $users = $this->model->with(['roles'])->latest()->paginate($perPage);
+
         return $users;
     }
 
     /**
      * get all role data
      *
-     * @param array $names
      * @return Collection
      */
     public function getRoles(array $names = [])
     {
         $roles = Role::with(['permissions'])
-            ->when(!empty($names), function ($query) use ($names) {
+            ->when(! empty($names), function ($query) use ($names) {
                 $query->whereIn('name', $names);
             })
             ->withCount([
@@ -187,15 +184,15 @@ class UserRepository extends Repository
                 },
                 'users as female_users_count' => function ($q) {
                     $q->where('gender', User::GENDER_FEMALE); // sesuaikan value di DB
-                }
+                },
             ])->latest()->get();
+
         return $roles;
     }
 
     /**
      * get role as option dropdown
      *
-     * @param array $names
      * @return array
      */
     public function getRoleOptions(array $names = [])
@@ -208,7 +205,6 @@ class UserRepository extends Repository
     /**
      * find permission
      *
-     * @param integer $permissionId
      * @return Permission
      */
     public function findPermission(int $permissionId)
@@ -219,7 +215,6 @@ class UserRepository extends Repository
     /**
      * find permission group
      *
-     * @param integer $groupId
      * @return PermissionGroup
      */
     public function findPermissionGroup(int $groupId)
@@ -230,7 +225,6 @@ class UserRepository extends Repository
     /**
      * delete permission
      *
-     * @param integer $permissionId
      * @return Permission
      */
     public function deletePermission(int $permissionId)
@@ -241,7 +235,6 @@ class UserRepository extends Repository
     /**
      * delete permission group by id
      *
-     * @param integer $groupId
      * @return Permission
      */
     public function deletePermissionGroup(int $groupId)
@@ -252,26 +245,24 @@ class UserRepository extends Repository
     /**
      * update permission data
      *
-     * @param integer $permissionId
-     * @param array $data
      * @return Permission
      */
     public function updatePermission(int $permissionId, array $data)
     {
         Permission::where('id', $permissionId)->update($data);
+
         return $this->findPermission($permissionId);
     }
 
     /**
      * update permission group data
      *
-     * @param integer $groupId
-     * @param array $data
      * @return PermissionGroup
      */
     public function updatePermissionGroup(int $groupId, array $data)
     {
         PermissionGroup::where('id', $groupId)->update($data);
+
         return $this->findPermissionGroup($groupId);
     }
 
@@ -294,6 +285,7 @@ class UserRepository extends Repository
     {
         $permissions = Permission::select(['permissions.*', 'permission_groups.group_name'])
             ->join('permission_groups', 'permissions.permission_group_id', '=', 'permission_groups.id')->get();
+
         return $permissions;
     }
 
@@ -308,6 +300,7 @@ class UserRepository extends Repository
             ->join('permission_groups', 'permissions.permission_group_id', '=', 'permission_groups.id')
             ->latest()
             ->get();
+
         return $permissions;
     }
 
@@ -334,7 +327,6 @@ class UserRepository extends Repository
     /**
      * create permission data
      *
-     * @param array $data
      * @return Permission
      */
     public function createPermission(array $data)
@@ -345,7 +337,6 @@ class UserRepository extends Repository
     /**
      * create permission group data
      *
-     * @param array $data
      * @return PermissionGroup
      */
     public function createPermissionGroup(array $data)
@@ -356,7 +347,6 @@ class UserRepository extends Repository
     /**
      * findRole
      *
-     * @param integer $roleId
      * @return Role
      */
     public function findRole(int $roleId)
@@ -367,28 +357,25 @@ class UserRepository extends Repository
     /**
      * create role data
      *
-     * @param string $roleName
-     * @param array $data
      * @return Role
      */
     public function createRole(string $roleName, array $data)
     {
         $role = Role::create([
-            'name'       => $roleName,
-            'guard_name' => 'web'
+            'name' => $roleName,
+            'guard_name' => 'web',
         ]);
         if (isset($data['permissions'])) {
             $permissions = Permission::whereIn('name', $data['permissions'])->get();
             $role->syncPermissions($permissions);
         }
+
         return $role;
     }
 
     /**
      * update role data
      *
-     * @param int $roleId
-     * @param array $data
      * @return int
      */
     public function updateRole(int $roleId, array $data)
@@ -398,6 +385,7 @@ class UserRepository extends Repository
         if ($role && isset($data['permissions'])) {
             $permissions = Permission::whereIn('name', $data['permissions'])->get();
             $role->syncPermissions($permissions);
+
             return $role;
         }
     }
@@ -405,7 +393,6 @@ class UserRepository extends Repository
     /**
      * delete role data
      *
-     * @param int $roleId
      * @return int
      */
     public function deleteRole(int $roleId)
@@ -421,6 +408,7 @@ class UserRepository extends Repository
     public function getOwnerOptions()
     {
         $owners = $this->model->role('pemilik kos')->get();
+
         return $owners->pluck('name', 'id')->toArray();
     }
 
@@ -437,8 +425,8 @@ class UserRepository extends Repository
     /**
      * getLogActivitiesPaginate
      *
-     * @param integer $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  int  $perPage
+     * @return LengthAwarePaginator
      */
     public function getLogActivitiesPaginate($perPage = 20)
     {
@@ -451,8 +439,6 @@ class UserRepository extends Repository
     /**
      * assign role
      *
-     * @param User $user
-     * @param string $role
      * @return User
      */
     public function assignRole(User $user, string $role)
@@ -463,8 +449,7 @@ class UserRepository extends Repository
     /**
      * sync roles
      *
-     * @param User $user
-     * @param array $role
+     * @param  array  $role
      * @return User
      */
     public function syncRoles(User $user, array|Collection $roles)
@@ -473,40 +458,42 @@ class UserRepository extends Repository
         } else {
             $roles = Role::whereIn('name', $roles)->get();
         }
+
         return $user->syncRoles($roles);
     }
 
     /**
      * sync roles by id
      *
-     * @param User $user
-     * @param array $role
+     * @param  array  $role
      * @return User
      */
     public function syncRolesByID(User $user, array $roles)
     {
         $roles = Role::whereIn('id', $roles)->get();
+
         return $user->syncRoles($roles);
     }
 
     /**
      * soft delete data by id
      *
-     * @param int $id
      * @return Model
      */
     public function softDelete(int $id)
     {
         $model = $this->find($id);
-        if ($model)
+        if ($model) {
             $model->update([
-                'deleted_at'         => now(),
-                'blocked_reason'     => null,
-                'is_active'          => false,
-                'wrong_login'        => 0,
-                'deleted_by_id'      => auth_id(),
-                'last_updated_by_id' => auth_id()
+                'deleted_at' => now(),
+                'blocked_reason' => null,
+                'is_active' => false,
+                'wrong_login' => 0,
+                'deleted_by_id' => auth_id(),
+                'last_updated_by_id' => auth_id(),
             ]);
+        }
+
         return $model;
     }
 
@@ -524,22 +511,24 @@ class UserRepository extends Repository
             Auth::login($user);
             $user->update(['last_login' => now()]);
             logLogin();
+
             return $user;
         }
+
         return null;
     }
 
     /**
      * set last seen to now
      *
-     * @param int|null $userId
      * @return int
      */
     public function setLastSeenToNow(?int $userId = null)
     {
-        if (!$userId) {
+        if (! $userId) {
             $userId = $this->getUserIdLogin();
         }
+
         return $this->model->where('id', $userId)->update(['last_seen_at' => now()]);
     }
 }

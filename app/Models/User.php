@@ -4,109 +4,110 @@ namespace App\Models;
 
 use App\Helpers\StringHelper;
 use App\Traits\UserTrait;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+#[Fillable([
+    'name',
+    'email',
+    'avatar',
+    'email_verified_at',
+    'password',
+    'last_login',
+    'email_token',
+    'verification_code',
+    'is_locked',
+    'phone_number',
+    'birth_date',
+    'address',
+    'last_password_change',
+    'twitter_id',
+    'file_upload',
+    'wrong_login',
+    'is_active',
+    'created_by_id',
+    'last_updated_by_id',
+    'blocked_reason',
+    'deleted_at',
+    'deleted_by_id',
+    'last_seen_at',
+    'is_anonymous',
+    'gender',
+    'nik',
+    'uuid',
+    'is_majalengka',
+    'province_code',
+    'city_code',
+    'district_code',
+    'village_code',
+    'photo',
+
+    // student
+    'nis',
+    'nisn',
+    'religion_id',
+    'religion_id',
+    'rt',
+    'rw',
+    'postal_code',
+    'school_class_id',
+    'school_class_id',
+    'room',
+    'father_nik',
+    'father_name',
+    'father_birth_date',
+    'father_education',
+    'father_work_id',
+    'father_work_id',
+    'father_income',
+    'mother_nik',
+    'mother_name',
+    'mother_birth_date',
+    'mother_education',
+    'mother_work_id',
+    'mother_work_id',
+    'mother_income',
+    'guardian_nik',
+    'guardian_name',
+    'guardian_birth_date',
+    'guardian_education',
+    'guardian_work_id',
+    'guardian_work_id',
+    'guardian_income',
+    'class_level_id',
+
+    // teacher
+    'teacher_nuptk',
+    'teacher_mother_name',
+    'teacher_employee_status',
+    'teacher_gtk_type',
+    'teacher_position',
+
+    'education_level_id',
+    'semester_id',
+    'school_year_id',
+
+    // siaga desa
+    'dusun_rt_rw',
+])]
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, HasRoles, UserTrait;
+    use HasFactory, HasRoles, Notifiable, UserTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'avatar',
-        'email_verified_at',
-        'password',
-        'last_login',
-        'email_token',
-        'verification_code',
-        'is_locked',
-        'phone_number',
-        'birth_date',
-        'address',
-        'last_password_change',
-        'twitter_id',
-        'file_upload',
-        'wrong_login',
-        'is_active',
-        'created_by_id',
-        'last_updated_by_id',
-        'blocked_reason',
-        'deleted_at',
-        'deleted_by_id',
-        'last_seen_at',
-        'is_anonymous',
-        'gender',
-        'nik',
-        'uuid',
-        'is_majalengka',
-        'province_code',
-        'city_code',
-        'district_code',
-        'village_code',
-        'photo',
+    const GENDER_MALE = 'Laki-laki';
 
-        // student
-        'nis',
-        'nisn',
-        'religion_id',
-        'religion_id',
-        'rt',
-        'rw',
-        'postal_code',
-        'school_class_id',
-        'school_class_id',
-        'room',
-        'father_nik',
-        'father_name',
-        'father_birth_date',
-        'father_education',
-        'father_work_id',
-        'father_work_id',
-        'father_income',
-        'mother_nik',
-        'mother_name',
-        'mother_birth_date',
-        'mother_education',
-        'mother_work_id',
-        'mother_work_id',
-        'mother_income',
-        'guardian_nik',
-        'guardian_name',
-        'guardian_birth_date',
-        'guardian_education',
-        'guardian_work_id',
-        'guardian_work_id',
-        'guardian_income',
-        'class_level_id',
-
-        // teacher
-        'teacher_nuptk',
-        'teacher_mother_name',
-        'teacher_employee_status',
-        'teacher_gtk_type',
-        'teacher_position',
-
-        'education_level_id',
-        'semester_id',
-        'school_year_id',
-
-        // siaga desa
-        'dusun_rt_rw',
-    ];
-
-    const GENDER_MALE   = 'Laki-laki';
     const GENDER_FEMALE = 'Perempuan';
-    const GENDER_OTHER  = 'Tidak Mau Menyebutkan';
+
+    const GENDER_OTHER = 'Tidak Mau Menyebutkan';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -127,7 +128,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
-            'last_seen_at'      => 'datetime',
+            'last_seen_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -145,19 +146,17 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the user's age.
-     *
-     * @return int|null
      */
-    public function getAgeAttribute(): int|null
+    public function getAgeAttribute(): ?int
     {
-        return $this->birth_date ? (new \Carbon\Carbon($this->birth_date))->age : null;
+        return $this->birth_date ? (new Carbon($this->birth_date))->age : null;
     }
 
     /**
      * Scope a query to only include female users.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder  $query
+     * @return Builder
      */
     public function scopeIsFemale($query)
     {
@@ -167,8 +166,8 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include male users.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder  $query
+     * @return Builder
      */
     public function scopeIsMale($query)
     {
@@ -178,7 +177,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include users of a given age range.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeAge1018()
     {
@@ -188,7 +187,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include users of a given age range.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeAge1925()
     {
@@ -198,7 +197,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include users of a given age range.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeAge2650()
     {
@@ -208,7 +207,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include users of a given age range.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeAge511000()
     {
@@ -218,7 +217,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * add custom column name to hide real name if is_anonymous is true
      *
-     * @param string $value
+     * @param  string  $value
      * @return string
      */
     public function getNameAttribute($value)
@@ -226,13 +225,12 @@ class User extends Authenticatable implements JWTSubject
         if ($this->is_anonymous) {
             return 'Anonymous';
         }
+
         return $value;
     }
 
     /**
      * add custom column is online
-     *
-     * @return bool
      */
     public function getIsOnlineAttribute(): bool
     {
@@ -250,11 +248,13 @@ class User extends Authenticatable implements JWTSubject
             if (StringHelper::isUrl($this->avatar)) {
                 return $this->avatar;
             }
-            if (Storage::exists('public/avatars/' . $this->avatar)) {
-                return asset('storage/avatars/' . $this->avatar);
+            if (Storage::exists('public/avatars/'.$this->avatar)) {
+                return asset('storage/avatars/'.$this->avatar);
             }
         }
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random&size=128';
+
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=random&size=128';
+
         return null;
     }
 
@@ -281,7 +281,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the user that deleted the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function deletedBy()
     {
@@ -291,7 +291,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the faculty leader associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function facultyLeader()
     {
@@ -301,7 +301,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the student associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function student()
     {
@@ -311,7 +311,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include Majalengka residents.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeMajalengkaResidents($query)
     {
@@ -321,7 +321,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Scope a query to only include non-Majalengka residents.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeNonMajalengkaResidents($query)
     {
@@ -331,7 +331,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the region associated with the User's province.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function region()
     {
@@ -341,7 +341,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the region associated with the User's province.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function province()
     {
@@ -351,7 +351,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the region associated with the User's city.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function city()
     {
@@ -361,7 +361,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the region associated with the User's district.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function district()
     {
@@ -371,7 +371,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the region associated with the User's village.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function village()
     {
@@ -381,7 +381,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the religion associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function religion()
     {
@@ -391,7 +391,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the school class associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function schoolclass()
     {
@@ -401,7 +401,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the father's work associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function fatherwork()
     {
@@ -411,7 +411,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the mother's work associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function motherwork()
     {
@@ -421,7 +421,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the guardian's work associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function guardianwork()
     {
@@ -431,7 +431,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the education level associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function educationlevel()
     {
@@ -441,7 +441,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the class level associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function classlevel()
     {
@@ -451,7 +451,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the semester associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function semester()
     {
@@ -461,7 +461,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the school year associated with the User.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function schoolyear()
     {

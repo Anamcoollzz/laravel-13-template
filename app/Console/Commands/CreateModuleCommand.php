@@ -26,33 +26,65 @@ class CreateModuleCommand extends Command
     --- Note: --columns is required, --icon is required, --title is required, --soft-deletes is optional`
     ';
 
-    private $prefix, $modelName, $snake, $camel, $slug, $pluralSnake, $title, $latestMigration, $softDeletes, $columns, $labels, $columnsArray, $labelsArray, $columnsArrayWithoutPassword, $icon;
+    private $prefix;
+
+    private $modelName;
+
+    private $snake;
+
+    private $camel;
+
+    private $slug;
+
+    private $pluralSnake;
+
+    private $title;
+
+    private $latestMigration;
+
+    private $softDeletes;
+
+    private $columns;
+
+    private $labels;
+
+    private $columnsArray;
+
+    private $labelsArray;
+
+    private $columnsArrayWithoutPassword;
+
+    private $icon;
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $columns         = $this->option('columns');
-        $this->icon      = $icon      = $this->option('icon');
-        $this->title     = $title     = $this->option('title');
+        $columns = $this->option('columns');
+        $this->icon = $icon = $this->option('icon');
+        $this->title = $title = $this->option('title');
         $this->modelName = $modelName = $name = $this->argument('name');
-        $softDeletes     = $this->option('soft-deletes');
+        $softDeletes = $this->option('soft-deletes');
 
         if ($name === null || $name === '') {
             $this->error('Name is required');
+
             return;
         }
         if ($columns === null || $columns === '') {
             $this->error('--columns is required');
+
             return;
         }
         if ($icon === null || $icon === '') {
             $this->error('--icon is required');
+
             return;
         }
         if ($title === null || $title === '') {
             $this->error('--title is required');
+
             return;
         }
         if ($softDeletes === null) {
@@ -68,14 +100,15 @@ class CreateModuleCommand extends Command
         });
         $this->labelsArray = $labelsArray = collect($columns)->transform(function ($item) {
             $parts = explode(':', $item);
+
             return $parts[1] ?? $parts[0];
         })->toArray();
 
-        $this->snake       = $snake       = Str::snake($name);
+        $this->snake = $snake = Str::snake($name);
         $this->pluralSnake = $pluralSnake = Str::plural($snake);
-        $this->prefix      = $prefix      = Str::kebab(Str::plural($name));
-        $this->camel       = $camel       = Str::camel($name);
-        $this->slug        = $slug        = Str::slug($name);
+        $this->prefix = $prefix = Str::kebab(Str::plural($name));
+        $this->camel = $camel = Str::camel($name);
+        $this->slug = $slug = Str::slug($name);
 
         $this->controller();
         $this->model();
@@ -94,50 +127,50 @@ class CreateModuleCommand extends Command
 
     private function logCommand()
     {
-        file_put_contents(app_path('Console/Commands/logs/' . $this->modelName . '.txt'), 'php artisan make:module ' . $this->modelName . ' --columns="' . implode(',', $this->columns) . '" --icon="' . $this->icon . '" --title="' . $this->title . '"');
+        file_put_contents(app_path('Console/Commands/logs/'.$this->modelName.'.txt'), 'php artisan make:module '.$this->modelName.' --columns="'.implode(',', $this->columns).'" --icon="'.$this->icon.'" --title="'.$this->title.'"');
     }
 
     private function generateMigrations()
     {
-        $pluralSnake  = $this->pluralSnake;
-        $softDeletes  = $this->softDeletes;
+        $pluralSnake = $this->pluralSnake;
+        $softDeletes = $this->softDeletes;
         $columnsArray = $this->columnsArray;
-        $labelsArray  = $this->labelsArray;
+        $labelsArray = $this->labelsArray;
 
-        $migrations = glob(database_path('migrations/*_create_' . $pluralSnake . '_table.php'));
+        $migrations = glob(database_path('migrations/*_create_'.$pluralSnake.'_table.php'));
         if (count($migrations) > 0) {
             File::delete($migrations);
         }
-        Artisan::call("make:migration create_" . $pluralSnake . "_table --create=" . $pluralSnake);
-        $migrations = glob(database_path('migrations/*_create_' . $pluralSnake . '_table.php'));
+        Artisan::call('make:migration create_'.$pluralSnake.'_table --create='.$pluralSnake);
+        $migrations = glob(database_path('migrations/*_create_'.$pluralSnake.'_table.php'));
         if ($migrations) {
             $this->latestMigration = $latestMigration = array_reduce($migrations, function ($a, $b) {
                 return filemtime($a) > filemtime($b) ? $a : $b;
             });
             // $this->info('Latest migration created: ' . $latestMigration);
         }
-        $soft = "";
+        $soft = '';
         if ($softDeletes) {
-            $soft = "\$table->softDeletes();";
+            $soft = '$table->softDeletes();';
         }
         file_put_contents($latestMigration, str_replace(
             '$table->timestamps();',
-            implode("\n\t\t\t", array_map(function ($col, $index) use ($softDeletes, $labelsArray) {
+            implode("\n\t\t\t", array_map(function ($col, $index) use ($labelsArray) {
 
                 if (Str::endsWith($col, '_id')) {
                     $table = Str::plural(Str::snake(substr($col, 0, -3)));
-                    return "\$table->unsignedBigInteger('$col')->nullable()->comment('" . $labelsArray[$index] . "');\n\t\t\t\$table->foreign('$col')->references('id')->on('" . $table . "')->onUpdate('set null')->onDelete('set null');";
-                } else if ($col === 'password') {
-                    return "\$table->string('$col', 191)->nullable()->comment('" . $labelsArray[$index] . "');";
-                } else if ($col === 'email') {
-                    return "\$table->string('$col', 191)->unique()->comment('" . $labelsArray[$index] . "');";
-                } else if ($col === 'birthdate' || Str::endsWith($col, '_date') || $col === 'date') {
-                    return "\$table->date('$col')->nullable()->comment('" . $labelsArray[$index] . "');";
+
+                    return "\$table->unsignedBigInteger('$col')->nullable()->comment('".$labelsArray[$index]."');\n\t\t\t\$table->foreign('$col')->references('id')->on('".$table."')->onUpdate('set null')->onDelete('set null');";
+                } elseif ($col === 'password') {
+                    return "\$table->string('$col', 191)->nullable()->comment('".$labelsArray[$index]."');";
+                } elseif ($col === 'email') {
+                    return "\$table->string('$col', 191)->unique()->comment('".$labelsArray[$index]."');";
+                } elseif ($col === 'birthdate' || Str::endsWith($col, '_date') || $col === 'date') {
+                    return "\$table->date('$col')->nullable()->comment('".$labelsArray[$index]."');";
                 }
 
-
-                return "\$table->string('$col', 50)->nullable()->comment('" . $labelsArray[$index] . "');";
-            }, $columnsArray, array_keys($columnsArray))) . "
+                return "\$table->string('$col', 50)->nullable()->comment('".$labelsArray[$index]."');";
+            }, $columnsArray, array_keys($columnsArray)))."
 
             // wajib
             \$table->timestamps();
@@ -152,8 +185,8 @@ class CreateModuleCommand extends Command
         file_put_contents($latestMigration, str_replace(
             'Schema::create(',
             "Schema::disableForeignKeyConstraints();
-            Schema::dropIfExists('" . $pluralSnake . "');
-        if (!in_array('" . $pluralSnake . "', config('stisla.table_excludes')))
+            Schema::dropIfExists('".$pluralSnake."');
+        if (!in_array('".$pluralSnake."', config('stisla.table_excludes')))
         Schema::create(",
             file_get_contents($latestMigration)
         ));
@@ -163,7 +196,7 @@ class CreateModuleCommand extends Command
     {
         $name = $this->modelName;
         $columnsArray = $this->columnsArray;
-        $this->copy(base_path('database/seeders/CrudExampleSeeder.php'), $seeder = base_path('database/seeders/' . $name . 'Seeder.php'));
+        $this->copy(base_path('database/seeders/CrudExampleSeeder.php'), $seeder = base_path('database/seeders/'.$name.'Seeder.php'));
         file_put_contents($seeder, str_replace('CrudExample', $name, file_get_contents($seeder)));
         file_put_contents($seeder, str_replace(
             '//columns',
@@ -179,9 +212,9 @@ class CreateModuleCommand extends Command
                 // }
                 if (Str::endsWith($col, '_id')) {
                     return "\$row['$col'] = fake()->word();";
-                } else if ($col == 'name') {
+                } elseif ($col == 'name') {
                     return "\$row['$col'] = fake()->name();";
-                } else if ($col == 'email') {
+                } elseif ($col == 'email') {
                     return "\$row['$col'] = fake()->email();";
                 } else {
                     return "\$row['$col'] = fake()->sentence();";
@@ -190,10 +223,10 @@ class CreateModuleCommand extends Command
             file_get_contents($seeder)
         ));
 
-        if (Str::contains($file = file_get_contents(database_path('seeders/DatabaseSeeder.php')), '$this->call(' . $name . 'Seeder::class);') === false) {
+        if (Str::contains($file = file_get_contents(database_path('seeders/DatabaseSeeder.php')), '$this->call('.$name.'Seeder::class);') === false) {
             file_put_contents(database_path('seeders/DatabaseSeeder.php'), str_replace(
                 '// seeders',
-                "\$this->call(" . $name . "Seeder::class);\n        // seeders ",
+                '$this->call('.$name."Seeder::class);\n        // seeders ",
                 file_get_contents(database_path('seeders/DatabaseSeeder.php'))
             ));
         }
@@ -204,7 +237,7 @@ class CreateModuleCommand extends Command
         $slug = $this->slug;
         $pluralSnake = $this->pluralSnake;
         $title = $this->title;
-        $this->copy(base_path('config/crud-example-permission.php'), $path = base_path('config/' . $slug . '-permission.php'));
+        $this->copy(base_path('config/crud-example-permission.php'), $path = base_path('config/'.$slug.'-permission.php'));
         file_put_contents($path, str_replace('Contoh CRUD', $title, file_get_contents($path)));
         file_put_contents($path, str_replace('crud_examples', $pluralSnake, file_get_contents($path)));
     }
@@ -235,9 +268,9 @@ class CreateModuleCommand extends Command
      */
     private function generateRoute()
     {
-        $name       = $this->modelName;
-        $prefix     = $this->prefix;
-        $snake      = $this->snake;
+        $name = $this->modelName;
+        $prefix = $this->prefix;
+        $snake = $this->snake;
         $title = $this->title;
         $content = "
 <?php
@@ -274,7 +307,7 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
 //route
         ";
         // $path = base_path('routes/stisla-web-auth.php');
-        $path = base_path('routes/modules/' . $prefix . '-web-auth.php');
+        $path = base_path('routes/modules/'.$prefix.'-web-auth.php');
         // file_put_contents($path, str_replace('//route', $content, @file_get_contents($path)));
         file_put_contents($path, $content);
     }
@@ -282,16 +315,19 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
     /**
      * copy file or directory
      *
-     * @param string $src
-     * @param string $dest
+     * @param  string  $src
+     * @param  string  $dest
      * @return void
      */
     private function copy($src, $dest)
     {
-        if (File::isDirectory($dest)) File::deleteDirectory($dest);
+        if (File::isDirectory($dest)) {
+            File::deleteDirectory($dest);
+        }
         File::ensureDirectoryExists(dirname($dest));
         if (is_dir($src)) {
             File::copyDirectory($src, $dest); // melempar exception kalau gagal
+
             return;
         }
         File::copy($src, $dest); // melempar exception kalau gagal
@@ -300,7 +336,7 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
     /**
      * get path according to OS
      *
-     * @param string $path
+     * @param  string  $path
      * @return string
      */
     private function getPath($path)
@@ -308,6 +344,7 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         if (PHP_OS === 'Windows' || PHP_OS === 'WINNT') {
             return str_replace('/', '\\', $path);
         }
+
         return $path;
     }
 
@@ -316,33 +353,33 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $name = $this->modelName;
         $prefix = $this->prefix;
         $slug = $this->slug;
-        $this->info('Controller: ' . $name . 'Controller');
-        $this->info('Model: ' . $name);
-        $this->info('Repository: ' . $name . 'Repository');
-        $this->info('Request: ' . $name . 'Request');
-        $this->info('Views: ' . $prefix);
-        $this->info('Migration: ' . $this->latestMigration);
-        $this->info('Seeder: ' . $name . 'Seeder');
-        $this->info('Permission Config: ' . $slug . '-permission.php');
+        $this->info('Controller: '.$name.'Controller');
+        $this->info('Model: '.$name);
+        $this->info('Repository: '.$name.'Repository');
+        $this->info('Request: '.$name.'Request');
+        $this->info('Views: '.$prefix);
+        $this->info('Migration: '.$this->latestMigration);
+        $this->info('Seeder: '.$name.'Seeder');
+        $this->info('Permission Config: '.$slug.'-permission.php');
         $this->info('Module created successfully.');
     }
 
     private function controller()
     {
-        $name       = $this->modelName;
-        $prefix     = $this->prefix;
-        $camel      = $this->camel;
-        $slug       = $this->slug;
-        $title      = $this->title;
-        $icon       = $this->option('icon');
+        $name = $this->modelName;
+        $prefix = $this->prefix;
+        $camel = $this->camel;
+        $slug = $this->slug;
+        $title = $this->title;
+        $icon = $this->option('icon');
 
         $controller = base_path('app/Http/Controllers/CrudExampleController.php');
-        $this->copy($controller, $path = base_path('app/Http/Controllers/' . $name . 'Controller.php'));
+        $this->copy($controller, $path = base_path('app/Http/Controllers/'.$name.'Controller.php'));
         file_put_contents($path, str_replace('CrudExample', $name, file_get_contents($path)));
         file_put_contents($path, str_replace('crudExample', $camel, file_get_contents($path)));
         file_put_contents($path, str_replace('crud-examples', $prefix, file_get_contents($path)));
         file_put_contents($path, str_replace('crud example', $slug, file_get_contents($path)));
-        file_put_contents($path, str_replace('//columns', "\n            " . implode("\n            ", array_map(fn($col) => "'$col',", $this->columnsArrayWithoutPassword)), file_get_contents($path)));
+        file_put_contents($path, str_replace('//columns', "\n            ".implode("\n            ", array_map(fn ($col) => "'$col',", $this->columnsArrayWithoutPassword)), file_get_contents($path)));
         file_put_contents($path, str_replace('//rostart', '$data = array_merge($data, request()->only([', file_get_contents($path)));
         file_put_contents($path, str_replace('//roend', ']));', file_get_contents($path)));
         file_put_contents($path, str_replace('fa fa-atom', $icon, file_get_contents($path)));
@@ -357,9 +394,9 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $columnsArray = $this->columnsArray;
         $model = base_path('app/Models/CrudExample.php');
         // exec('cp ' . $model . ' ' . ($path = base_path('app/Models/' . $name . '.php')));
-        $this->copy($model, $path = base_path('app/Models/' . $name . '.php'));
+        $this->copy($model, $path = base_path('app/Models/'.$name.'.php'));
         file_put_contents($path, str_replace('CrudExample', $name, file_get_contents($path)));
-        file_put_contents($path, str_replace('//columns', "\n            " . implode("\n            ", array_map(fn($col) => "'$col',", $columnsArray)), file_get_contents($path)));
+        file_put_contents($path, str_replace('//columns', "\n            ".implode("\n            ", array_map(fn ($col) => "'$col',", $columnsArray)), file_get_contents($path)));
         file_put_contents($path, str_replace(', SoftDeletes', '', file_get_contents($path)));
         if ($softDeletes) {
             file_put_contents($path, str_replace('//softdeletes', 'use SoftDeletes;', file_get_contents($path)));
@@ -376,15 +413,15 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $labelsArray = $this->labelsArray;
         $modelName = $this->modelName;
         $repository = base_path('app/Repositories/CrudExampleRepository.php');
-        $this->copy($repository, $path = base_path('app/Repositories/' . $name . 'Repository.php'));
+        $this->copy($repository, $path = base_path('app/Repositories/'.$name.'Repository.php'));
         file_put_contents($path, str_replace('CrudExample', $name, file_get_contents($path)));
         file_put_contents($path, str_replace('crud-examples', $prefix, file_get_contents($path)));
         file_put_contents($path, str_replace('crudExample', $camel, file_get_contents($path)));
-        file_put_contents($path, str_replace('//columns', "\n            " . implode("\n            ", array_map(function ($col, $index) use ($columnsArray, $labelsArray) {
+        file_put_contents($path, str_replace('//columns', "\n            ".implode("\n            ", array_map(function ($col, $index) {
             // return "['data' => '$col', 'name' => '$labelsArray[$index]'],";
             return "['data' => '$col', 'name' => '$col'],";
         }, $columnsArray, array_keys($columnsArray))), file_get_contents($path)));
-        file_put_contents($path, str_replace('// columns', "\n            " . implode("\n            ", array_map(function ($col, $index) use ($columnsArray, $labelsArray, $modelName) {
+        file_put_contents($path, str_replace('// columns', "\n            ".implode("\n            ", array_map(function ($col, $index) use ($modelName) {
             return "'$col' => fn($modelName \$item) => \$item->$col,";
         }, $columnsArray, array_keys($columnsArray))), file_get_contents($path)));
     }
@@ -395,20 +432,21 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $pluralSnake = $this->pluralSnake;
         $columnsArray = $this->columnsArray;
         $request = base_path('app/Http/Requests/CrudExampleRequest.php');
-        $this->copy($request, $path = base_path('app/Http/Requests/' . $name . 'Request.php'));
+        $this->copy($request, $path = base_path('app/Http/Requests/'.$name.'Request.php'));
         file_put_contents($path, str_replace('CrudExample', $name, file_get_contents($path)));
-        file_put_contents($path, str_replace('// columns', "\n            " . implode("\n            ", array_map(function ($col) use ($pluralSnake) {
+        file_put_contents($path, str_replace('// columns', "\n            ".implode("\n            ", array_map(function ($col) use ($pluralSnake) {
             if ($col === 'name') {
                 return "'$col' => 'required|string|regex:/^[\\pL\\s.,]+$/u|max:50',";
-            } else if ($col === 'email') {
+            } elseif ($col === 'email') {
                 return "'$col' => \$this->isMethod('put') || \$this->isMethodPut || \$isMethodPut ? 'required|email|unique:$pluralSnake,$col,'.\$id.',id|max:100' : 'required|email|unique:$pluralSnake,$col|max:100',";
-            } else if ($col === 'password') {
+            } elseif ($col === 'password') {
                 return "'$col' => \$this->isMethod('put') || \$this->isMethodPut || \$isMethodPut ? 'nullable|string|min:6|max:50' : 'required|string|min:6|max:50',";
-            } else if ($col === 'birthdate' || $col === 'date' || Str::endsWith($col, '_date')) {
+            } elseif ($col === 'birthdate' || $col === 'date' || Str::endsWith($col, '_date')) {
                 return "'$col' => 'required|date',";
-            } else if ($col === 'nik') {
+            } elseif ($col === 'nik') {
                 return "'$col' => 'required|unique:$pluralSnake,$col|digits:16',";
             }
+
             return "'$col'\t\t=> 'required',";
         }, $columnsArray)), file_get_contents($path)));
         file_put_contents($path, str_replace('// aa', 'return [', file_get_contents($path)));
@@ -421,35 +459,37 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $columnsArray = $this->columnsArray;
         $labelsArray = $this->labelsArray;
         $view = base_path('resources/views/stisla/crud-examples');
-        File::deleteDirectory($path = base_path('resources/views/stisla/' . $prefix));
-        $this->copy($view, $path = base_path('resources/views/stisla/' . $prefix));
+        File::deleteDirectory($path = base_path('resources/views/stisla/'.$prefix));
+        $this->copy($view, $path = base_path('resources/views/stisla/'.$prefix));
         $views = File::allFiles($path);
         foreach ($views as $view) {
             $fname = $view->getRealPath();
-            file_put_contents($fname, str_replace('{{-- columns --}}', implode("\n\t\t", array_map(function ($col, $index) use ($labelsArray) {
+            file_put_contents($fname, str_replace('{{-- columns --}}', implode("\n\t\t", array_map(function ($col, $index) {
                 if ($col === 'password') {
-                    return "{{-- <th>{{ __('validation.attributes." . $col . "') }}</th> --}}";
-                } else if (Str::contains($col, 'email') || Str::contains($col, 'birthdate') || $col === 'name') {
+                    return "{{-- <th>{{ __('validation.attributes.".$col."') }}</th> --}}";
+                } elseif (Str::contains($col, 'email') || Str::contains($col, 'birthdate') || $col === 'name') {
                     return '';
                 }
-                return "<th>{{ __('validation.attributes." . $col . "') }}</th>";
+
+                return "<th>{{ __('validation.attributes.".$col."') }}</th>";
             }, $columnsArray, array_keys($columnsArray))), file_get_contents($fname)));
-            file_put_contents($fname, str_replace('{{-- columnstd --}}', implode("\n\t\t", array_map(function ($col, $index) use ($labelsArray) {
+            file_put_contents($fname, str_replace('{{-- columnstd --}}', implode("\n\t\t", array_map(function ($col, $index) {
                 if ($col === 'deleted_at') {
                     return "@include('stisla.includes.others.td-deleted-at')";
-                } else if (Str::contains($col, 'email') || Str::contains($col, 'birthdate') || $col === 'name') {
+                } elseif (Str::contains($col, 'email') || Str::contains($col, 'birthdate') || $col === 'name') {
                     return '';
+
                     return "@include('stisla.includes.others.td-email')";
-                } else if (Str::endsWith($col, '_date') || $col === 'date' || $col === 'birthdate') {
+                } elseif (Str::endsWith($col, '_date') || $col === 'date' || $col === 'birthdate') {
                     return "@include('stisla.includes.others.td-datetime', ['DateTime' => \$item->$col])";
-                } else if (Str::contains($col, 'image') || Str::contains($col, 'avatar') || Str::contains($col, 'photo')) {
+                } elseif (Str::contains($col, 'image') || Str::contains($col, 'avatar') || Str::contains($col, 'photo')) {
                     return "@include('stisla.includes.others.td-image', ['file' => \$item->$col])";
-                } else if (Str::contains($col, 'address')) {
+                } elseif (Str::contains($col, 'address')) {
                     return "@include('stisla.includes.others.td-address')";
-                } else if (Str::contains($col, 'phone')) {
+                } elseif (Str::contains($col, 'phone')) {
                     return "@include('stisla.includes.others.td-phone-number')";
-                } else if ($col === 'password') {
-                    return "{{-- <td>********</td> --}}";
+                } elseif ($col === 'password') {
+                    return '{{-- <td>********</td> --}}';
                 }
 
                 return "<td>{{ \$item->$col }}</td>";
@@ -457,21 +497,24 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
             file_put_contents($fname, str_replace(
                 '{{-- formcolumns --}}',
                 implode("\n", array_map(
-                    function ($col, $index) use ($labelsArray) {
+                    function ($col, $index) {
                         if (Str::endsWith($col, '_id')) {
-                            return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.selects.select', ['id' => '$col','name' => '$col','options' => '{$col}_options','label' => __('validation.attributes." . $col . "'),'required' => true,])\n\t</div>";
+                            return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.selects.select', ['id' => '$col','name' => '$col','options' => '{$col}_options','label' => __('validation.attributes.".$col."'),'required' => true,])\n\t</div>";
                         } elseif ($col === 'name' || $col === 'birthdate' || $col === 'phone_number' || $col === 'address' || $col === 'birth_date') {
                             return '';
+
                             return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.inputs.input-name')\n\t</div>";
                         } elseif ($col === 'email') {
                             return '';
+
                             return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.inputs.input-email')\n\t</div>";
                         } elseif ($col === 'password') {
                             return '';
+
                             return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.inputs.input-password')\n\t</div>";
                         }
 
-                        return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => '$col', 'label' => __('validation.attributes." . $col . "')])\n\t</div>";
+                        return "<div class=\"col-md-6\">\n\t\t@include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => '$col', 'label' => __('validation.attributes.".$col."')])\n\t</div>";
                     },
                     $columnsArray,
                     array_keys($columnsArray)
@@ -487,9 +530,9 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         $filepath = base_path('lang/id/validation.php');
         file_put_contents($filepath, str_replace(
             "'attributes' => [",
-            "'attributes' => [\n        " . implode("\n        ", array_map(function ($col, $index) {
-                return "'$col' => '" . $this->labelsArray[$index] . "',";
-            }, $this->columnsArray, array_keys($this->columnsArray))) . "",
+            "'attributes' => [\n        ".implode("\n        ", array_map(function ($col, $index) {
+                return "'$col' => '".$this->labelsArray[$index]."',";
+            }, $this->columnsArray, array_keys($this->columnsArray))).'',
             file_get_contents($filepath)
         ));
     }

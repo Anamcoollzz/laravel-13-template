@@ -5,81 +5,80 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * successMessageCreate
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageCreate($nextTitle = '')
 {
-    return __('Berhasil Menambahkan Data ' . ($nextTitle));
+    return __('Berhasil Menambahkan Data '.($nextTitle));
 }
 
 /**
  * successMessageUpdate
  *
- * @param string $nextTitle
- * @param Model|null $model
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageUpdate($nextTitle = '', ?Model $model = null)
 {
     if ($model && $model->email) {
-        return __('Berhasil Memperbarui Data ' . ($nextTitle) . ' Dengan Email ' . $model->email);
+        return __('Berhasil Memperbarui Data '.($nextTitle).' Dengan Email '.$model->email);
     }
-    return __('Berhasil Memperbarui Data ' . ($nextTitle));
+
+    return __('Berhasil Memperbarui Data '.($nextTitle));
 }
 
 /**
  * successMessageDuplicate
  *
- * @param string $nextTitle
- * @param Model|null $model
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageDuplicate($nextTitle = '', ?Model $model = null)
 {
     if ($model && $model->email) {
-        return __('Berhasil Menggandakan Data ' . ($nextTitle) . ' Dengan Email Baru ' . $model->email);
+        return __('Berhasil Menggandakan Data '.($nextTitle).' Dengan Email Baru '.$model->email);
     }
-    return __('Berhasil Menggandakan Data ' . ($nextTitle));
+
+    return __('Berhasil Menggandakan Data '.($nextTitle));
 }
 
 /**
  * successMessageDelete
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageDelete($nextTitle = '')
 {
     if (request()->input('variant') === 'warning') {
-        return __('Berhasil Memindahkan Data ' . ($nextTitle) . ' Ke Tempat Sampah');
+        return __('Berhasil Memindahkan Data '.($nextTitle).' Ke Tempat Sampah');
     }
-    return __('Berhasil Menghapus Data ' . ($nextTitle));
+
+    return __('Berhasil Menghapus Data '.($nextTitle));
 }
 
 /**
  * successMessageImportExcel
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageImportExcel($nextTitle = '')
 {
-    return __('Berhasil Mengimpor Data ' . ($nextTitle) . ' Dari Excel');
+    return __('Berhasil Mengimpor Data '.($nextTitle).' Dari Excel');
 }
-
 
 /**
  * successMessageLoadData
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageLoadData($nextTitle = '')
 {
-    return __('Berhasil Mengambil Data ' . ($nextTitle));
+    return __('Berhasil Mengambil Data '.($nextTitle));
 }
-
 
 // GAGAL SECCTION
 // ===================================================================================================================
@@ -87,88 +86,87 @@ function successMessageLoadData($nextTitle = '')
 /**
  * failedMessageCreate
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function failedMessageCreate($nextTitle = '')
 {
-    return __('Gagal Menambahkan Data ' . ($nextTitle));
+    return __('Gagal Menambahkan Data '.($nextTitle));
 }
 
 /**
  * failedMessageUpdate
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function failedMessageUpdate($nextTitle = '')
 {
-    return __('Gagal Memperbarui Data ' . ($nextTitle));
+    return __('Gagal Memperbarui Data '.($nextTitle));
 }
 
 /**
  * failedMessageDelete
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function failedMessageDelete($nextTitle = '')
 {
-    return __('Gagal Menghapus Data ' . ($nextTitle));
+    return __('Gagal Menghapus Data '.($nextTitle));
 }
-
 
 /**
  * failedMessageLoadData
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function failedMessageLoadData($nextTitle = '')
 {
-    return __('Gagal Mengambil Data ' . ($nextTitle));
+    return __('Gagal Mengambil Data '.($nextTitle));
 }
 
 /**
  * successMessageRestore
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageRestore($nextTitle = '')
 {
-    return __('Berhasil Mengembalikan Data ' . ($nextTitle));
+    return __('Berhasil Mengembalikan Data '.($nextTitle));
 }
 
 /**
  * successMessageForceDelete
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageForceDelete($nextTitle = '')
 {
-    return __('Berhasil Menghapus Secara Permanen Data ' . ($nextTitle));
+    return __('Berhasil Menghapus Secara Permanen Data '.($nextTitle));
 }
 
 /**
  * successMessageForceDeleteAll
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageForceDeleteAll($nextTitle = '')
 {
-    return __('Berhasil Menghapus Secara Permanen Data ' . ($nextTitle) . ' Yang Ada Di Tempat Sampah');
+    return __('Berhasil Menghapus Secara Permanen Data '.($nextTitle).' Yang Ada Di Tempat Sampah');
 }
 
 /**
  * successMessageRestoreAll
  *
- * @param string $nextTitle
+ * @param  string  $nextTitle
  * @return string
  */
 function successMessageRestoreAll($nextTitle = '')
 {
-    return __('Berhasil Mengembalikan Semua Data ' . ($nextTitle) . ' Yang Ada Di Tempat Sampah');
+    return __('Berhasil Mengembalikan Semua Data '.($nextTitle).' Yang Ada Di Tempat Sampah');
 }

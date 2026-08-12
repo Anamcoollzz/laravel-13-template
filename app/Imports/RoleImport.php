@@ -2,14 +2,13 @@
 
 namespace App\Imports;
 
+use App\Models\Role;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Models\Role;
 
 class RoleImport implements ToCollection, WithHeadingRow
 {
-
     /**
      * To collection
      *
@@ -21,10 +20,10 @@ class RoleImport implements ToCollection, WithHeadingRow
         foreach ($rows->chunk(30) as $chunkData) {
             $insertData = $chunkData->transform(function ($item) use ($dateTime) {
                 return [
-                    'name'          => $item['role'],
-                    'guard_name'    => 'web',
-                    'created_at'    => $dateTime,
-                    'updated_at'    => $dateTime,
+                    'name' => $item['role'],
+                    'guard_name' => 'web',
+                    'created_at' => $dateTime,
+                    'updated_at' => $dateTime,
                     'created_by_id' => auth_user()->id,
                 ];
             })->toArray();

@@ -30,6 +30,7 @@ class DeleteModuleCommand extends Command
 
         if (empty($moduleName)) {
             $this->error('Module name is required.');
+
             return 1;
         }
 
@@ -39,8 +40,9 @@ class DeleteModuleCommand extends Command
             Schema::dropIfExists('bank_deposits');
             Schema::dropIfExists('banks');
             $this->info("Module 'bank' and its associated tables have been deleted.");
+
             return 0;
-        } else if ($moduleName === 'pendidikan') {
+        } elseif ($moduleName === 'pendidikan') {
             Schema::dropIfExists('faculty_leaders');
             Schema::dropIfExists('ormawas');
             Schema::dropIfExists('works');
@@ -48,17 +50,21 @@ class DeleteModuleCommand extends Command
             Schema::dropIfExists('study_programs');
             Schema::dropIfExists('students');
             $this->info("Module 'pendidikan' and its associated tables have been deleted.");
+
             return 0;
-        } else if ($moduleName === 'crud-examples') {
+        } elseif ($moduleName === 'crud-examples') {
             Schema::dropIfExists('crud_examples');
             $this->info("Module 'crud-examples' and its associated tables have been deleted.");
+
             return 0;
-        } else if ($moduleName === 'notifikasi') {
+        } elseif ($moduleName === 'notifikasi') {
             Schema::dropIfExists('notifications');
             $this->info("Module 'notifikasi' and its associated tables have been deleted.");
+
             return 0;
         } else {
             $this->error("Module '$moduleName' not found or cannot be deleted.");
+
             return 1;
         }
         Schema::enableForeignKeyConstraints();

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!in_array('ormawas', config('stisla.table_excludes')))
+        if (! in_array('ormawas', config('stisla.table_excludes'))) {
             Schema::create('ormawas', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 50);
@@ -23,6 +23,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

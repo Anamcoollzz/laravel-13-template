@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\AppEnum;
 use App\Http\Requests\ProfileRequest;
+use Carbon\Carbon;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -36,21 +36,21 @@ class ProfileController extends StislaController
     {
         $user = Auth::user();
         // dd($user->getAllPermissions()->toArray());
-        $totalDay = \Carbon\Carbon::parse($user->last_password_change)->diffInDays(now());
+        $totalDay = Carbon::parse($user->last_password_change)->diffInDays(now());
         // dd(auth_user()->permissions()->get()->toArray());
         $is_chat = config('stisla.app') === AppEnum::APP_CHAT && is_user();
+
         return view('stisla.profile.index', [
-            'user'     => $user,
-            'd'        => $user,
+            'user' => $user,
+            'd' => $user,
             'totalDay' => $totalDay,
-            'is_chat'  => $is_chat,
+            'is_chat' => $is_chat,
         ]);
     }
 
     /**
      * update profile user login
      *
-     * @param ProfileRequest $request
      * @return Response
      */
     public function update(ProfileRequest $request)
@@ -71,49 +71,49 @@ class ProfileController extends StislaController
         $newUser = $this->userRepository->updateProfile($data);
 
         logUpdate('Profil Pengguna', $user, $newUser);
+
         return backSuccess('Berhasil memperbarui profil');
     }
 
     /**
      * update password user login
      *
-     * @param ProfileRequest $request
      * @return Response
      */
     public function updatePassword(ProfileRequest $request)
     {
         $oldPassword = Auth::user()->password;
         $data = [
-            'password'             => $newPassword = bcrypt($request->new_password),
+            'password' => $newPassword = bcrypt($request->new_password),
             'last_password_change' => date('Y-m-d H:i:s'),
-            'last_updated_by_id'   => auth_id(),
+            'last_updated_by_id' => auth_id(),
         ];
         $this->userRepository->updateProfile($data);
 
         logUpdate('Kata Sandi', $oldPassword, $newPassword);
+
         return backSuccess('Berhasil memperbarui password');
     }
 
     /**
      * update email user login
      *
-     * @param ProfileRequest $request
      * @return Response
      */
     public function updateEmail(ProfileRequest $request)
     {
         $this->userRepository->updateProfile([
-            'email' => $request->email
+            'email' => $request->email,
         ]);
 
         logUpdate('Email', user_email(), $request->email);
+
         return backSuccess('Berhasil memperbarui email');
     }
 
     /**
      * delete account
      *
-     * @param ProfileRequest $request
      * @return Response
      */
     public function deleteAccount(ProfileRequest $request)
@@ -122,6 +122,7 @@ class ProfileController extends StislaController
 
         logDelete('Akun', $user);
         Auth::logout();
+
         return redirectSuccess(route('login'), 'Berhasil menghapus akun');
     }
 }

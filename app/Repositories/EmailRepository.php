@@ -6,7 +6,6 @@ use App\Models\Setting;
 
 class EmailRepository
 {
-
     /**
      * emailProvider
      *
@@ -41,13 +40,14 @@ class EmailRepository
     public static function fromName()
     {
         $setting = Setting::where('key', 'mail_from_name')->first();
-        if (!$setting) {
+        if (! $setting) {
             $appName = SettingRepository::appName();
             $setting = Setting::create([
                 'key' => 'mail_from_name',
-                'value' => 'Superadmin ' . $appName,
+                'value' => 'Superadmin '.$appName,
             ]);
         }
+
         return $setting->value;
     }
 

@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class OrmawaController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -22,9 +21,9 @@ class OrmawaController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-sitemap';
+        $this->icon = 'fa fa-sitemap';
         $this->repository = new OrmawaRepository;
-        $this->prefix     = $this->viewFolder            = 'ormawas';
+        $this->prefix = $this->viewFolder = 'ormawas';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new OrmawaImport;
 
@@ -65,7 +64,6 @@ class OrmawaController extends StislaController
     /**
      * showing data page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -76,7 +74,6 @@ class OrmawaController extends StislaController
     /**
      * showing add new data page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
@@ -87,7 +84,6 @@ class OrmawaController extends StislaController
     /**
      * save new data to db
      *
-     * @param OrmawaRequest $request
      * @return Response
      */
     public function store(OrmawaRequest $request)
@@ -98,8 +94,6 @@ class OrmawaController extends StislaController
     /**
      * showing edit data page
      *
-     * @param Request $request
-     * @param Ormawa $ormawa
      * @return Response
      */
     public function edit(Request $request, Ormawa $ormawa)
@@ -110,8 +104,6 @@ class OrmawaController extends StislaController
     /**
      * update data to db
      *
-     * @param OrmawaRequest $request
-     * @param Ormawa $ormawa
      * @return Response
      */
     public function update(OrmawaRequest $request, Ormawa $ormawa)
@@ -122,8 +114,6 @@ class OrmawaController extends StislaController
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param Ormawa $ormawa
      * @return Response
      */
     public function show(Request $request, Ormawa $ormawa)
@@ -134,7 +124,6 @@ class OrmawaController extends StislaController
     /**
      * delete data from db
      *
-     * @param Ormawa $ormawa
      * @return Response
      */
     public function destroy(Ormawa $ormawa)
@@ -145,8 +134,6 @@ class OrmawaController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\RequestLog;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class RequestLogRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -15,13 +15,13 @@ class RequestLogRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new RequestLog();
+        $this->model = new RequestLog;
     }
 
     /**
      * getFilter
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return Collection|static[]
      */
     public function getFilter()
     {
@@ -44,7 +44,7 @@ class RequestLogRepository extends Repository
             ->when(request('filter_browser'), function ($query) {
                 $query->whereBrowser(request('filter_browser'));
             })
-            ->when(!auth_user()->hasRole('superadmin'), function ($query) {
+            ->when(! auth_user()->hasRole('superadmin'), function ($query) {
                 $query->where('user_id', auth_user()->id);
             })
             ->with([
@@ -64,8 +64,9 @@ class RequestLogRepository extends Repository
      */
     public function getBrowserOptions()
     {
-        $query = "SELECT DISTINCT browser FROM `log_requests`;";
+        $query = 'SELECT DISTINCT browser FROM `log_requests`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('browser', 'browser')->toArray();
     }
 
@@ -76,8 +77,9 @@ class RequestLogRepository extends Repository
      */
     public function getDeviceOptions()
     {
-        $query = "SELECT DISTINCT device FROM `log_requests`;";
+        $query = 'SELECT DISTINCT device FROM `log_requests`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('device', 'device')->toArray();
     }
 
@@ -88,8 +90,9 @@ class RequestLogRepository extends Repository
      */
     public function getMethodOptions()
     {
-        $query = "SELECT DISTINCT method FROM `log_requests`;";
+        $query = 'SELECT DISTINCT method FROM `log_requests`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('method', 'method')->toArray();
     }
 
@@ -100,16 +103,17 @@ class RequestLogRepository extends Repository
      */
     public function getPlatformOptions()
     {
-        $query = "SELECT DISTINCT platform FROM `log_requests`;";
+        $query = 'SELECT DISTINCT platform FROM `log_requests`;';
         $results = DB::select($query);
+
         return collect($results)->pluck('platform', 'platform')->toArray();
     }
 
     /**
      * getMineLatest
      *
-     * @param integer $limit
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  int  $limit
+     * @return Collection|static[]
      */
     public function getMineLatest($limit = 10)
     {

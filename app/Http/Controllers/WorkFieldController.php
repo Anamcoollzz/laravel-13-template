@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class WorkFieldController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -20,20 +19,20 @@ class WorkFieldController extends StislaController
 
         parent::__construct();
 
-        $this->icon         = 'fas fa-cubes';
-        $this->repository   = new WorkFieldRepository;
-        $this->prefix       = $this->viewFolder = 'work-fields';
+        $this->icon = 'fas fa-cubes';
+        $this->repository = new WorkFieldRepository;
+        $this->prefix = $this->viewFolder = 'work-fields';
 
         // ini sesuaiin sama kebutuhan masing-masing, soalnya kalau A1 kan gede banget
         $this->pdfPaperSize = 'A1';
-        $this->isAppCrud    = true;
-        $this->request      = new WorkFieldRequest;
-        $this->fileColumns  = [
+        $this->isAppCrud = true;
+        $this->request = new WorkFieldRequest;
+        $this->fileColumns = [
             'file',
             'image',
             'avatar',
         ];
-        $this->htmlColumns  = [
+        $this->htmlColumns = [
             'summernote',
             'summernote_simple',
             'tinymce',
@@ -90,26 +89,33 @@ class WorkFieldController extends StislaController
             }
         }
 
-        if ($request->has('currency') && in_array('currency', $columns))
+        if ($request->has('currency') && in_array('currency', $columns)) {
             $data['currency'] = idr_to_double($request->currency);
+        }
 
-        if ($request->has('currency_idr') && in_array('currency_idr', $columns))
+        if ($request->has('currency_idr') && in_array('currency_idr', $columns)) {
             $data['currency_idr'] = rp_to_double($request->currency_idr);
+        }
 
-        if ($request->hasFile('file') && in_array('file', $columns))
+        if ($request->hasFile('file') && in_array('file', $columns)) {
             $data['file'] = $this->fileUtil->uploadToFolder($request->file('file'), 'work-fields/files');
+        }
 
-        if ($request->hasFile('image') && in_array('image', $columns))
+        if ($request->hasFile('image') && in_array('image', $columns)) {
             $data['image'] = $this->fileUtil->uploadToFolder($request->file('image'), 'work-fields/images');
+        }
 
-        if ($request->hasFile('avatar') && in_array('avatar', $columns))
+        if ($request->hasFile('avatar') && in_array('avatar', $columns)) {
             $data['avatar'] = $this->fileUtil->uploadToFolder($request->file('avatar'), 'work-fields/avatars');
+        }
 
-        if ($request->password  && in_array('password', $columns))
+        if ($request->password && in_array('password', $columns)) {
             $data['password'] = bcrypt($request->password);
+        }
 
-        if (in_array('is_active', $columns))
+        if (in_array('is_active', $columns)) {
             $data['is_active'] = $request->filled('is_active');
+        }
 
         $data = array_merge($data, request()->only([
             'name',
@@ -120,8 +126,6 @@ class WorkFieldController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

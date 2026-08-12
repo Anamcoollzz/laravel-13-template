@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class StudyProgramController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -23,9 +22,9 @@ class StudyProgramController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-book';
+        $this->icon = 'fa fa-book';
         $this->repository = new StudyProgramRepository;
-        $this->prefix     = $this->viewFolder            = 'study-programs';
+        $this->prefix = $this->viewFolder = 'study-programs';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new StudyProgramImport;
 
@@ -60,7 +59,6 @@ class StudyProgramController extends StislaController
     /**
      * showing data page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -71,7 +69,6 @@ class StudyProgramController extends StislaController
     /**
      * showing add new data page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
@@ -82,7 +79,6 @@ class StudyProgramController extends StislaController
     /**
      * save new data to db
      *
-     * @param StudyProgramRequest $request
      * @return Response
      */
     public function store(StudyProgramRequest $request)
@@ -93,8 +89,6 @@ class StudyProgramController extends StislaController
     /**
      * showing edit data page
      *
-     * @param Request $request
-     * @param StudyProgram $studyProgram
      * @return Response
      */
     public function edit(Request $request, StudyProgram $studyProgram)
@@ -105,8 +99,6 @@ class StudyProgramController extends StislaController
     /**
      * update data to db
      *
-     * @param StudyProgramRequest $request
-     * @param StudyProgram $studyProgram
      * @return Response
      */
     public function update(StudyProgramRequest $request, StudyProgram $studyProgram)
@@ -117,8 +109,6 @@ class StudyProgramController extends StislaController
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param StudyProgram $studyProgram
      * @return Response
      */
     public function show(Request $request, StudyProgram $studyProgram)
@@ -129,7 +119,6 @@ class StudyProgramController extends StislaController
     /**
      * delete data from db
      *
-     * @param StudyProgram $studyProgram
      * @return Response
      */
     public function destroy(StudyProgram $studyProgram)
@@ -140,8 +129,6 @@ class StudyProgramController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

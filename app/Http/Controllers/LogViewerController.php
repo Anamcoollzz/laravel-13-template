@@ -10,6 +10,7 @@ class LogViewerController extends StislaController
         if ($check && $check[0]) {
             return response($check[1]);
         }
+
         return (new \Rap2hpoutre\LaravelLogViewer\LogViewerController)->index();
     }
 }

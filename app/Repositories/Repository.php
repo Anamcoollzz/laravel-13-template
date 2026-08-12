@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -13,7 +14,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Repository extends RepositoryAbstract
 {
-
     protected Model $model;
 
     /**
@@ -59,8 +59,6 @@ class Repository extends RepositoryAbstract
     /**
      * get all data order by created at desc
      *
-     * @param string $column
-     * @param string $method
      * @return Collection
      */
     public function getOrderBy(string $column, string $method = 'asc')
@@ -70,9 +68,6 @@ class Repository extends RepositoryAbstract
 
     /**
      * store data to db
-     *
-     * @param array $data
-     * @return bool
      */
     public function insert(array $data): bool
     {
@@ -82,7 +77,6 @@ class Repository extends RepositoryAbstract
     /**
      * store data to db
      *
-     * @param array $data
      * @return Model
      */
     public function create(array $data)
@@ -93,12 +87,12 @@ class Repository extends RepositoryAbstract
     /**
      * store data to db
      *
-     * @param array $data
      * @return Model
      */
     public function createWithUser(array $data)
     {
         $data['created_by_id'] = Auth::id();
+
         // $data['last_updated_by_id'] = Auth::id();
         return $this->create($data);
     }
@@ -106,8 +100,6 @@ class Repository extends RepositoryAbstract
     /**
      * find or store data to db
      *
-     * @param array $data
-     * @param array $data2
      * @return Model
      */
     public function firstOrCreate(array $data, array $data2 = [])
@@ -118,7 +110,6 @@ class Repository extends RepositoryAbstract
     /**
      * store data to db
      *
-     * @param array $data
      * @return Model
      */
     public function store(array $data)
@@ -129,9 +120,7 @@ class Repository extends RepositoryAbstract
     /**
      * find data by id
      *
-     * @param mixed $id
-     * @param array $columns
-     * @param bool|null $deleted
+     * @param  mixed  $id
      * @return Model
      */
     public function find($id, array $columns = ['*'], ?bool $deleted = false)
@@ -148,9 +137,7 @@ class Repository extends RepositoryAbstract
     /**
      * find or fail data by id
      *
-     * @param mixed $id
-     * @param array $columns
-     * @param bool|null $deleted
+     * @param  mixed  $id
      * @return Model
      */
     public function findOrFail($id, array $columns = ['*'], ?bool $deleted = false)
@@ -163,8 +150,8 @@ class Repository extends RepositoryAbstract
     /**
      * find with data by id
      *
-     * @param mixed $id
-     * @param array $with
+     * @param  mixed  $id
+     * @param  array  $with
      * @return Model
      */
     public function findWith($id, $with = [])
@@ -175,8 +162,8 @@ class Repository extends RepositoryAbstract
     /**
      * find with or fail data by id
      *
-     * @param mixed $id
-     * @param array $with
+     * @param  mixed  $id
+     * @param  array  $with
      * @return Model
      */
     public function findWithOrFail($id, $with = [])
@@ -187,9 +174,6 @@ class Repository extends RepositoryAbstract
     /**
      * update data by id
      *
-     * @param array $data
-     * @param int $id
-     * @param array $columns
      * @return Model
      */
     public function update(array $data, int $id, array $columns = ['*'])
@@ -197,31 +181,29 @@ class Repository extends RepositoryAbstract
         $model = $this->find($id);
         if ($model) {
             $model->update($data);
+
             return $this->find($id, $columns);
         }
+
         return $model;
     }
 
     /**
      * update data by id
      *
-     * @param array $data
-     * @param int $id
-     * @param array $columns
      * @return Model
      */
     public function updateWithUser(array $data, int $id, array $columns = ['*'])
     {
         // $data['created_by_id'] = Auth::id();
         $data['last_updated_by_id'] = Auth::id();
+
         return $this->update($data, $id, $columns);
     }
 
     /**
      * update data by key
      *
-     * @param array $data
-     * @param string $key
      * @return Model
      */
     public function updateByKey(array $data, string $key)
@@ -229,15 +211,16 @@ class Repository extends RepositoryAbstract
         $model = $this->model->where('key', $key);
         if ($model) {
             $model->update($data);
+
             return $model;
         }
+
         return 0;
     }
 
     /**
      * delete data by id
      *
-     * @param int $id
      * @return Model
      */
     public function delete(int $id)
@@ -246,29 +229,30 @@ class Repository extends RepositoryAbstract
         if ($model) {
             return $model->delete();
         }
+
         return 0;
     }
 
     /**
      * soft delete data by id
      *
-     * @param int $id
      * @return Model
      */
     public function softDelete(int $id)
     {
         $model = $this->find($id);
-        if ($model)
+        if ($model) {
             $model->update([
-                'deleted_at'     => now(),
+                'deleted_at' => now(),
             ]);
+        }
+
         return $model;
     }
 
     /**
      * delete data by id
      *
-     * @param int $id
      * @return Model
      */
     public function destroy(int $id)
@@ -279,11 +263,12 @@ class Repository extends RepositoryAbstract
     /**
      * get data as pagination
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function getPaginate()
     {
         $perPage = request('perPage', 20);
+
         return $this->model->query()
             ->when(request('sort') === 'oldest', function ($query) {
                 $query->sortBy('id', 'asc');
@@ -307,9 +292,6 @@ class Repository extends RepositoryAbstract
     /**
      * getWhereIn
      *
-     * @param string $column
-     * @param array $data
-     * @param array $columns
      * @return Collection
      */
     public function getWhereIn(string $column, array $data, array $columns = ['*'])
@@ -323,8 +305,6 @@ class Repository extends RepositoryAbstract
     /**
      * deleteWhereIn
      *
-     * @param string $column
-     * @param array $data
      * @return int
      */
     public function deleteWhereIn(string $column, array $data)
@@ -344,15 +324,12 @@ class Repository extends RepositoryAbstract
         Schema::disableForeignKeyConstraints();
         $result = $this->model->query()->truncate();
         Schema::enableForeignKeyConstraints();
+
         return $result;
     }
 
     /**
      * countWhereIn
-     *
-     * @param string $column
-     * @param array $data
-     * @return int
      */
     public function countWhereIn(string $column, array $data): int
     {
@@ -364,7 +341,7 @@ class Repository extends RepositoryAbstract
     /**
      * get query
      *
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @return Builder<static>
      */
     public function query()
     {
@@ -374,8 +351,7 @@ class Repository extends RepositoryAbstract
     /**
      * get data as datatable
      *
-     * @param \Illuminate\Database\Eloquent\Builder<static> $query
-     * @param array $params
+     * @param  Builder<static>  $query
      * @return Response
      */
     protected function generateDataTables($query, array $params)
@@ -394,6 +370,7 @@ class Repository extends RepositoryAbstract
         if (isset($params['rawColumns']) && is_array($params['rawColumns'])) {
             $dataTables->rawColumns($params['rawColumns']);
         }
+
         return $dataTables->make(true);
     }
 
@@ -410,24 +387,19 @@ class Repository extends RepositoryAbstract
     /**
      * get data as select options
      *
-     * @param string $label
-     * @param string $value
-     * @param array|null $where
-     * @param string|null $whereField
-     * @param array|null $whereIn
-     * @param callable|null $map
-     * @return array
+     * @param  string  $label
+     * @param  string  $value
      */
     public function getSelectOptions($label = 'name', $value = 'id', ?array $where = [], ?string $whereField = null, ?array $whereIn = [], ?callable $map = null): array
     {
         $query = $this->query()
-            ->when(!empty($where), function ($query) use ($where) {
+            ->when(! empty($where), function ($query) use ($where) {
                 $query->where($where);
             })
-            ->when(!empty($whereIn), function ($query) use ($whereField, $whereIn) {
+            ->when(! empty($whereIn), function ($query) use ($whereField, $whereIn) {
                 $query->whereIn($whereField, $whereIn);
             })
-            ->when($map !== null, function ($query) use ($map) {
+            ->when($map !== null, function ($query) {
                 $query->select('*');
             })
             ->when($map === null, function ($query) use ($label, $value) {
@@ -437,6 +409,7 @@ class Repository extends RepositoryAbstract
             ->when($map !== null, function ($collection) use ($map) {
                 return $collection->map($map);
             });
+
         return $query->pluck($label, $value)->toArray();
     }
 
@@ -449,16 +422,16 @@ class Repository extends RepositoryAbstract
     {
         return json_encode([
             [
-                'data'       => 'DT_RowIndex',
-                'name'       => 'DT_RowIndex',
+                'data' => 'DT_RowIndex',
+                'name' => 'DT_RowIndex',
                 'searchable' => false,
-                'orderable'  => false
+                'orderable' => false,
             ],
             [
                 'data' => 'action',
                 'name' => 'action',
                 'orderable' => false,
-                'searchable' => false
+                'searchable' => false,
             ],
         ]);
     }
@@ -466,7 +439,7 @@ class Repository extends RepositoryAbstract
     /**
      * get query full data
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function queryFullData(?array $orderBy = [])
     {
@@ -517,8 +490,9 @@ class Repository extends RepositoryAbstract
                 }
             })
             ->when(request('filter_limit', 50), function (Builder $query) {
-                if (!is_app_dataku())
+                if (! is_app_dataku()) {
                     $query->limit(request('filter_limit', 50));
+                }
             })
             ->when(request('filter_role'), function (Builder $query) {
                 if (is_app_dataku()) {
@@ -527,17 +501,19 @@ class Repository extends RepositoryAbstract
                             $query->whereHas('roles', function (Builder $query) {
                                 $query->where('id', request('filter_role'));
                             });
-                        } else
+                        } else {
                             $query->where('id', auth_id());
-                    } else if (is_superadmin()) {
+                        }
+                    } elseif (is_superadmin()) {
                         $query->whereHas('roles', function (Builder $query) {
                             $query->where('id', request('filter_role'));
                         });
                     }
-                } else
+                } else {
                     $query->whereHas('roles', function (Builder $query) {
                         $query->where('id', request('filter_role'));
                     });
+                }
             })
             ->when(request('filter_semester_id'), function (Builder $query) {
                 $query->where('semester_id', request('filter_semester_id'));
@@ -549,8 +525,9 @@ class Repository extends RepositoryAbstract
                 $query->where('gender', request('gender'));
             })
             ->when(is_app_dataku(), function (Builder $query) {
-                if (session('education_level_id') && request('filter_role') && request('filter_role') !== '1')
+                if (session('education_level_id') && request('filter_role') && request('filter_role') !== '1') {
                     $query->where('education_level_id', session('education_level_id'));
+                }
                 $query->when(is_guru(), function (Builder $query) {
                     $query->where('id', auth_user()->id);
                 });
@@ -580,13 +557,7 @@ class Repository extends RepositoryAbstract
     /**
      * get full data with relations
      *
-     * @param array $relations
-     * @param array|null $where
-     * @param array|null $orderBy
-     * @param array|null $whereHas
-     * @param bool|null $deleted
-     * @param bool|null $isQueryBuilder
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Collection|Builder
      */
     public function getFullDataWith(array $relations = [], ?array $where = [], ?array $orderBy = [], ?array $whereHas = [], ?bool $deleted = false, ?bool $isQueryBuilder = false)
     {
@@ -609,8 +580,9 @@ class Repository extends RepositoryAbstract
                 $query->latest();
             })
             ->when($deleted, function ($query) {
-                if (method_exists($query, 'onlyTrashed'))
+                if (method_exists($query, 'onlyTrashed')) {
                     $query?->onlyTrashed();
+                }
             });
 
         return $isQueryBuilder ? $query : $query->get();
@@ -619,8 +591,6 @@ class Repository extends RepositoryAbstract
     /**
      * update or create model
      *
-     * @param array $attributes
-     * @param array $values
      * @return Model
      */
     public function updateOrCreate(array $attributes, array $values = [])
@@ -644,22 +614,25 @@ class Repository extends RepositoryAbstract
         $data = $request->data;
 
         foreach ($data as $key => $value) {
-            if ($key === 'currency')
-                $data['currency']     = idr_to_double($value);
+            if ($key === 'currency') {
+                $data['currency'] = idr_to_double($value);
+            }
 
-            if ($key === 'currency_idr')
+            if ($key === 'currency_idr') {
                 $data['currency_idr'] = rp_to_double($value);
+            }
 
-            if ($request->hasFile('data.' . $key)) {
-                $file = $request->file('data.' . $key);
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads/' . $request->table, $fileName, 'public');
-                $data[$key] = asset('/storage/' . $filePath);
+            if ($request->hasFile('data.'.$key)) {
+                $file = $request->file('data.'.$key);
+                $fileName = time().'_'.$file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads/'.$request->table, $fileName, 'public');
+                $data[$key] = asset('/storage/'.$filePath);
             }
         }
 
-        $data['created_at']    = now();
-        $data['updated_at']    = now();
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
         return $data;
     }
 
@@ -675,9 +648,9 @@ class Repository extends RepositoryAbstract
 
         DB::table($table = request('table'))->insert($data);
 
-        $pdo     = DB::connection()->getPdo();
+        $pdo = DB::connection()->getPdo();
         $last_id = $pdo->lastInsertId();
-        $result  = DB::table($table)->where('id', $last_id)->first();
+        $result = DB::table($table)->where('id', $last_id)->first();
 
         return $result;
     }
@@ -685,7 +658,6 @@ class Repository extends RepositoryAbstract
     /**
      * Update general API data
      *
-     * @param string $id
      * @return mixed
      */
     public function updateGeneralApi(string $id)
@@ -697,7 +669,7 @@ class Repository extends RepositoryAbstract
 
         DB::table($table = request('table'))->where('id', $id)->update($data);
 
-        $result  = DB::table($table)->where('id', $id)->first();
+        $result = DB::table($table)->where('id', $id)->first();
 
         return $result;
     }
@@ -705,7 +677,6 @@ class Repository extends RepositoryAbstract
     /**
      * get general API data by id
      *
-     * @param string $id
      * @return mixed
      */
     public function getGeneralApiById(string $id)
@@ -748,7 +719,6 @@ class Repository extends RepositoryAbstract
     /**
      * Delete general API data
      *
-     * @param string $id
      * @return mixed
      */
     public function deleteGeneralApi(string $id)
@@ -763,28 +733,30 @@ class Repository extends RepositoryAbstract
     /**
      * restore soft deleted data by id
      *
-     * @param string $id
      * @return Model
      */
     public function restore(string $id)
     {
         $model = $this->model->withTrashed()->where('id', $id)->firstOrFail();
-        if ($model)
+        if ($model) {
             return $model->restore();
+        }
+
         return 0;
     }
 
     /**
      * force delete data by id
      *
-     * @param string $id
      * @return Model
      */
     public function forceDelete(string $id)
     {
         $model = $this->model->withTrashed()->where('id', $id)->firstOrFail();
-        if ($model)
+        if ($model) {
             return $model->forceDelete();
+        }
+
         return 0;
     }
 
@@ -800,8 +772,6 @@ class Repository extends RepositoryAbstract
 
     /**
      * count all data
-     *
-     * @return int
      */
     public function count(): int
     {

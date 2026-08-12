@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\LogRequest;
+use App\Services\GeneralService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,23 +21,23 @@ class LogRequestMiddleware
             $roles = [];
             if (auth()->check()) {
                 $roles = auth_user()->roles->pluck('name')->toArray();
-            } else if (config('jwt.secret') && auth('api')->check()) {
+            } elseif (config('jwt.secret') && auth('api')->check()) {
                 $roles = auth('api')->user()->roles->pluck('name')->toArray();
             }
-            $generalService = new \App\Services\GeneralService;
+            $generalService = new GeneralService;
             LogRequest::create([
-                'uri'          => $request->path(),
+                'uri' => $request->path(),
                 'query_string' => $request->getQueryString(),
-                'method'       => $request->method(),
+                'method' => $request->method(),
                 'request_data' => $request->all(),
-                'ip'           => $request->ip(),
-                'user_agent'   => $request->userAgent(),
-                'user_id'      => auth_id() ?? (config('jwt.secret') ? auth('api')->id() : null) ?? null,
-                'roles'        => $roles,
-                'browser'      => $generalService->getBrowser(),
-                'platform'     => $generalService->getPlatform(),
-                'device'       => $generalService->getDevice(),
-                'is_ajax'      => $request->ajax(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'user_id' => auth_id() ?? (config('jwt.secret') ? auth('api')->id() : null) ?? null,
+                'roles' => $roles,
+                'browser' => $generalService->getBrowser(),
+                'platform' => $generalService->getPlatform(),
+                'device' => $generalService->getDevice(),
+                'is_ajax' => $request->ajax(),
             ]);
         }
 

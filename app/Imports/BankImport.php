@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class BankImport implements ToCollection, WithHeadingRow
 {
-
     /**
      * To collection
      *
@@ -23,6 +22,7 @@ class BankImport implements ToCollection, WithHeadingRow
                 $item->put('created_at', $dateTime);
                 $item->put('updated_at', $dateTime);
                 $item->put('created_by_id', auth_user()->id);
+
                 return $item;
             })->toArray();
             Bank::insert($insertData);

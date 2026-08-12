@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     {
         if (Route::is('api.login')) {
             return [
-                'email'    => 'required|exists:users,email',
+                'email' => 'required|exists:users,email',
                 'password' => 'required|min:4',
             ];
         }
@@ -35,15 +35,16 @@ class LoginRequest extends FormRequest
         if (Route::is('siaga-desa.login-post')) {
             return [
                 'phone_number' => 'required|exists:users,phone_number',
-                'password'     => 'required|min:4',
+                'password' => 'required|min:4',
             ];
         }
 
         $isGoogleCaptcha = SettingRepository::isGoogleCaptchaLogin();
+
         return [
-            'email'                => 'required|exists:users,email',
-            'password'             => 'required|min:4',
-            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable'
+            'email' => 'required|exists:users,email',
+            'password' => 'required|min:4',
+            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable',
         ];
     }
 }

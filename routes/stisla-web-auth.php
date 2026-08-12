@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDepositController;
@@ -10,13 +11,15 @@ use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropboxController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\FacultyLeaderController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\LogViewerController;
 use App\Http\Controllers\MenuManagementController;
 use App\Http\Controllers\NotificationController;
+// use App\Http\Controllers\PersonController;
+use App\Http\Controllers\OrmawaController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PermissionGroupController;
-// use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleController;
@@ -27,27 +30,29 @@ use App\Http\Controllers\StudyProgramController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UbuntuController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\WorkController;
 use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
+use UniSharp\LaravelFilemanager\Lfm;
 
-# DASHBOARD
+// DASHBOARD
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::post('dashboard', [DashboardController::class, 'post']);
 
-# SETTINGS
+// SETTINGS
 Route::get('settings/all', [SettingController::class, 'allSetting'])->name('settings.all');
 Route::get('settings/{type}', [SettingController::class, 'index'])->name('settings.index');
 Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 
-# PROFILE
+// PROFILE
 Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::put('profile', [ProfileController::class, 'update']);
 Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 Route::put('profile/email', [ProfileController::class, 'updateEmail'])->name('profile.update-email');
 Route::put('profile/delete-account', [ProfileController::class, 'deleteAccount'])->name('profile.delete-account');
 
-# EXAMPLE STISLA
+// EXAMPLE STISLA
 Route::view('datatable', 'stisla.examples.datatable.index')->name('datatable.index');
 Route::view('form', 'stisla.examples.form.index')->name('form.index');
 Route::view('chart-js', 'stisla.examples.chart-js.index')->name('chart-js.index');
@@ -56,13 +61,13 @@ Route::view('invoice', 'stisla.examples.invoice.index')->name('invoice.index');
 Route::view('topnav', 'stisla.examples.topnav.index')->name('topnav.index');
 Route::view('gallery-blade', 'stisla.examples.gallery-blade.index')->name('gallery-blade.index');
 
-# GALLERY
+// GALLERY
 Route::view('galleries', 'stisla.coming-soon.index')->name('galleries.index');
 
-# PENDUDUK
+// PENDUDUK
 // Route::resource('persons', PersonController::class);
 
-# USER MANAGEMENT
+// USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::post('users/block/{user}', [UserManagementController::class, 'block'])->name('users.block');
     Route::post('users/unblock/{user}', [UserManagementController::class, 'unblock'])->name('users.unblock');
@@ -77,7 +82,7 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::get('users/{user}/pdf', [UserManagementController::class, 'singlePdf'])->name('users.single-pdf');
     Route::resource('users', UserManagementController::class);
 
-    # ROLES
+    // ROLES
     Route::get('roles/pdf', [RoleController::class, 'pdf'])->name('roles.pdf');
     Route::get('roles/csv', [RoleController::class, 'csv'])->name('roles.csv');
     Route::get('roles/excel', [RoleController::class, 'excel'])->name('roles.excel');
@@ -86,7 +91,7 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::post('roles/import-excel', [RoleController::class, 'importExcel'])->name('roles.import-excel');
     Route::resource('roles', RoleController::class);
 
-    # PERMISSIONS
+    // PERMISSIONS
     Route::get('permissions/pdf', [PermissionController::class, 'pdf'])->name('permissions.pdf');
     Route::get('permissions/csv', [PermissionController::class, 'csv'])->name('permissions.csv');
     Route::get('permissions/excel', [PermissionController::class, 'excel'])->name('permissions.excel');
@@ -95,7 +100,7 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::post('permissions/import-excel', [PermissionController::class, 'importExcel'])->name('permissions.import-excel');
     Route::resource('permissions', PermissionController::class);
 
-    # GROUP PERMISSIONS
+    // GROUP PERMISSIONS
     Route::get('permission-groups/pdf', [PermissionGroupController::class, 'pdf'])->name('permission-groups.pdf');
     Route::get('permission-groups/csv', [PermissionGroupController::class, 'csv'])->name('permission-groups.csv');
     Route::get('permission-groups/excel', [PermissionGroupController::class, 'excel'])->name('permission-groups.excel');
@@ -107,7 +112,7 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::resource('permission-groups', PermissionGroupController::class);
 });
 
-# ACTIVITY LOGS
+// ACTIVITY LOGS
 Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 Route::get('activity-logs/print', [ActivityLogController::class, 'exportPrint'])->name('activity-logs.print');
 Route::get('activity-logs/pdf', [ActivityLogController::class, 'pdf'])->name('activity-logs.pdf');
@@ -115,7 +120,7 @@ Route::get('activity-logs/csv', [ActivityLogController::class, 'csv'])->name('ac
 Route::get('activity-logs/json', [ActivityLogController::class, 'json'])->name('activity-logs.json');
 Route::get('activity-logs/excel', [ActivityLogController::class, 'excel'])->name('activity-logs.excel');
 
-# REQUEST LOGS
+// REQUEST LOGS
 Route::get('request-logs', [RequestLogController::class, 'index'])->name('request-logs.index');
 Route::get('request-logs/print', [RequestLogController::class, 'exportPrint'])->name('request-logs.print');
 Route::get('request-logs/pdf', [RequestLogController::class, 'pdf'])->name('request-logs.pdf');
@@ -123,27 +128,27 @@ Route::get('request-logs/csv', [RequestLogController::class, 'csv'])->name('requ
 Route::get('request-logs/json', [RequestLogController::class, 'json'])->name('request-logs.json');
 Route::get('request-logs/excel', [RequestLogController::class, 'excel'])->name('request-logs.excel');
 
-# NOTIFICATIONS
+// NOTIFICATIONS
 Route::get('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 Route::get('notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
 Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-# BACKUP DATABASE
+// BACKUP DATABASE
 Route::resource('backup-databases', BackupDatabaseController::class);
 
-# FILE MANAGER
+// FILE MANAGER
 Route::group(['prefix' => 'unisharp-files', 'middleware' => [FileManagerPermission::class]], function () {
-    \UniSharp\LaravelFilemanager\Lfm::routes();
+    Lfm::routes();
 });
 
-# LOG VIEWER
+// LOG VIEWER
 Route::get('logs-viewer', [LogViewerController::class, 'index'])->name('logs.index')->middleware('can:Laravel Log Viewer');
 
-# YOUTUBE VIEWER (SECRET MENU)
+// YOUTUBE VIEWER (SECRET MENU)
 Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');
 
-# UBUNTU
+// UBUNTU
 Route::get('ubuntu/laravel-seeder/{seeder}', [UbuntuController::class, 'laravelSeeder'])->name('ubuntu.laravelSeeder');
 Route::get('ubuntu/laravel-migrate', [UbuntuController::class, 'laravelMigrate'])->name('ubuntu.laravelMigrate');
 Route::get('ubuntu/laravel-migrate-refresh', [UbuntuController::class, 'laravelMigrateRefresh'])->name('ubuntu.laravelMigrateRefresh');
@@ -164,7 +169,7 @@ Route::get('ubuntu/{pathname}/set-laravel-permission', [UbuntuController::class,
 Route::get('mysql-all', [UbuntuController::class, 'index'])->name('ubuntu.mysql-all');
 Route::resource('ubuntu', UbuntuController::class);
 
-# MANAJEMEN MENU
+// MANAJEMEN MENU
 Route::get('menu-managements/pdf', [MenuManagementController::class, 'pdf'])->name('menu-managements.pdf');
 Route::get('menu-managements/csv', [MenuManagementController::class, 'csv'])->name('menu-managements.csv');
 Route::get('menu-managements/excel', [MenuManagementController::class, 'excel'])->name('menu-managements.excel');
@@ -177,7 +182,7 @@ Route::resource('menu-managements', MenuManagementController::class);
 
 Route::resource('group-menus', GroupMenuController::class);
 
-# CONTOH CRUD
+// CONTOH CRUD
 Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-yajra');
 Route::get('yajra-crud-examples/ajax', [CrudExampleController::class, 'yajraAjax'])->name('crud-examples.ajax-yajra');
 Route::get('ajax-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-ajax');
@@ -207,7 +212,7 @@ Route::post('crud-examples-export-pdf-using-checkbox', [CrudExampleController::c
 Route::post('crud-examples-export-excel-using-checkbox', [CrudExampleController::class, 'exportExcelUsingCheckbox'])->name('crud-examples.export-excel-using-checkbox');
 Route::post('crud-examples-export-csv-using-checkbox', [CrudExampleController::class, 'exportCsvUsingCheckbox'])->name('crud-examples.export-csv-using-checkbox');
 Route::post('crud-examples-export-json-using-checkbox', [CrudExampleController::class, 'exportJsonUsingCheckbox'])->name('crud-examples.export-json-using-checkbox');
-# CONTOH CRUD ID
+// CONTOH CRUD ID
 Route::get('yajra-contoh-crud', [CrudExampleController::class, 'indexID'])->name('contoh-crud.index-yajra');
 Route::get('yajra-contoh-crud/ajax', [CrudExampleController::class, 'yajraAjaxID'])->name('contoh-crud.ajax-yajra');
 Route::get('ajax-contoh-crud', [CrudExampleController::class, 'indexID'])->name('contoh-crud.index-ajax');
@@ -240,7 +245,7 @@ Route::post('contoh-crud-export-csv-using-checkbox', [CrudExampleController::cla
 Route::post('contoh-crud-export-json-using-checkbox', [CrudExampleController::class, 'exportJsonUsingCheckboxID'])->name('contoh-crud.export-json-using-checkbox');
 // Route::resource('crud-examples', CrudExampleController::class);
 
-# BANK
+// BANK
 Route::get('yajra-banks', [BankController::class, 'index'])->name('banks.index-yajra');
 Route::get('yajra-banks/ajax', [BankController::class, 'yajraAjax'])->name('banks.ajax-yajra');
 Route::get('ajax-banks', [BankController::class, 'index'])->name('banks.index-ajax');
@@ -253,9 +258,10 @@ Route::get('banks/import-excel-example', [BankController::class, 'importExcelExa
 Route::post('banks/import-excel', [BankController::class, 'importExcel'])->name('banks.import-excel');
 Route::resource('banks', BankController::class);
 
-# DEPOSITO BANK
+// DEPOSITO BANK
 Route::get('toggle-chart', function () {
-    session(['toggle_chart' => !session('toggle_chart')]);
+    session(['toggle_chart' => ! session('toggle_chart')]);
+
     return back();
 })->name('toggle-chart');
 Route::get('save-to-history-bank-deposits', [BankDepositController::class, 'saveToHistory'])->name('bank-deposits.save-to-history');
@@ -271,7 +277,7 @@ Route::get('bank-deposits/import-excel-example', [BankDepositController::class, 
 Route::post('bank-deposits/import-excel', [BankDepositController::class, 'importExcel'])->name('bank-deposits.import-excel');
 Route::resource('bank-deposits', BankDepositController::class);
 
-# RIWAYAT DEPOSITO BANK
+// RIWAYAT DEPOSITO BANK
 Route::get('yajra-bank-deposit-histories', [BankDepositHistoryController::class, 'index'])->name('bank-deposit-histories.index-yajra');
 Route::get('yajra-bank-deposit-histories/ajax', [BankDepositHistoryController::class, 'yajraAjax'])->name('bank-deposit-histories.ajax-yajra');
 Route::get('ajax-bank-deposit-histories', [BankDepositHistoryController::class, 'index'])->name('bank-deposit-histories.index-ajax');
@@ -284,7 +290,7 @@ Route::get('bank-deposit-histories/import-excel-example', [BankDepositHistoryCon
 Route::post('bank-deposit-histories/import-excel', [BankDepositHistoryController::class, 'importExcel'])->name('bank-deposit-histories.import-excel');
 Route::resource('bank-deposit-histories', BankDepositHistoryController::class);
 
-# MAHASISWA
+// MAHASISWA
 Route::get('yajra-students', [StudentController::class, 'index'])->name('students.index-yajra');
 Route::get('yajra-students/ajax', [StudentController::class, 'yajraAjax'])->name('students.ajax-yajra');
 Route::get('ajax-students', [StudentController::class, 'index'])->name('students.index-ajax');
@@ -296,7 +302,7 @@ Route::get('students/json', [StudentController::class, 'exportJson'])->name('stu
 Route::get('students/import-excel-example', [StudentController::class, 'importExcelExample'])->name('students.import-excel-example');
 Route::post('students/import-excel', [StudentController::class, 'importExcel'])->name('students.import-excel');
 Route::resource('students', StudentController::class);
-# FAKULTAS
+// FAKULTAS
 Route::get('yajra-faculties', [FacultyController::class, 'index'])->name('faculties.index-yajra');
 Route::get('yajra-faculties/ajax', [FacultyController::class, 'yajraAjax'])->name('faculties.ajax-yajra');
 Route::get('ajax-faculties', [FacultyController::class, 'index'])->name('faculties.index-ajax');
@@ -308,7 +314,7 @@ Route::get('faculties/json', [FacultyController::class, 'exportJson'])->name('fa
 Route::get('faculties/import-excel-example', [FacultyController::class, 'importExcelExample'])->name('faculties.import-excel-example');
 Route::post('faculties/import-excel', [FacultyController::class, 'importExcel'])->name('faculties.import-excel');
 Route::resource('faculties', FacultyController::class);
-# PROGRAM STUDI
+// PROGRAM STUDI
 Route::get('yajra-study-programs', [StudyProgramController::class, 'index'])->name('study-programs.index-yajra');
 Route::get('yajra-study-programs/ajax', [StudyProgramController::class, 'yajraAjax'])->name('study-programs.ajax-yajra');
 Route::get('ajax-study-programs', [StudyProgramController::class, 'index'])->name('study-programs.index-ajax');
@@ -321,73 +327,73 @@ Route::get('study-programs/import-excel-example', [StudyProgramController::class
 Route::post('study-programs/import-excel', [StudyProgramController::class, 'importExcel'])->name('study-programs.import-excel');
 Route::resource('study-programs', StudyProgramController::class);
 
-# FacultyLeader
-Route::get('yajra-faculty-leaders', [\App\Http\Controllers\FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-yajra');
-Route::get('yajra-faculty-leaders/ajax', [\App\Http\Controllers\FacultyLeaderController::class, 'yajraAjax'])->name('faculty-leaders.ajax-yajra');
-Route::get('ajax-faculty-leaders', [\App\Http\Controllers\FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-ajax');
-Route::get('yajra-ajax-faculty-leaders', [\App\Http\Controllers\FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-ajax-yajra');
-Route::get('faculty-leaders/pdf', [\App\Http\Controllers\FacultyLeaderController::class, 'exportPdf'])->name('faculty-leaders.pdf');
-Route::get('faculty-leaders/csv', [\App\Http\Controllers\FacultyLeaderController::class, 'exportCsv'])->name('faculty-leaders.csv');
-Route::get('faculty-leaders/excel', [\App\Http\Controllers\FacultyLeaderController::class, 'exportExcel'])->name('faculty-leaders.excel');
-Route::get('faculty-leaders/json', [\App\Http\Controllers\FacultyLeaderController::class, 'exportJson'])->name('faculty-leaders.json');
-Route::get('faculty-leaders/import-excel-example', [\App\Http\Controllers\FacultyLeaderController::class, 'importExcelExample'])->name('faculty-leaders.import-excel-example');
-Route::post('faculty-leaders/import-excel', [\App\Http\Controllers\FacultyLeaderController::class, 'importExcel'])->name('faculty-leaders.import-excel');
-Route::resource('faculty-leaders', \App\Http\Controllers\FacultyLeaderController::class);
+// FacultyLeader
+Route::get('yajra-faculty-leaders', [FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-yajra');
+Route::get('yajra-faculty-leaders/ajax', [FacultyLeaderController::class, 'yajraAjax'])->name('faculty-leaders.ajax-yajra');
+Route::get('ajax-faculty-leaders', [FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-ajax');
+Route::get('yajra-ajax-faculty-leaders', [FacultyLeaderController::class, 'index'])->name('faculty-leaders.index-ajax-yajra');
+Route::get('faculty-leaders/pdf', [FacultyLeaderController::class, 'exportPdf'])->name('faculty-leaders.pdf');
+Route::get('faculty-leaders/csv', [FacultyLeaderController::class, 'exportCsv'])->name('faculty-leaders.csv');
+Route::get('faculty-leaders/excel', [FacultyLeaderController::class, 'exportExcel'])->name('faculty-leaders.excel');
+Route::get('faculty-leaders/json', [FacultyLeaderController::class, 'exportJson'])->name('faculty-leaders.json');
+Route::get('faculty-leaders/import-excel-example', [FacultyLeaderController::class, 'importExcelExample'])->name('faculty-leaders.import-excel-example');
+Route::post('faculty-leaders/import-excel', [FacultyLeaderController::class, 'importExcel'])->name('faculty-leaders.import-excel');
+Route::resource('faculty-leaders', FacultyLeaderController::class);
 
-# Ormawa
-Route::get('yajra-ormawas', [\App\Http\Controllers\OrmawaController::class, 'index'])->name('ormawas.index-yajra');
-Route::get('yajra-ormawas/ajax', [\App\Http\Controllers\OrmawaController::class, 'yajraAjax'])->name('ormawas.ajax-yajra');
-Route::get('ajax-ormawas', [\App\Http\Controllers\OrmawaController::class, 'index'])->name('ormawas.index-ajax');
-Route::get('yajra-ajax-ormawas', [\App\Http\Controllers\OrmawaController::class, 'index'])->name('ormawas.index-ajax-yajra');
-Route::get('ormawas/pdf', [\App\Http\Controllers\OrmawaController::class, 'exportPdf'])->name('ormawas.pdf');
-Route::get('ormawas/csv', [\App\Http\Controllers\OrmawaController::class, 'exportCsv'])->name('ormawas.csv');
-Route::get('ormawas/excel', [\App\Http\Controllers\OrmawaController::class, 'exportExcel'])->name('ormawas.excel');
-Route::get('ormawas/json', [\App\Http\Controllers\OrmawaController::class, 'exportJson'])->name('ormawas.json');
-Route::get('ormawas/import-excel-example', [\App\Http\Controllers\OrmawaController::class, 'importExcelExample'])->name('ormawas.import-excel-example');
-Route::post('ormawas/import-excel', [\App\Http\Controllers\OrmawaController::class, 'importExcel'])->name('ormawas.import-excel');
-Route::resource('ormawas', \App\Http\Controllers\OrmawaController::class);
+// Ormawa
+Route::get('yajra-ormawas', [OrmawaController::class, 'index'])->name('ormawas.index-yajra');
+Route::get('yajra-ormawas/ajax', [OrmawaController::class, 'yajraAjax'])->name('ormawas.ajax-yajra');
+Route::get('ajax-ormawas', [OrmawaController::class, 'index'])->name('ormawas.index-ajax');
+Route::get('yajra-ajax-ormawas', [OrmawaController::class, 'index'])->name('ormawas.index-ajax-yajra');
+Route::get('ormawas/pdf', [OrmawaController::class, 'exportPdf'])->name('ormawas.pdf');
+Route::get('ormawas/csv', [OrmawaController::class, 'exportCsv'])->name('ormawas.csv');
+Route::get('ormawas/excel', [OrmawaController::class, 'exportExcel'])->name('ormawas.excel');
+Route::get('ormawas/json', [OrmawaController::class, 'exportJson'])->name('ormawas.json');
+Route::get('ormawas/import-excel-example', [OrmawaController::class, 'importExcelExample'])->name('ormawas.import-excel-example');
+Route::post('ormawas/import-excel', [OrmawaController::class, 'importExcel'])->name('ormawas.import-excel');
+Route::resource('ormawas', OrmawaController::class);
 
-# Alumni
-Route::get('yajra-alumnis', [\App\Http\Controllers\AlumniController::class, 'index'])->name('alumnis.index-yajra');
-Route::get('yajra-alumnis/ajax', [\App\Http\Controllers\AlumniController::class, 'yajraAjax'])->name('alumnis.ajax-yajra');
-Route::get('ajax-alumnis', [\App\Http\Controllers\AlumniController::class, 'index'])->name('alumnis.index-ajax');
-Route::get('yajra-ajax-alumnis', [\App\Http\Controllers\AlumniController::class, 'index'])->name('alumnis.index-ajax-yajra');
-Route::get('alumnis/pdf', [\App\Http\Controllers\AlumniController::class, 'exportPdf'])->name('alumnis.pdf');
-Route::get('alumnis/csv', [\App\Http\Controllers\AlumniController::class, 'exportCsv'])->name('alumnis.csv');
-Route::get('alumnis/excel', [\App\Http\Controllers\AlumniController::class, 'exportExcel'])->name('alumnis.excel');
-Route::get('alumnis/json', [\App\Http\Controllers\AlumniController::class, 'exportJson'])->name('alumnis.json');
-Route::get('alumnis/import-excel-example', [\App\Http\Controllers\AlumniController::class, 'importExcelExample'])->name('alumnis.import-excel-example');
-Route::post('alumnis/import-excel', [\App\Http\Controllers\AlumniController::class, 'importExcel'])->name('alumnis.import-excel');
-Route::resource('alumnis', \App\Http\Controllers\AlumniController::class);
+// Alumni
+Route::get('yajra-alumnis', [AlumniController::class, 'index'])->name('alumnis.index-yajra');
+Route::get('yajra-alumnis/ajax', [AlumniController::class, 'yajraAjax'])->name('alumnis.ajax-yajra');
+Route::get('ajax-alumnis', [AlumniController::class, 'index'])->name('alumnis.index-ajax');
+Route::get('yajra-ajax-alumnis', [AlumniController::class, 'index'])->name('alumnis.index-ajax-yajra');
+Route::get('alumnis/pdf', [AlumniController::class, 'exportPdf'])->name('alumnis.pdf');
+Route::get('alumnis/csv', [AlumniController::class, 'exportCsv'])->name('alumnis.csv');
+Route::get('alumnis/excel', [AlumniController::class, 'exportExcel'])->name('alumnis.excel');
+Route::get('alumnis/json', [AlumniController::class, 'exportJson'])->name('alumnis.json');
+Route::get('alumnis/import-excel-example', [AlumniController::class, 'importExcelExample'])->name('alumnis.import-excel-example');
+Route::post('alumnis/import-excel', [AlumniController::class, 'importExcel'])->name('alumnis.import-excel');
+Route::resource('alumnis', AlumniController::class);
 
-# Work
-Route::get('yajra-works', [\App\Http\Controllers\WorkController::class, 'index'])->name('works.index-yajra');
-Route::get('yajra-works/ajax', [\App\Http\Controllers\WorkController::class, 'yajraAjax'])->name('works.ajax-yajra');
-Route::get('ajax-works', [\App\Http\Controllers\WorkController::class, 'index'])->name('works.index-ajax');
-Route::get('yajra-ajax-works', [\App\Http\Controllers\WorkController::class, 'index'])->name('works.index-ajax-yajra');
-Route::get('works/pdf', [\App\Http\Controllers\WorkController::class, 'exportPdf'])->name('works.pdf');
-Route::get('works/csv', [\App\Http\Controllers\WorkController::class, 'exportCsv'])->name('works.csv');
-Route::get('works/excel', [\App\Http\Controllers\WorkController::class, 'exportExcel'])->name('works.excel');
-Route::get('works/json', [\App\Http\Controllers\WorkController::class, 'exportJson'])->name('works.json');
-Route::get('works/import-excel-example', [\App\Http\Controllers\WorkController::class, 'importExcelExample'])->name('works.import-excel-example');
-Route::post('works/import-excel', [\App\Http\Controllers\WorkController::class, 'importExcel'])->name('works.import-excel');
-Route::resource('works', \App\Http\Controllers\WorkController::class);
-//route
+// Work
+Route::get('yajra-works', [WorkController::class, 'index'])->name('works.index-yajra');
+Route::get('yajra-works/ajax', [WorkController::class, 'yajraAjax'])->name('works.ajax-yajra');
+Route::get('ajax-works', [WorkController::class, 'index'])->name('works.index-ajax');
+Route::get('yajra-ajax-works', [WorkController::class, 'index'])->name('works.index-ajax-yajra');
+Route::get('works/pdf', [WorkController::class, 'exportPdf'])->name('works.pdf');
+Route::get('works/csv', [WorkController::class, 'exportCsv'])->name('works.csv');
+Route::get('works/excel', [WorkController::class, 'exportExcel'])->name('works.excel');
+Route::get('works/json', [WorkController::class, 'exportJson'])->name('works.json');
+Route::get('works/import-excel-example', [WorkController::class, 'importExcelExample'])->name('works.import-excel-example');
+Route::post('works/import-excel', [WorkController::class, 'importExcel'])->name('works.import-excel');
+Route::resource('works', WorkController::class);
+// route
 
 Route::get('testing/datatable', [TestingController::class, 'datatable']);
 Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
 Route::get('testing/modal', [TestingController::class, 'modal']);
 
-# DROPBOX
+// DROPBOX
 Route::get('dropboxs', [DropboxController::class, 'index'])->name('dropboxs.index');
 Route::post('dropboxs', [DropboxController::class, 'upload'])->name('dropboxs.upload');
 Route::delete('dropboxs', [DropboxController::class, 'destroy'])->name('dropboxs.destroy');
 
-# RESET
+// RESET
 Route::get('reset', [SettingController::class, 'reset'])->name('reset');
 Route::get('reset2', [SettingController::class, 'reset2'])->name('reset2');
 
-# CHATS
+// CHATS
 Route::get('yajra-chats', [ChatController::class, 'index'])->name('chats.index-yajra');
 Route::get('yajra-chats/ajax', [ChatController::class, 'yajraAjax'])->name('chats.ajax-yajra');
 Route::get('ajax-chats', [ChatController::class, 'index'])->name('chats.index-ajax');
@@ -404,6 +410,6 @@ Route::get('chatting-yuk-delete/{category}', [ChatController::class, 'reset'])->
 Route::get('chatting-yuk-users', [ChatController::class, 'users'])->name('chatting-yuk-users');
 Route::resource('chats', ChatController::class);
 
-# SIAGA DESA
+// SIAGA DESA
 Route::get('siaga-desa', [SiagaDesaController::class, 'index'])->name('siaga-desa.index');
 Route::get('siaga-desa/order-form', [SiagaDesaController::class, 'orderForm'])->name('siaga-desa.order-form');

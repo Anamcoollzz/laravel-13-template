@@ -2,21 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'group_name',
+])]
 class MenuGroup extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'group_name'
-    ];
 
     /**
      * Default with relationship
@@ -24,7 +19,7 @@ class MenuGroup extends Model
      * @var array
      */
     protected $with = [
-        'menus'
+        'menus',
     ];
 
     public function menus()

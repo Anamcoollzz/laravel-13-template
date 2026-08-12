@@ -3,13 +3,14 @@
 namespace App\Traits;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait UserTrait
 {
     /**
      * Get the user that created
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function createdBy()
     {
@@ -19,7 +20,7 @@ trait UserTrait
     /**
      * Get the user that updated
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function lastUpdatedBy()
     {
@@ -29,7 +30,7 @@ trait UserTrait
     /**
      * Get the user id
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {

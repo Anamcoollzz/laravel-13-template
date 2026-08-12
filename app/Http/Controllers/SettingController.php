@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 class SettingController extends StislaController
 {
-
     /**
      * construct function
      *
@@ -32,7 +31,7 @@ class SettingController extends StislaController
     /**
      * showing setting page
      *
-     * @param mixed $type
+     * @param  mixed  $type
      * @return Response
      */
     public function index($type)
@@ -42,25 +41,28 @@ class SettingController extends StislaController
             $fullTitle = 'Pengaturan Umum';
             if ($type === 'meta') {
                 $fullTitle = 'Pengaturan Meta';
-            } else if ($type === 'view') {
+            } elseif ($type === 'view') {
                 $fullTitle = 'Pengaturan Tampilan';
-            } else if ($type === 'other') {
+            } elseif ($type === 'other') {
                 $fullTitle = 'Pengaturan Lainnya';
-            } else if ($type === 'sso') {
+            } elseif ($type === 'sso') {
                 $fullTitle = __('SSO Login dan Register');
             }
+
             return view('stisla.settings.index', [
-                'skins'        => $skins,
+                'skins' => $skins,
                 'setting_type' => $type,
-                'routeIndex'   => route('settings.all'),
-                'fullTitle'    => $fullTitle,
-                'title'        => __('Pengaturan'),
+                'routeIndex' => route('settings.all'),
+                'fullTitle' => $fullTitle,
+                'title' => __('Pengaturan'),
             ]);
         } else {
             $skins = collect($this->settingRepository->getSkins())->map(function ($item) {
                 $item2['name'] = $item;
+
                 return $item2;
             })->pluck('name', 'name')->toArray();
+
             return view('sbadmin.settings.index', [
                 'skins' => $skins,
             ]);
@@ -79,50 +81,53 @@ class SettingController extends StislaController
             $options = [
                 [
                     'title' => __('Umum'),
-                    'desc'  => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
+                    'desc' => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
                     'route' => route('settings.index', ['type' => 'general']),
-                    'icon'  => 'cog',
+                    'icon' => 'cog',
                 ],
                 [
                     'title' => __('Meta'),
-                    'desc'  => __('Pengaturan seperti meta author, description, dan keyword.'),
+                    'desc' => __('Pengaturan seperti meta author, description, dan keyword.'),
                     'route' => route('settings.index', ['type' => 'meta']),
-                    'fullIcon'  => 'fab fa-chrome',
+                    'fullIcon' => 'fab fa-chrome',
                 ],
                 [
                     'title' => __('Tampilan'),
-                    'desc'  => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
+                    'desc' => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
                     'route' => route('settings.index', ['type' => 'view']),
-                    'icon'  => 'eye'
+                    'icon' => 'eye',
                 ],
                 [
                     'title' => __('Email'),
-                    'desc'  => __('Pengaturan seperti provider email, pengirim, nama pengirim, dll.'),
+                    'desc' => __('Pengaturan seperti provider email, pengirim, nama pengirim, dll.'),
                     'route' => route('settings.index', ['type' => 'email']),
-                    'icon'  => 'envelope'
+                    'icon' => 'envelope',
                 ],
                 [
                     'title' => __('SSO Login dan Register'),
-                    'desc'  => __('Pengaturan untuk SSO menggunakan media sosial seperti google, facebook, twitter dan github.'),
+                    'desc' => __('Pengaturan untuk SSO menggunakan media sosial seperti google, facebook, twitter dan github.'),
                     'route' => route('settings.index', ['type' => 'sso']),
-                    'icon'  => 'key'
+                    'icon' => 'key',
                 ],
                 [
                     'title' => __('Lainnya'),
-                    'desc'  => __('Pengaturan email verifikasi, lupa password, halaman daftar.'),
+                    'desc' => __('Pengaturan email verifikasi, lupa password, halaman daftar.'),
                     'route' => route('settings.index', ['type' => 'other']),
-                    'icon'  => 'cogs'
+                    'icon' => 'cogs',
                 ],
             ];
+
             return view('stisla.settings.all', [
-                'title'      => __('Pengaturan'),
-                'options'    => $options
+                'title' => __('Pengaturan'),
+                'options' => $options,
             ]);
         } else {
             $skins = collect($this->settingRepository->getSkins())->map(function ($item) {
                 $item2['name'] = $item;
+
                 return $item2;
             })->pluck('name', 'name')->toArray();
+
             return view('sbadmin.settings.index', [
                 'skins' => $skins,
             ]);
@@ -132,7 +137,6 @@ class SettingController extends StislaController
     /**
      * update setting data
      *
-     * @param SettingRequest $request
      * @return Response
      */
     public function update(SettingRequest $request)
@@ -143,13 +147,13 @@ class SettingController extends StislaController
             $value = $input;
             if ($key === 'favicon') {
                 $value = $this->fileService->uploadFavicon($request->file('favicon'));
-            } else if ($key === 'logo') {
+            } elseif ($key === 'logo') {
                 $value = $this->fileService->uploadLogo($request->file('logo'));
-            } else if ($key === 'meta_og_image' || $key === 'meta_twitter_image' || $key === 'meta_itemprop_thumbnailUrl') {
+            } elseif ($key === 'meta_og_image' || $key === 'meta_twitter_image' || $key === 'meta_itemprop_thumbnailUrl') {
                 $value = $this->fileService->uploadToFolder($request->file($key), 'files');
-            } else if ($key === 'stisla_bg_login') {
+            } elseif ($key === 'stisla_bg_login') {
                 $value = $this->fileService->uploadStislaBgLogin($request->file('stisla_bg_login'));
-            } else if ($key === 'stisla_bg_home') {
+            } elseif ($key === 'stisla_bg_home') {
                 $value = $this->fileService->uploadStislaBgHome($request->file('stisla_bg_home'));
             }
 
@@ -161,13 +165,14 @@ class SettingController extends StislaController
         }
         $settings = SettingRepository::settings();
         foreach ($settings as $key => $setting) {
-            Session::forget('_' . $key);
+            Session::forget('_'.$key);
         }
         Session::forget('_logo_url');
         Session::forget('_logo');
         $after = $this->settingRepository->all();
         logUpdate('Pengaturan', $before, $after);
-        return back()->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting') . ' ' . __('success updated'));
+
+        return back()->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting').' '.__('success updated'));
     }
 
     /**
@@ -184,7 +189,7 @@ class SettingController extends StislaController
         // //get output from shell
         // $commandOutput = exec('php artisan db:seed');
         // dd($commandOutput);
-        $output = new BufferedOutput();
+        $output = new BufferedOutput;
         $a = Artisan::call(
             'migrate:refresh',
             [
@@ -197,6 +202,7 @@ class SettingController extends StislaController
             $output
         );
         $commandOutput = $output->fetch();
+
         return backSuccess('Aplikasi berhasil direset');
     }
 
@@ -209,6 +215,7 @@ class SettingController extends StislaController
     {
         config(['stisla.use_setting' => '2']);
         Artisan::call('db:seed');
+
         return backSuccess(__('Aplikasi berhasil direset'));
     }
 }

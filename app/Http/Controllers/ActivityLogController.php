@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ActivityLogExport;
-use Illuminate\Http\Response;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Http\Response;
+use Maatwebsite\Excel\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ActivityLogController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -29,40 +29,40 @@ class ActivityLogController extends StislaController
      */
     public function index()
     {
-        $user            = auth_user();
-        $user            = $this->userRepository->find($user->id);
-        $queryString     = request()->query();
-        $data            = $this->activityLogRepository->getFilter();
-        $roles           = $this->userRepository->getRoleOptions();
-        $users           = $this->userRepository->getUserOptions();
-        $kinds           = $this->activityLogRepository->getActivityTypeOptions();
-        $browserOptions  = $this->activityLogRepository->getBrowserOptions();
+        $user = auth_user();
+        $user = $this->userRepository->find($user->id);
+        $queryString = request()->query();
+        $data = $this->activityLogRepository->getFilter();
+        $roles = $this->userRepository->getRoleOptions();
+        $users = $this->userRepository->getUserOptions();
+        $kinds = $this->activityLogRepository->getActivityTypeOptions();
+        $browserOptions = $this->activityLogRepository->getBrowserOptions();
         $platformOptions = $this->activityLogRepository->getPlatformOptions();
-        $deviceOptions   = $this->activityLogRepository->getDeviceOptions();
+        $deviceOptions = $this->activityLogRepository->getDeviceOptions();
 
         return view('stisla.activity-logs.index', [
-            'data'             => $data,
-            'users'            => $users,
-            'roles'            => $roles,
-            'kinds'            => $kinds,
-            'browserOptions'   => $browserOptions,
-            'platformOptions'  => $platformOptions,
-            'deviceOptions'    => $deviceOptions,
-            'canCreate'        => false,
+            'data' => $data,
+            'users' => $users,
+            'roles' => $roles,
+            'kinds' => $kinds,
+            'browserOptions' => $browserOptions,
+            'platformOptions' => $platformOptions,
+            'deviceOptions' => $deviceOptions,
+            'canCreate' => false,
             // 'canCreate'        => $user->can('Log Aktivitas Tambah'),
             // 'canUpdate'        => $user->can('Log Aktivitas Ubah'),
             // 'canDelete'        => $user->can('Log Aktivitas Hapus'),
             // 'canImportExcel'   => $user->can('Log Aktivitas Impor Excel'),
-            'canExport'        => $user->can('Log Aktivitas Ekspor'),
-            'title'            => __('Log Aktivitas'),
-            'routeCreate'      => null,
+            'canExport' => $user->can('Log Aktivitas Ekspor'),
+            'title' => __('Log Aktivitas'),
+            'routeCreate' => null,
             // 'routeCreate'      => route('activity-logs.create'),
-            'routePdf'         => route('activity-logs.pdf', $queryString),
-            'routePrint'       => route('activity-logs.print', $queryString),
-            'routeExcel'       => route('activity-logs.excel', $queryString),
-            'routeCsv'         => route('activity-logs.csv', $queryString),
-            'routeJson'        => route('activity-logs.json', $queryString),
-            'isSuperAdmin'     => $user->hasRole('superadmin'),
+            'routePdf' => route('activity-logs.pdf', $queryString),
+            'routePrint' => route('activity-logs.print', $queryString),
+            'routeExcel' => route('activity-logs.excel', $queryString),
+            'routeCsv' => route('activity-logs.csv', $queryString),
+            'routeJson' => route('activity-logs.json', $queryString),
+            'isSuperAdmin' => $user->hasRole('superadmin'),
             // 'routeImportExcel' => route('activity-logs.import-excel'),
             // 'excelExampleLink' => route('activity-logs.import-excel-example'),
         ]);
@@ -70,50 +70,46 @@ class ActivityLogController extends StislaController
 
     /**
      * download export data as json
-     *
-     * @return BinaryFileResponse
      */
     public function json(): BinaryFileResponse
     {
         $data = $this->activityLogRepository->getFilter();
+
         return $this->fileService->downloadJson($data, 'activity-logs.json');
     }
 
     /**
      * download export data as xlsx
-     *
-     * @return BinaryFileResponse
      */
     public function excel(): BinaryFileResponse
     {
         $data = $this->activityLogRepository->getFilter();
-        return (new ActivityLogExport($data))->download('activity-logs.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
+        return (new ActivityLogExport($data))->download('activity-logs.xlsx', Excel::XLSX);
     }
 
     /**
      * download export data as csv
-     *
-     * @return BinaryFileResponse
      */
     public function csv(): BinaryFileResponse
     {
         $data = $this->activityLogRepository->getFilter();
-        return (new ActivityLogExport($data))->download('activity-logs.csv', \Maatwebsite\Excel\Excel::CSV);
+
+        return (new ActivityLogExport($data))->download('activity-logs.csv', Excel::CSV);
     }
 
     /**
      * download export data as pdf
-     *
-     * @return Response
      */
     public function pdf(): Response
     {
         $data = $this->activityLogRepository->getFilter();
         $html = view('stisla.activity-logs.export-pdf', [
-            'data'    => $data,
+            'data' => $data,
             'isPrint' => false,
             'isExport' => true,
         ])->render();
+
         return PDF::setPaper('Letter', 'landscape')
             ->loadHTML($html)
             ->download('activity-logs.pdf');
@@ -127,8 +123,9 @@ class ActivityLogController extends StislaController
     public function exportPrint()
     {
         $data = $this->activityLogRepository->getFilter();
+
         return view('stisla.activity-logs.export-pdf', [
-            'data'    => $data,
+            'data' => $data,
             'isPrint' => true,
             'isExport' => true,
         ]);

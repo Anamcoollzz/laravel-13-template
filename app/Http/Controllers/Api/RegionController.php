@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\RegionRepository;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class RegionController extends Controller
 {
-    /**
-     * @var RegionRepository
-     */
     private RegionRepository $regionRepository;
 
     /**
@@ -20,65 +17,69 @@ class RegionController extends Controller
      */
     public function __construct()
     {
-        $this->regionRepository = new RegionRepository();
+        $this->regionRepository = new RegionRepository;
     }
 
     /**
      * getProvinces
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getProvinces()
     {
         $data = $this->regionRepository->getProvinces();
+
         return response()->json([
             'status' => 'success',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
     /**
      * getCities
      *
-     * @param  mixed $provinceId
-     * @return \Illuminate\Http\JsonResponse
+     * @param  mixed  $provinceId
+     * @return JsonResponse
      */
     public function getCities($provinceId)
     {
         $data = $this->regionRepository->getCities($provinceId);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
     /**
      * getDistricts
      *
-     * @param  mixed $cityId
-     * @return \Illuminate\Http\JsonResponse
+     * @param  mixed  $cityId
+     * @return JsonResponse
      */
     public function getDistricts($cityId)
     {
         $data = $this->regionRepository->getDistricts($cityId);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
     /**
      * getVillages
      *
-     * @param  mixed $districtId
-     * @return \Illuminate\Http\JsonResponse
+     * @param  mixed  $districtId
+     * @return JsonResponse
      */
     public function getVillages($districtId)
     {
         $data = $this->regionRepository->getVillages($districtId);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

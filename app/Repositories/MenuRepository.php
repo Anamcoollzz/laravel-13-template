@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MenuRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -16,7 +15,7 @@ class MenuRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new Menu();
+        $this->model = new Menu;
     }
 
     /**

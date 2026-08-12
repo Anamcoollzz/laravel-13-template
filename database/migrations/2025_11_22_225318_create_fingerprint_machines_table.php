@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('fingerprint_machines');
-        if (!in_array('fingerprint_machines', config('stisla.table_excludes')))
+        if (! in_array('fingerprint_machines', config('stisla.table_excludes'))) {
             Schema::create('fingerprint_machines', function (Blueprint $table) {
                 $table->id();
                 $table->string('machine_name', 50)->comment('Nama Mesin');
@@ -31,6 +31,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

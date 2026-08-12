@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 
 class YoutubeController extends Controller
 {
-
-    /**
-     * @var YoutubeService
-     *
-     */
     private YoutubeService $youtubeService;
 
     /**
@@ -30,12 +25,12 @@ class YoutubeController extends Controller
     /**
      * get list video from youtube channel
      *
-     * @param Request $request
      * @return JsonResponse
      */
     public function getListVideoFromChannel(Request $request)
     {
         $videoList = $this->youtubeService->getListVideoFromChannelId($request->query('channelId'));
+
         return response()->json($videoList);
     }
 }

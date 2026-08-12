@@ -2,32 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'title',
+    'content',
+    'user_id',
+    'is_read',
+    'notification_type',
+    'icon',
+    'bg_color',
+])]
 class Notification extends Model
 {
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'title',
-        'content',
-        'user_id',
-        'is_read',
-        'notification_type',
-        'icon',
-        'bg_color',
-    ];
-
-    /**
      * relation with user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {

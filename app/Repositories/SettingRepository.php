@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Helpers\Helper;
 use App\Helpers\StringHelper;
 use App\Models\Setting;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingRepository
 {
-
     /**
      * get all data
      *
@@ -19,6 +17,7 @@ class SettingRepository
     public static function all()
     {
         $data = Setting::all();
+
         return $data;
     }
 
@@ -45,14 +44,13 @@ class SettingRepository
             'sso_github_client_secret',
             'sso_github_redirect',
         ];
+
         return $encrypts;
     }
 
     /**
      * update data by key
      *
-     * @param array $data
-     * @param string $key
      * @return Model
      */
     public static function updateByKey(array $data, string $key)
@@ -60,8 +58,10 @@ class SettingRepository
         $model = Setting::where('key', $key);
         if ($model) {
             $model->update($data);
+
             return $model;
         }
+
         return 0;
     }
 
@@ -74,22 +74,23 @@ class SettingRepository
     {
         $data = [];
         foreach (static::all() as $d) {
-            $data['_' . $d->key] = $d->value;
+            $data['_'.$d->key] = $d->value;
             if ($d->key === 'application_name') {
                 $data['_app_name'] = $d->value;
-                $data['_app_name_mobile'] = \App\Helpers\StringHelper::acronym($d->value, 2);
-            } else if ($d->key === 'logo') {
+                $data['_app_name_mobile'] = StringHelper::acronym($d->value, 2);
+            } elseif ($d->key === 'logo') {
                 $data['_logo_url'] = SettingRepository::logoUrl($d->value);
-            } else if ($d->key === 'stisla_skin') {
+            } elseif ($d->key === 'stisla_skin') {
                 $data['_skin'] = $d->value;
-            } else if ($d->key === 'stisla_bg_login') {
+            } elseif ($d->key === 'stisla_bg_login') {
                 $data['_stisla_bg_login_url'] = $data['_stisla_bg_login'] = SettingRepository::loginBgUrl($d->value);
-            } else if ($d->key === 'stisla_sidebar_mini') {
+            } elseif ($d->key === 'stisla_sidebar_mini') {
                 $data['_sidebar_mini'] = $d->value;
-            } else if ($d->key === 'application_version') {
+            } elseif ($d->key === 'application_version') {
                 $data['_version '] = $d->value;
             }
         }
+
         return $data;
     }
 
@@ -201,26 +202,26 @@ class SettingRepository
     public static function getSkins()
     {
         return [
-            "red",
-            "pink",
-            "purple",
-            "deep-purple",
-            "indigo",
-            "blue",
-            "light-blue",
-            "cyan",
-            "teal",
-            "green",
-            "light-green",
-            "lime",
-            "yellow",
-            "amber",
-            "orange",
-            "deep-orange",
-            "brown",
-            "grey",
-            "blue-grey",
-            "black",
+            'red',
+            'pink',
+            'purple',
+            'deep-purple',
+            'indigo',
+            'blue',
+            'light-blue',
+            'cyan',
+            'teal',
+            'green',
+            'light-green',
+            'lime',
+            'yellow',
+            'amber',
+            'orange',
+            'deep-orange',
+            'brown',
+            'grey',
+            'blue-grey',
+            'black',
         ];
     }
 
@@ -232,35 +233,36 @@ class SettingRepository
     public static function getStislaSkins()
     {
         return [
-            "style"  => "default",
-            "brown"  => "brown",
-            "purple" => "purple",
-            "red"    => "red",
-            "indigo" => "indigo",
-            "yellow" => "yellow",
-            "orange" => "orange",
-            "pink"   => "pink",
-            "citron" => "citron",
+            'style' => 'default',
+            'brown' => 'brown',
+            'purple' => 'purple',
+            'red' => 'red',
+            'indigo' => 'indigo',
+            'yellow' => 'yellow',
+            'orange' => 'orange',
+            'pink' => 'pink',
+            'citron' => 'citron',
         ];
     }
 
     /**
      * get logo url
      *
-     * @param string|null $path
+     * @param  string|null  $path
      * @return string
      */
     public static function logoUrl($logo = null)
     {
         if (config('app.template') === 'stisla') {
-            if (is_null($logo))
+            if (is_null($logo)) {
                 $logo = Setting::where('key', 'logo')->first()->value;
+            }
             if ($logo) {
                 if (StringHelper::isUrl($logo)) {
                     return $logo;
                 }
-                if (Storage::exists('public/settings/' . $logo)) {
-                    return asset('storage/settings/' . $logo);
+                if (Storage::exists('public/settings/'.$logo)) {
+                    return asset('storage/settings/'.$logo);
                 } else {
                     $logo = null;
                 }
@@ -274,20 +276,21 @@ class SettingRepository
     /**
      * get login bg url
      *
-     * @param string|null $bgLogin
+     * @param  string|null  $bgLogin
      * @return string
      */
     public static function loginBgUrl($bgLogin = null)
     {
         if (TEMPLATE === STISLA) {
-            if (is_null($bgLogin))
-                $bgLogin =  Setting::where('key', 'stisla_bg_login')->first()->value;
+            if (is_null($bgLogin)) {
+                $bgLogin = Setting::where('key', 'stisla_bg_login')->first()->value;
+            }
             if (StringHelper::isUrl($bgLogin)) {
                 return $bgLogin;
             }
             if ($bgLogin) {
-                if (Storage::exists('public/settings/' . $bgLogin)) {
-                    return asset('storage/settings/' . $bgLogin);
+                if (Storage::exists('public/settings/'.$bgLogin)) {
+                    return asset('storage/settings/'.$bgLogin);
                 } else {
                     $bgLogin = null;
                 }
@@ -449,7 +452,7 @@ class SettingRepository
      */
     public static function stislaSidebarMini()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'stisla_sidebar_mini'], ['value' => '0'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'stisla_sidebar_mini'], ['value' => '0'])->value) === 1;
     }
 
     /**
@@ -459,8 +462,11 @@ class SettingRepository
      */
     public static function isGoogleCaptchaLogin()
     {
-        if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '0'])->value) === 1;
+        if (config('captcha.secret') === 'default_secret') {
+            return false;
+        }
+
+        return ((int) Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '0'])->value) === 1;
     }
 
     /**
@@ -470,8 +476,11 @@ class SettingRepository
      */
     public static function isGoogleCaptchaRegister()
     {
-        if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '0'])->value) === 1;
+        if (config('captcha.secret') === 'default_secret') {
+            return false;
+        }
+
+        return ((int) Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '0'])->value) === 1;
     }
 
     /**
@@ -481,8 +490,11 @@ class SettingRepository
      */
     public static function isGoogleCaptchaForgotPassword()
     {
-        if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '0'])->value) === 1;
+        if (config('captcha.secret') === 'default_secret') {
+            return false;
+        }
+
+        return ((int) Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '0'])->value) === 1;
     }
 
     /**
@@ -492,8 +504,11 @@ class SettingRepository
      */
     public static function isGoogleCaptchaResetPassword()
     {
-        if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '0'])->value) === 1;
+        if (config('captcha.secret') === 'default_secret') {
+            return false;
+        }
+
+        return ((int) Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '0'])->value) === 1;
     }
 
     /**
@@ -504,8 +519,10 @@ class SettingRepository
     public static function googleCaptchaSiteKey()
     {
         $siteKey = Setting::where(['key' => 'google_captcha_site_key'])->first()->value ?? null;
-        if ($siteKey)
+        if ($siteKey) {
             return decrypt($siteKey);
+        }
+
         return null;
     }
 
@@ -517,8 +534,10 @@ class SettingRepository
     public static function googleCaptchaSecret()
     {
         $secret = Setting::where(['key' => 'google_captcha_secret'])->first()->value ?? null;
-        if ($secret)
+        if ($secret) {
             return decrypt($secret);
+        }
+
         return null;
     }
 
@@ -529,7 +548,7 @@ class SettingRepository
      */
     public function isLoginWithGoogle()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_google'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_login_with_google'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -539,7 +558,7 @@ class SettingRepository
      */
     public function isLoginWithFacebook()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_facebook'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_login_with_facebook'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -549,7 +568,7 @@ class SettingRepository
      */
     public function isLoginWithTwitter()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_twitter'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_login_with_twitter'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -559,7 +578,7 @@ class SettingRepository
      */
     public function isLoginWithGithub()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_github'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_login_with_github'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -569,7 +588,7 @@ class SettingRepository
      */
     public function isRegisterWithFacebook()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_facebook'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_register_with_facebook'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -579,7 +598,7 @@ class SettingRepository
      */
     public function isRegisterWithGoogle()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_google'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_register_with_google'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -589,7 +608,7 @@ class SettingRepository
      */
     public function isRegisterWithTwitter()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_twitter'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_register_with_twitter'], ['value' => '1'])->value) === 1;
     }
 
     /**
@@ -599,6 +618,6 @@ class SettingRepository
      */
     public function isRegisterWithGithub()
     {
-        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_github'], ['value' => '1'])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_register_with_github'], ['value' => '1'])->value) === 1;
     }
 }
