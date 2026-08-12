@@ -2,39 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Route;
 
+#[Fillable([
+    'menu_name',
+    'route_name',
+    'icon',
+    'parent_menu_id',
+    'permission',
+    'is_active_if_url_includes',
+    'is_blank',
+    'uri',
+    'menu_group_id',
+])]
+#[Appends(['fix_url'])]
 class Menu extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'menu_name',
-        'route_name',
-        'icon',
-        'parent_menu_id',
-        'permission',
-        'is_active_if_url_includes',
-        'is_blank',
-        'uri',
-        'menu_group_id',
-    ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'fix_url',
-    ];
 
     /**
      * Default with relationship
@@ -42,22 +32,23 @@ class Menu extends Model
      * @var array
      */
     protected $with = [
-        'childs'
+        'childs',
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [];
+    protected function casts(): array
+    {
+        return [];
+    }
 
     /**
-     * Get the fix_url attribute.
-     *
-     * @return string
+     * Get the fix URL for the menu.
      */
-    public function getFixUrlAttribute()
+    public function getFixUrlAttribute(): string
     {
         if ($this->uri) {
             return url($this->uri);
@@ -65,35 +56,30 @@ class Menu extends Model
         if ($this->route_name && Route::has($this->route_name)) {
             return route($this->route_name);
         }
+
         return '#';
     }
 
     /**
-     * Get all of the Menu's childs.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get the child menus.
      */
-    public function childs()
+    public function childs(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_menu_id');
     }
 
     /**
-     * Get the group that owns the Menu
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the group that owns the menu.
      */
-    public function group()
+    public function group(): BelongsTo
     {
         return $this->belongsTo(MenuGroup::class, 'menu_group_id');
     }
 
     /**
-     * Get the parent that owns the Menu
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the parent menu.
      */
-    public function parentMenu()
+    public function parentMenu(): BelongsTo
     {
         return $this->belongsTo(Menu::class, 'parent_menu_id');
     }

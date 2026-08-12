@@ -10,7 +10,6 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class GeneralImport implements ToCollection, WithHeadingRow
 {
-
     /**
      * To collection
      *
@@ -35,6 +34,7 @@ class GeneralImport implements ToCollection, WithHeadingRow
 
                 $item->put('currency', idr_to_double($item['currency']));
                 $item->put('currency_idr', rp_to_double($item['currency_idr']));
+
                 return $item;
             })->toArray();
             // dd($insertData);

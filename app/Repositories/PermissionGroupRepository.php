@@ -6,7 +6,6 @@ use App\Models\PermissionGroup;
 
 class PermissionGroupRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -14,6 +13,6 @@ class PermissionGroupRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new PermissionGroup();
+        $this->model = new PermissionGroup;
     }
 }

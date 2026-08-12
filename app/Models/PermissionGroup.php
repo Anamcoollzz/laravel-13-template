@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Permission\Models\Permission;
 
+#[Fillable([
+    'group_name',
+])]
 class PermissionGroup extends Model
 {
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * Get the permissions for the permission group.
      */
-    protected $fillable = [
-        'group_name',
-    ];
-
-    public function permissions()
+    public function permissions(): HasMany
     {
         return $this->hasMany(Permission::class, 'permission_group_id');
     }

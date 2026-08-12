@@ -13,15 +13,12 @@ class ActivityLogExport implements FromView
 
     /**
      * data
-     *
-     * @var Collection
      */
     private Collection $data;
 
     /**
      * constructor method
      *
-     * @param Collection $data
      * @return void
      */
     public function __construct(Collection $data)
@@ -31,8 +28,6 @@ class ActivityLogExport implements FromView
 
     /**
      * export from view
-     *
-     * @return View
      */
     public function view(): View
     {

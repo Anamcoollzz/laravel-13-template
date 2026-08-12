@@ -52,8 +52,7 @@ class AlumniRequest extends FormRequest
             // 'password'          => $this->isMethod('put') ? 'nullable|min:6' : 'required|min:6',
             // 'avatar'            => $this->isMethod('put') ? 'nullable|image' : 'required|image',
 
-
-            'work_id'        => 'required|numeric|exists:works,id',
+            'work_id' => 'required|numeric|exists:works,id',
         ];
     }
 }

@@ -18,7 +18,6 @@ use App\Repositories\WorkRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -26,14 +25,20 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserManagementController extends StislaController
 {
-
     private ReligionRepository $religionRepository;
+
     private SchoolClassRepository $schoolClassRepository;
+
     private WorkRepository $workRepository;
+
     private RegionRepository $regionRepository;
-    private Role|null $role;
+
+    private ?Role $role;
+
     private ClassLevelRepository $classLevelRepository;
+
     private SchoolYearRepository $schoolYearRepository;
+
     private SemesterRepository $semesterRepository;
 
     /**
@@ -47,23 +52,23 @@ class UserManagementController extends StislaController
 
         $this->defaultMiddleware('Pengguna');
 
-        $this->icon       = 'fa fa-users';
+        $this->icon = 'fa fa-users';
         $this->viewFolder = 'user-management';
-        $this->prefix     = 'user-management.users';
-        $this->paperSize  = 'A3';
+        $this->prefix = 'user-management.users';
+        $this->paperSize = 'A3';
 
-        $this->religionRepository    = new ReligionRepository;
+        $this->religionRepository = new ReligionRepository;
         $this->schoolClassRepository = new SchoolClassRepository;
-        $this->workRepository        = new WorkRepository;
-        $this->regionRepository      = new RegionRepository;
-        $this->classLevelRepository  = new ClassLevelRepository;
-        $this->schoolYearRepository  = new SchoolYearRepository();
-        $this->semesterRepository    = new SemesterRepository();
+        $this->workRepository = new WorkRepository;
+        $this->regionRepository = new RegionRepository;
+        $this->classLevelRepository = new ClassLevelRepository;
+        $this->schoolYearRepository = new SchoolYearRepository;
+        $this->semesterRepository = new SemesterRepository;
         $this->repository = new UserRepository;
         $this->title = __('Pengguna');
 
         if ((is_app_dataku() && request('filter_role'))) {
-            $this->role        = $this->userRepository->findRole(request('filter_role'));
+            $this->role = $this->userRepository->findRole(request('filter_role'));
             $this->exportTitle = is_app_dataku() && $this->role ? ucfirst($this->role->name) : 'Pengguna';
         }
     }
@@ -77,12 +82,13 @@ class UserManagementController extends StislaController
     {
         $roleOptions = $this->userRepository->getRoleOptions(is_kepala_sekolah() ? ['siswa', 'guru'] : []);
         $defaultData = $this->getDefaultDataIndex(__('Pengguna'), 'Pengguna', 'user-management.users');
+
         return array_merge($defaultData, [
-            'data'           => $this->userRepository->getUsers(),
-            'roleCount'      => count($roleOptions),
+            'data' => $this->userRepository->getUsers(),
+            'roleCount' => count($roleOptions),
             'isRegionExists' => Schema::hasTable('regions'),
-            'roleOptions'    => $roleOptions,
-            'isSiswa'        => request('filter_role') === '4',
+            'roleOptions' => $roleOptions,
+            'isSiswa' => request('filter_role') === '4',
         ]);
     }
 
@@ -159,74 +165,78 @@ class UserManagementController extends StislaController
         ];
 
         foreach ($numberColumns as $column) {
-            if ($request->has($column))
+            if ($request->has($column)) {
                 $data[$column] = rp_to_double($request->$column);
+            }
         }
 
         $data['education_level_id'] = session('education_level_id');
 
-        if ($request->hasFile('avatar'))
+        if ($request->hasFile('avatar')) {
             $data['avatar'] = $this->fileService->uploadAvatar($request->file('avatar'));
-        if ($request->hasFile('photo'))
+        }
+        if ($request->hasFile('photo')) {
             $data['photo'] = $this->fileService->uploadPhoto($request->file('photo'));
-        if ($request->filled('password'))
+        }
+        if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
+        }
+
         return $data;
     }
 
     /**
      * get detail data
      *
-     * @param User $user
-     * @param boolean $isDetail
      * @return array
      */
     protected function getDetailDataOld(User $user, bool $isDetail)
     {
         $roleOptions = $this->userRepository->getRoleOptions();
-        if ($user->roles->count() > 1)
+        if ($user->roles->count() > 1) {
             $user->role = $user->roles->pluck('id')->toArray();
-        else
+        } else {
             $user->role = $user->roles->first()->id ?? null;
+        }
         $defaultData = $this->getDefaultDataDetail(__('Pengguna'), 'user-management.users', $user, $isDetail);
         $dataku = [];
         if (is_app_dataku()) {
             $dataku = [
-                'religionOptions'    => $this->religionRepository->getSelectOptions('religion_name'),
+                'religionOptions' => $this->religionRepository->getSelectOptions('religion_name'),
                 'schoolClassOptions' => $this->schoolClassRepository->getSelectOptions('class_name'),
-                'classLevelOptions'  => $this->classLevelRepository->getSelectOptions('level_name'),
-                'workOptions'        => $this->workRepository->getSelectOptions('job_name'),
-                'schoolYearOptions'  => $this->schoolYearRepository->getSelectOptions('year_name'),
-                'semesterOptions'    => $this->semesterRepository->getSelectOptions('semester'),
+                'classLevelOptions' => $this->classLevelRepository->getSelectOptions('level_name'),
+                'workOptions' => $this->workRepository->getSelectOptions('job_name'),
+                'schoolYearOptions' => $this->schoolYearRepository->getSelectOptions('year_name'),
+                'semesterOptions' => $this->semesterRepository->getSelectOptions('semester'),
             ];
         }
+
         return array_merge($defaultData, [
-            'roleOptions'        => $roleOptions,
-            'fullTitle'          => $isDetail ? __('Detail Pengguna') : __('Ubah Pengguna'),
-            'provinces'          => $this->regionRepository->getProvinces(),
-            'roleName'           => $user->roles->first()->name ?? null,
-            'roleId'             => $user->roles->first()->id ?? null,
-            'isSiswa'            => $user->hasRole('siswa'),
+            'roleOptions' => $roleOptions,
+            'fullTitle' => $isDetail ? __('Detail Pengguna') : __('Ubah Pengguna'),
+            'provinces' => $this->regionRepository->getProvinces(),
+            'roleName' => $user->roles->first()->name ?? null,
+            'roleId' => $user->roles->first()->id ?? null,
+            'isSiswa' => $user->hasRole('siswa'),
         ], $dataku);
     }
 
     /**
      * get export data
-     *
-     * @return array
      */
     protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $role = $this->userRepository->findRole(request('filter_role'));
-        $suffix = is_app_dataku() ? '_dataku_' . Str::snake($role->name) : '';
+        $suffix = is_app_dataku() ? '_dataku_'.Str::snake($role->name) : '';
         $data = [
-            'isExport'   => true,
-            'pdf_name'   => $times . '_users' . $suffix . '.pdf',
-            'excel_name' => $times . '_users' . $suffix . '.xlsx',
-            'csv_name'   => $times . '_users' . $suffix . '.csv',
-            'json_name'  => $times . '_users' . $suffix . '.json',
+            'isExport' => true,
+            'pdf_name' => $times.'_users'.$suffix.'.pdf',
+            'excel_name' => $times.'_users'.$suffix.'.xlsx',
+            'csv_name' => $times.'_users'.$suffix.'.csv',
+            'json_name' => $times.'_users'.$suffix.'.json',
         ];
+
         return array_merge($this->getIndexData(), $data);
     }
 
@@ -245,7 +255,7 @@ class UserManagementController extends StislaController
             if (is_guru()) {
                 return redirect()->route('user-management.users.show', ['user' => auth_user()->id]);
             }
-            if (is_kepala_sekolah() && request('filter_role') && !in_array(request('filter_role'), ['3', '4', '2'])) {
+            if (is_kepala_sekolah() && request('filter_role') && ! in_array(request('filter_role'), ['3', '4', '2'])) {
                 abort(403, 'Anda tidak memiliki akses ke halaman ini.');
             }
             if (is_guru() && request('filter_role') != '3') {
@@ -254,6 +264,7 @@ class UserManagementController extends StislaController
         }
 
         $data = $this->getIndexData();
+
         // return $data;
         return view('stisla.user-management.users.index', $data);
     }
@@ -270,25 +281,26 @@ class UserManagementController extends StislaController
         $defaultData = $this->getDefaultDataCreate(__('Pengguna'), 'user-management.users');
         $dataku = [];
         if (is_app_dataku()) {
-            $role        = $this->userRepository->findRole(request('filter_role'));
-            $isSiswa     = $role ? $role->name === 'siswa' : false;
+            $role = $this->userRepository->findRole(request('filter_role'));
+            $isSiswa = $role ? $role->name === 'siswa' : false;
             $dataku = [
-                'religionOptions'    => $this->religionRepository->getSelectOptions('religion_name'),
+                'religionOptions' => $this->religionRepository->getSelectOptions('religion_name'),
                 'schoolClassOptions' => $this->schoolClassRepository->getSelectOptions('class_name'),
-                'workOptions'        => $this->workRepository->getSelectOptions('job_name'),
-                'provinces'          => $this->regionRepository->getProvinces(),
-                'classLevelOptions'  => $this->classLevelRepository->getSelectOptions('level_name'),
-                'schoolYearOptions'  => $this->schoolYearRepository->getSelectOptions('year_name'),
-                'semesterOptions'    => $this->semesterRepository->getSelectOptions('semester'),
-                'isSiswa'            => $isSiswa,
-                'roleName'           => $role->name,
-                'roleId'             => $role->id ?? null,
+                'workOptions' => $this->workRepository->getSelectOptions('job_name'),
+                'provinces' => $this->regionRepository->getProvinces(),
+                'classLevelOptions' => $this->classLevelRepository->getSelectOptions('level_name'),
+                'schoolYearOptions' => $this->schoolYearRepository->getSelectOptions('year_name'),
+                'semesterOptions' => $this->semesterRepository->getSelectOptions('semester'),
+                'isSiswa' => $isSiswa,
+                'roleName' => $role->name,
+                'roleId' => $role->id ?? null,
             ];
         }
         $data = array_merge($defaultData, [
             'roleOptions' => $roleOptions,
-            'fullTitle'   => __('Tambah Pengguna'),
+            'fullTitle' => __('Tambah Pengguna'),
         ], $dataku);
+
         // return $data;
         return view('stisla.user-management.users.form', $data);
     }
@@ -296,7 +308,6 @@ class UserManagementController extends StislaController
     /**
      * save new user to db
      *
-     * @param UserRequest $request
      * @return Response
      */
     public function store(UserRequest $request)
@@ -310,13 +321,13 @@ class UserManagementController extends StislaController
         $this->userRepository->syncRolesByID($user, $roles);
         logCreate('Pengguna', $user);
         $successMessage = successMessageCreate('Pengguna');
+
         return redirect()->back()->with('successMessage', $successMessage);
     }
 
     /**
      * check user role for kepala sekolah and guru
      *
-     * @param User $user
      * @return void
      */
     private function checkRole(User $user)
@@ -324,7 +335,7 @@ class UserManagementController extends StislaController
         if (is_app_dataku()) {
             $roleId = $user->roles->first()->id ?? null;
             if (is_kepala_sekolah()) {
-                if ($roleId && !in_array($roleId, ['3', '4', '2'])) {
+                if ($roleId && ! in_array($roleId, ['3', '4', '2'])) {
                     abort(403, 'Anda tidak memiliki akses ke halaman ini.');
                 }
                 if ($user->hasRole('siswa')) {
@@ -333,7 +344,7 @@ class UserManagementController extends StislaController
                         abort(403, 'Anda tidak memiliki akses ke halaman ini.');
                     }
                 }
-            } else if (is_guru()) {
+            } elseif (is_guru()) {
                 if (auth_user()->id != $user->id) {
                     abort(403, 'Anda tidak memiliki akses ke halaman ini.');
                 }
@@ -344,7 +355,6 @@ class UserManagementController extends StislaController
     /**
      * showing edit user page
      *
-     * @param User $user
      * @return Response
      */
     public function edit(User $user)
@@ -356,14 +366,13 @@ class UserManagementController extends StislaController
         $data = array_merge($data, [
             'isSiswa' => $isSiswa,
         ]);
+
         return view('stisla.user-management.users.form', $data);
     }
 
     /**
      * update user to db
      *
-     * @param UserRequest $request
-     * @param User $user
      * @return Response
      */
     public function update(UserRequest $request, User $user)
@@ -378,13 +387,13 @@ class UserManagementController extends StislaController
         $this->userRepository->syncRolesByID($userNew, $roles);
         logUpdate('Pengguna', $user, $userNew);
         $successMessage = successMessageUpdate('Pengguna');
+
         return redirect()->back()->with('successMessage', $successMessage);
     }
 
     /**
      * showing detail user page
      *
-     * @param User $user
      * @return Response
      */
     public function show(User $user)
@@ -392,13 +401,13 @@ class UserManagementController extends StislaController
         $this->checkRole($user);
 
         $data = $this->getDetailDataOld($user, true);
+
         return view('stisla.user-management.users.form', $data);
     }
 
     /**
      * delete user from db
      *
-     * @param User $user
      * @return Response
      */
     public function destroy(User $user)
@@ -412,27 +421,26 @@ class UserManagementController extends StislaController
         }
         logDelete('Pengguna', $user);
         $successMessage = successMessageDelete('Pengguna');
+
         return backSuccess($successMessage);
     }
 
     /**
      * force login with specific user
      *
-     * @param User $user
      * @return Response
      */
     public function forceLogin(User $user)
     {
         Session::flush();
         $this->userRepository->login($user);
+
         return redirectSuccess(route('dashboard.index'), 'Berhasil masuk ke dalam sistem');
     }
 
     /**
      * block specific user
      *
-     * @param Request $request
-     * @param User $user
      * @return Response
      */
     public function block(Request $request, User $user)
@@ -441,39 +449,39 @@ class UserManagementController extends StislaController
             'blocked_reason' => 'required|string|max:255',
         ]);
         $after = $this->userRepository->update([
-            'is_active'          => false,
-            'blocked_reason'     => $request->blocked_reason,
-            'last_updated_by_id' => auth_id()
+            'is_active' => false,
+            'blocked_reason' => $request->blocked_reason,
+            'last_updated_by_id' => auth_id(),
         ], $user->id);
         logExecute('Blokir Pengguna', UPDATE, $user, $after);
-        return backSuccess('Pengguna ' . $user->email . ' berhasil diblokir');
+
+        return backSuccess('Pengguna '.$user->email.' berhasil diblokir');
     }
 
     /**
      * unblock specific user
      *
-     * @param User $user
      * @return Response
      */
     public function unblock(User $user)
     {
         $after = $this->userRepository->update([
-            'is_active'          => true,
-            'blocked_reason'     => null,
-            'last_updated_by_id' => auth_id()
+            'is_active' => true,
+            'blocked_reason' => null,
+            'last_updated_by_id' => auth_id(),
         ], $user->id);
         logExecute('Buka Blokir Pengguna', UPDATE, $user, $after);
-        return backSuccess('Pengguna ' . $user->email . ' berhasil diaktifkan kembali');
+
+        return backSuccess('Pengguna '.$user->email.' berhasil diaktifkan kembali');
     }
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {
         $filepath = public_path('excel_examples/sample_users.xlsx');
+
         return response()->download($filepath);
     }
 
@@ -494,13 +502,13 @@ class UserManagementController extends StislaController
             if ($this->role->name === 'siswa') {
                 $filepath = public_path('excel_examples/users/contoh_import_siswa.xlsx');
                 $fileurl = url('excel_examples/users/contoh_import_siswa.xlsx');
-            } else if ($this->role->name === 'guru') {
+            } elseif ($this->role->name === 'guru') {
                 $filepath = public_path('excel_examples/users/contoh_import_guru.xlsx');
                 $fileurl = url('excel_examples/users/contoh_import_guru.xlsx');
-            } else if ($this->role->name === 'kepala sekolah') {
+            } elseif ($this->role->name === 'kepala sekolah') {
                 $filepath = public_path('excel_examples/users/contoh_import_kepala_sekolah.xlsx');
                 $fileurl = url('excel_examples/users/contoh_import_kepala_sekolah.xlsx');
-            } else if ($this->role->name === 'superadmin') {
+            } elseif ($this->role->name === 'superadmin') {
                 $filepath = public_path('excel_examples/users/contoh_import_superadmin.xlsx');
                 $fileurl = url('excel_examples/users/contoh_import_superadmin.xlsx');
             }
@@ -514,19 +522,18 @@ class UserManagementController extends StislaController
         return response()->download($filepath, basename($filepath), [
             // 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ]);
+
         return response()->download($filepath);
     }
 
     /**
      * import excel file to db
-     *
-     * @param ImportExcelRequest $request
-     * @return RedirectResponse
      */
     public function importExcel(ImportExcelRequest $request): RedirectResponse
     {
         $this->fileService->importExcel(new UserImport, $request->file('import_file'));
-        $successMessage = successMessageImportExcel("Pengguna");
+        $successMessage = successMessageImportExcel('Pengguna');
+
         return backSuccess($successMessage);
     }
 }

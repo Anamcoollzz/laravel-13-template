@@ -5,18 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\RoleRequest;
 use App\Imports\RoleImport;
+use App\Models\Role;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoleController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -28,9 +26,9 @@ class RoleController extends StislaController
 
         $this->defaultMiddleware('Role');
 
-        $this->icon       = 'fas fa-user-tag';
+        $this->icon = 'fas fa-user-tag';
         $this->viewFolder = 'user-management.roles';
-        $this->prefix     = 'user-management.roles';
+        $this->prefix = 'user-management.roles';
     }
 
     /**
@@ -40,9 +38,10 @@ class RoleController extends StislaController
      */
     protected function getIndexData()
     {
-        $data        = $this->userRepository->getRoles();
+        $data = $this->userRepository->getRoles();
         $defaultData = $this->getDefaultDataIndex(__('Role'), 'Role', 'user-management.roles');
-        $data        = array_merge(['data' => $data], $defaultData);
+        $data = array_merge(['data' => $data], $defaultData);
+
         return $data;
     }
 
@@ -58,15 +57,12 @@ class RoleController extends StislaController
             'permissions',
             'name',
         ]);
+
         return $data;
     }
 
     /**
      * get detail data
-     *
-     * @param Role $role
-     * @param boolean $isDetail
-     * @return array
      */
     private function getDetailDataOld(Role $role, bool $isDetail): array
     {
@@ -74,28 +70,28 @@ class RoleController extends StislaController
         $rolePermissions = $role->permissions->pluck('name')->toArray();
         $defaultData = $this->getDefaultDataDetail(__('Role'), 'user-management.roles', $role, $isDetail);
         $data = [
-            'rolePermissions'  => $rolePermissions,
+            'rolePermissions' => $rolePermissions,
             'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'fullTitle'        => $isDetail ? __('Detail Role') : __('Ubah Role')
+            'fullTitle' => $isDetail ? __('Detail Role') : __('Ubah Role'),
         ];
+
         return array_merge($data, $defaultData);
     }
 
     /**
      * get export data
-     *
-     * @return array
      */
     protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [
-            'isExport'   => true,
-            'pdf_name'   => $times . '_roles.pdf',
-            'excel_name' => $times . '_roles.xlsx',
-            'csv_name'   => $times . '_roles.csv',
-            'json_name'  => $times . '_roles.json',
+            'isExport' => true,
+            'pdf_name' => $times.'_roles.pdf',
+            'excel_name' => $times.'_roles.xlsx',
+            'csv_name' => $times.'_roles.csv',
+            'json_name' => $times.'_roles.json',
         ];
+
         return array_merge($this->getIndexData(), $data);
     }
 
@@ -120,22 +116,22 @@ class RoleController extends StislaController
     {
         $data = [
             'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'fullTitle'        => __('Tambah Role')
+            'fullTitle' => __('Tambah Role'),
         ];
         $defaultData = $this->getDefaultDataCreate(__('Role'), 'user-management.roles');
         $data = array_merge($data, $defaultData);
+
         return view('stisla.user-management.roles.form', $data);
     }
 
     /**
      * store role data
      *
-     * @param RoleRequest $request
      * @return Response
      */
     public function store(RoleRequest $request)
     {
-        $data   = $this->getStoreData($request);
+        $data = $this->getStoreData($request);
         $result = $this->userRepository->createRole($request->name, $data);
         $result->created_by_id = auth_user()->id;
         $result->save();
@@ -143,66 +139,59 @@ class RoleController extends StislaController
         logCreate('Role', $result);
 
         $successMessage = successMessageCreate('Role Dan Permission');
+
         return backSuccess($successMessage);
     }
 
     /**
      * showing edit role page
-     *
-     * @param Role $role
-     * @return View
      */
     public function edit(Role $role): View
     {
         $data = $this->getDetailDataOld($role, false);
+
         return view('stisla.user-management.roles.form', $data);
     }
 
     /**
      * update role data
-     *
-     * @param RoleRequest $request
-     * @param Role $role
-     * @return RedirectResponse
      */
     public function update(RoleRequest $request, Role $role): RedirectResponse
     {
         // if ($role->is_locked) abort(404);
 
         $before = $this->userRepository->findRole($role->id);
-        $data   = $this->getStoreData($request);
+        $data = $this->getStoreData($request);
         $data['last_updated_by_id'] = auth_user()->id;
-        $after  = $this->userRepository->updateRole($role->id, $data);
+        $after = $this->userRepository->updateRole($role->id, $data);
 
         logUpdate('Role', $before, $after);
 
         $successMessage = successMessageUpdate('Role Dan Permission');
+
         return backSuccess($successMessage);
     }
 
     /**
      * showing detail role page
-     *
-     * @param Role $role
-     * @return View
      */
     public function show(Role $role): View
     {
         $data = $this->getDetailDataOld($role, true);
+
         return view('stisla.user-management.roles.form', $data);
     }
 
     /**
      * delete role data
-     *
-     * @param Role $role
-     * @return RedirectResponse
      */
     public function destroy(Role $role): RedirectResponse
     {
         DB::beginTransaction();
         try {
-            if ($role->is_locked) abort(404);
+            if ($role->is_locked) {
+                abort(404);
+            }
 
             $before = $this->userRepository->findRole($role->id);
             $this->userRepository->deleteRole($role->id);
@@ -211,28 +200,28 @@ class RoleController extends StislaController
             DB::commit();
 
             $successMessage = successMessageDelete('Role Dan Permission');
+
             return backSuccess($successMessage);
         } catch (Exception $exception) {
             DB::rollBack();
+
             return back()->with('errorMessage', $exception->getMessage());
         }
     }
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {
         $filepath = public_path('excel_examples/sample_roles.xlsx');
+
         return response()->download($filepath);
     }
 
     /**
      * import excel file to db
      *
-     * @param ImportExcelRequest $request
      * @return Response
      */
     public function importExcel(ImportExcelRequest $request)
@@ -241,9 +230,11 @@ class RoleController extends StislaController
         try {
             $this->fileService->importExcel(new RoleImport, $request->file('import_file'));
             DB::commit();
+
             return back()->with('successMessage', __('Impor berhasil dilakukan'));
         } catch (Exception $exception) {
             DB::rollBack();
+
             return back()->with('errorMessage', $exception->getMessage());
         }
     }

@@ -75,7 +75,7 @@ function is_superadmin()
 /**
  * check if user has permission
  *
- * @param string $permission
+ * @param  string  $permission
  * @return bool
  */
 function can($permission)
@@ -106,7 +106,7 @@ function auth_check()
 /**
  * check if user has permission
  *
- * @param string $permission
+ * @param  string  $permission
  * @return bool
  */
 function user_can($permission)

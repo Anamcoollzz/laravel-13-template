@@ -7,7 +7,6 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -15,25 +14,25 @@ class PermissionRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new Permission();
+        $this->model = new Permission;
     }
 
     /**
      * create permission
      *
-     * @param string $name
-     * @param int $permissionGroupId
-     * @param string $guardName
+     * @param  string  $name
+     * @param  int  $permissionGroupId
+     * @param  string  $guardName
      * @return void
      */
     public function createPermission($name, $permissionGroupId, $guardName = 'web')
     {
         DB::table('permissions')->insert([
-            'name'                => $name,
+            'name' => $name,
             'permission_group_id' => $permissionGroupId,
-            'guard_name'          => $guardName,
-            'created_at'          => now(),
-            'updated_at'          => now(),
+            'guard_name' => $guardName,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

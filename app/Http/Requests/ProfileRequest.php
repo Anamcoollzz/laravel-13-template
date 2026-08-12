@@ -28,17 +28,17 @@ class ProfileRequest extends FormRequest
     {
         if (Route::is('profile.delete-account')) {
             return [
-                'confirm_email' => 'required|email|in:' . user_email(),
+                'confirm_email' => 'required|email|in:'.user_email(),
             ];
         }
 
         if (Route::is('profile.update-password')) {
             return [
-                'new_password'              => 'required|min:6|confirmed',
+                'new_password' => 'required|min:6|confirmed',
                 'new_password_confirmation' => 'required|min:6',
-                'old_password'              => ['required', 'min:6', function ($attribute, $value, $fail) {
+                'old_password' => ['required', 'min:6', function ($attribute, $value, $fail) {
                     $user = auth_user();
-                    if (!Hash::check($value, $user->password)) {
+                    if (! Hash::check($value, $user->password)) {
                         $fail('Password lama tidak sesuai');
                     }
                 }],
@@ -46,13 +46,13 @@ class ProfileRequest extends FormRequest
         }
         if (Route::is('profile.update-email')) {
             return [
-                'email' => 'required|email|unique:users,email'
+                'email' => 'required|email|unique:users,email',
             ];
         }
         if (Route::is('api.profiles.update-password')) {
             return [
-                'current_password'          => 'required|min:6',
-                'new_password'              => 'required|min:6|confirmed',
+                'current_password' => 'required|min:6',
+                'new_password' => 'required|min:6|confirmed',
                 'new_password_confirmation' => 'required|min:6',
             ];
         }
@@ -60,13 +60,14 @@ class ProfileRequest extends FormRequest
         $userId = (new UserRepository)->getUserIdLogin();
         if (Route::is('api.profiles.update')) {
             return [
-                'name'   => 'required',
+                'name' => 'required',
                 'avatar' => 'nullable|image',
-                'email'  => 'required|email|unique:users,email,' . $userId . ',id'
+                'email' => 'required|email|unique:users,email,'.$userId.',id',
             ];
         }
+
         return [
-            'name'   => 'required',
+            'name' => 'required',
             'avatar' => 'nullable|image',
             // 'email'  => 'required|email|unique:users,email,' . $userId . ',id'
         ];

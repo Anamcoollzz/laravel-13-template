@@ -5,27 +5,27 @@ return [
         [
             'name' => 'Profil',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Ubah',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Perbarui Email',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Perbarui Password',
             'roles' => ['superadmin', 'admin', 'user', 'banker', 'mahasiswa', 'pimpinan fakultas'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
         [
             'name' => 'Profil Hapus Akun',
             'roles' => ['superadmin'],
-            'group' => 'Profil'
+            'group' => 'Profil',
         ],
 
         // [
@@ -167,68 +167,68 @@ return [
         [
             'name' => 'Curhat',
             'roles' => ['superadmin', 'user'],
-            'group' => 'Chatting'
+            'group' => 'Chatting',
         ],
         [
             'name' => 'Keluhan Penyakit',
             'roles' => ['superadmin', 'user'],
-            'group' => 'Chatting'
+            'group' => 'Chatting',
         ],
         [
             'name' => 'Pertanyaan Lainnya',
             'roles' => ['superadmin', 'user'],
-            'group' => 'Chatting'
+            'group' => 'Chatting',
         ],
         [
             'name' => 'Pengguna',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Tambah',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Impor Excel',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Ubah',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Detail',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Hapus',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Ekspor',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Force Login',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
         [
             'name' => 'Pengguna Blokir',
             'roles' => ['superadmin'],
-            'group' => 'Pengguna'
+            'group' => 'Pengguna',
         ],
 
         [
             'name' => 'Pengaturan',
             'roles' => ['superadmin', 'admin'],
-            'group' => 'Pengaturan'
+            'group' => 'Pengaturan',
         ],
 
         // [
@@ -576,15 +576,15 @@ return [
     ],
     'users' => [
         [
-            'name'              => 'Hairul Anam Superadmin',
-            'email'             => 'superadmin@aidssupportmajalengka.com',
-            'password'          => 'superadmin',
-            'roles'             => ['superadmin'],
+            'name' => 'Hairul Anam Superadmin',
+            'email' => 'superadmin@aidssupportmajalengka.com',
+            'password' => 'superadmin',
+            'roles' => ['superadmin'],
             'email_verified_at' => '2021-04-06 04:06:00',
-            'is_locked'         => 1,
-            'phone_number'      => '6285322778935',
-            'birth_date'        => '1998-04-08',
-            'address'           => 'Majalengka'
+            'is_locked' => 1,
+            'phone_number' => '6285322778935',
+            'birth_date' => '1998-04-08',
+            'address' => 'Majalengka',
         ],
         // [
         //     'name'              => 'Hairul Anam Admin',
@@ -597,25 +597,25 @@ return [
         //     'address'           => 'Majalengka'
         // ],
         [
-            'name'              => 'Hairul Anam User',
-            'email'             => 'user@aidssupportmajalengka.com',
-            'password'          => 'user',
-            'roles'             => ['user'],
+            'name' => 'Hairul Anam User',
+            'email' => 'user@aidssupportmajalengka.com',
+            'password' => 'user',
+            'roles' => ['user'],
             'email_verified_at' => '2021-04-06 04:06:00',
-            'phone_number'      => '6285322778935',
-            'birth_date'        => '1998-04-08',
-            'address'           => 'Majalengka'
+            'phone_number' => '6285322778935',
+            'birth_date' => '1998-04-08',
+            'address' => 'Majalengka',
         ],
         [
-            'name'              => 'Ahfa User',
-            'email'             => 'ahfauser@aidssupportmajalengka.com',
-            'password'          => 'user',
-            'roles'             => ['user'],
+            'name' => 'Ahfa User',
+            'email' => 'ahfauser@aidssupportmajalengka.com',
+            'password' => 'user',
+            'roles' => ['user'],
             'email_verified_at' => '2021-04-06 04:06:00',
-            'phone_number'      => '6285322778935',
-            'birth_date'        => '1998-04-08',
-            'address'           => 'Majalengka'
-        ]
+            'phone_number' => '6285322778935',
+            'birth_date' => '1998-04-08',
+            'address' => 'Majalengka',
+        ],
     ],
     'settings' => [
         ['key' => 'application_name', 'value' => 'Pojok LAJUR PESAT'],
@@ -628,19 +628,19 @@ return [
         [
             'key' => 'favicon',
             'value' => 'assets/icons/chats/favicon.ico',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'logo', 'value' => 'assets/images/logo2.png', 'is_url' => true],
         ['key' => 'since', 'value' => '2021'],
 
         [
             'key' => 'meta_author',
-            'value' => 'Hairul Anam'
+            'value' => 'Hairul Anam',
         ],
         ['key' => 'meta_description', 'value' => 'Komisi Penanggulangan AIDS Kab Majalengka'],
         [
             'key' => 'meta_keywords',
-            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL'
+            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL',
         ],
         // new
         ['key' => 'meta_language', 'value' => 'id'],
@@ -668,12 +668,12 @@ return [
             'key' => 'stisla_bg_home',
             'value' => 'stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg',
             // 'value' => 'assets/images/aids3.png',
-            'is_url' => true
+            'is_url' => true,
         ],
         [
             'key' => 'stisla_bg_login',
             'value' => 'assets/images/aids2.png',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'stisla_sidebar_mini', 'value' => '0'],
         ['key' => 'stisla_login_template', 'value' => 'default'],
@@ -734,7 +734,7 @@ return [
 
         ['key' => 'sso_github_client_id', 'value' => '-'],
         ['key' => 'sso_github_client_secret', 'value' => '-'],
-        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true]
+        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true],
     ],
 
     'settings2' => [
@@ -749,19 +749,19 @@ return [
         [
             'key' => 'favicon',
             'value' => 'assets/icons/chats/favicon.ico',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'logo', 'value' => 'assets/images/logo2.png', 'is_url' => true],
         ['key' => 'since', 'value' => '2021'],
 
         [
             'key' => 'meta_author',
-            'value' => 'Hairul Anam'
+            'value' => 'Hairul Anam',
         ],
         ['key' => 'meta_description', 'value' => 'Komisi Penanggulangan AIDS Kab Majalengka'],
         [
             'key' => 'meta_keywords',
-            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL'
+            'value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL',
         ],
         // new
         ['key' => 'meta_language', 'value' => 'id'],
@@ -789,12 +789,12 @@ return [
             'key' => 'stisla_bg_home',
             'value' => 'stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg',
             // 'value' => 'assets/images/aids3.png',
-            'is_url' => true
+            'is_url' => true,
         ],
         [
             'key' => 'stisla_bg_login',
             'value' => 'assets/images/aids2.png',
-            'is_url' => true
+            'is_url' => true,
         ],
         ['key' => 'stisla_sidebar_mini', 'value' => '0'],
         ['key' => 'stisla_login_template', 'value' => 'default'],
@@ -855,6 +855,6 @@ return [
 
         ['key' => 'sso_github_client_id', 'value' => '-'],
         ['key' => 'sso_github_client_secret', 'value' => '-'],
-        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true]
+        ['key' => 'sso_github_redirect', 'value' => '/auth/social/github/callback', 'is_url' => true],
     ],
 ];

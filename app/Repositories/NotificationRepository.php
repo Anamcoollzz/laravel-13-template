@@ -3,11 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\Notification;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Schema;
 
 class NotificationRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -15,20 +16,21 @@ class NotificationRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new Notification();
+        $this->model = new Notification;
     }
 
     /**
      * myUnReadNotif
      *
-     * @param integer $limit
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  int  $limit
+     * @return Collection|static[]
      */
     public function myUnReadNotif($limit = 1000)
     {
         if (Schema::hasTable('notifications') === false) {
             return [];
         }
+
         return $this->model->query()->where('is_read', 0)
             ->limit($limit)->latest()->where('user_id', auth_id())->get();
     }
@@ -36,7 +38,7 @@ class NotificationRepository extends Repository
     /**
      * myUnReadNotifAll
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return Collection|static[]
      */
     public function myUnReadNotifAll(array $columns = ['*'])
     {
@@ -50,7 +52,7 @@ class NotificationRepository extends Repository
     /**
      * myUnReadNotifCount
      *
-     * @return integer
+     * @return int
      */
     public function myUnReadNotifCount()
     {
@@ -63,8 +65,8 @@ class NotificationRepository extends Repository
     /**
      * getPaginate
      *
-     * @param integer $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  int  $perPage
+     * @return LengthAwarePaginator
      *
      * @throws \InvalidArgumentException
      */
@@ -77,8 +79,8 @@ class NotificationRepository extends Repository
     /**
      * getMinePaginate
      *
-     * @param integer $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  int  $perPage
+     * @return LengthAwarePaginator
      *
      * @throws \InvalidArgumentException
      */
@@ -103,25 +105,23 @@ class NotificationRepository extends Repository
     /**
      * create notification
      *
-     * @param string $title
-     * @param string $content
-     * @param string|integer $userId
-     * @param string $notificationType
-     * @param string $icon
-     * @param string $bgColor
+     * @param  string|int  $userId
+     * @param  string  $icon
+     * @param  string  $bgColor
      * @return Notification
      */
     public function createNotif(string $title, string $content, $userId, string $notificationType, $icon = 'bell', $bgColor = 'primary')
     {
         $data = [
-            'title'             => $title,
-            'content'           => $content,
-            'user_id'           => $userId,
-            'is_read'           => false,
+            'title' => $title,
+            'content' => $content,
+            'user_id' => $userId,
+            'is_read' => false,
             'notification_type' => $notificationType,
-            'icon'              => $icon,
-            'bg_color'          => $bgColor,
+            'icon' => $icon,
+            'bg_color' => $bgColor,
         ];
+
         return $this->create($data);
     }
 }

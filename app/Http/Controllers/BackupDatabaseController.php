@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\DatabaseService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class BackupDatabaseController extends StislaController
@@ -41,19 +41,19 @@ class BackupDatabaseController extends StislaController
         $data = $this->databaseService->getAllBackupMysql();
         if (count($data) > 100) {
             $data = $data->filter(function ($item) use ($filter_month, $filter_year) {
-                return Str::contains($item['name'], $filter_year . '-' . $filter_month);
+                return Str::contains($item['name'], $filter_year.'-'.$filter_month);
             });
             $isShowFilter = true;
         }
 
         return view('stisla.backup-databases.index', [
-            'active'       => 'databases.index',
-            'title'        => 'Backup Database',
-            'data'         => $data,
-            'month'        => $filter_month,
-            'year'         => $filter_year,
-            'array_bulan'  => array_bulan(),
-            'array_year'   => array_year(2019, date('Y')),
+            'active' => 'databases.index',
+            'title' => 'Backup Database',
+            'data' => $data,
+            'month' => $filter_month,
+            'year' => $filter_year,
+            'array_bulan' => array_bulan(),
+            'array_year' => array_year(2019, date('Y')),
             'isShowFilter' => $isShowFilter,
         ]);
     }
@@ -61,18 +61,21 @@ class BackupDatabaseController extends StislaController
     public function create()
     {
         $this->databaseService->backupMysql();
+
         return redirect()->route('backup-databases.index')->with('successMessage', 'Database berhasil dibackup');
     }
 
     public function update($filename)
     {
         $this->databaseService->restoreMysql($filename);
-        return redirect()->route('backup-databases.index')->with('successMessage', 'Database berhasil direstore menggunakan ' . $filename);
+
+        return redirect()->route('backup-databases.index')->with('successMessage', 'Database berhasil direstore menggunakan '.$filename);
     }
 
     public function destroy($fileName)
     {
         $this->databaseService->deleteMysql($fileName);
+
         return redirect()->back()->with('successMessage', 'Database berhasil dihapus');
     }
 }

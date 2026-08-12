@@ -3,12 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\Ormawa;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 class OrmawaRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -16,13 +18,13 @@ class OrmawaRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new Ormawa();
+        $this->model = new Ormawa;
     }
 
     /**
      * get data for yajra datatables
      *
-     * @param mixed $params
+     * @param  mixed  $params
      * @return Response
      */
     public function getYajraDataTables($additionalParams = null)
@@ -32,42 +34,44 @@ class OrmawaRepository extends Repository
         })
             ->with(['createdBy', 'lastUpdatedBy']);
         $editColumns = [
-            'currency'         => fn(Ormawa $item) => dollar($item->currency),
-            'currency_idr'     => fn(Ormawa $item) => rp($item->currency_idr),
+            'currency' => fn (Ormawa $item) => dollar($item->currency),
+            'currency_idr' => fn (Ormawa $item) => rp($item->currency_idr),
             'select2_multiple' => '{{implode(", ", $select2_multiple)}}',
-            'checkbox'         => '{{implode(", ", $checkbox)}}',
-            'checkbox2'        => '{{implode(", ", $checkbox2)}}',
-            'tags'             => 'stisla.crud-examples.tags',
-            'file'             => 'stisla.crud-examples.file',
-            'image'            => fn(Ormawa $item) => view('stisla.crud-examples.image', ['file' => $item->image, 'item' => $item]),
-            'barcode'          => fn(Ormawa $item) => \Milon\Barcode\Facades\DNS1DFacade::getBarcodeHTML($item->barcode, 'C39', 1, 10),
-            'qr_code'          => fn(Ormawa $item) => \Milon\Barcode\Facades\DNS2DFacade::getBarcodeHTML($item->qr_code, 'QRCODE', 3, 3),
-            'color'            => 'stisla.crud-examples.color',
-            'created_at'       => '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}',
-            'updated_at'       => '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'checkbox' => '{{implode(", ", $checkbox)}}',
+            'checkbox2' => '{{implode(", ", $checkbox2)}}',
+            'tags' => 'stisla.crud-examples.tags',
+            'file' => 'stisla.crud-examples.file',
+            'image' => fn (Ormawa $item) => view('stisla.crud-examples.image', ['file' => $item->image, 'item' => $item]),
+            'barcode' => fn (Ormawa $item) => DNS1DFacade::getBarcodeHTML($item->barcode, 'C39', 1, 10),
+            'qr_code' => fn (Ormawa $item) => DNS2DFacade::getBarcodeHTML($item->qr_code, 'QRCODE', 3, 3),
+            'color' => 'stisla.crud-examples.color',
+            'created_at' => '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'updated_at' => '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}',
             // 'created_by'       => fn(Ormawa $crudExample) => $crudExample->createdBy ? $crudExample->createdBy->name : '-',
             // 'last_updated_by'  => fn(Ormawa $crudExample) => $crudExample->lastUpdatedBy ? $crudExample->lastUpdatedBy->name : '-',
-            'action'           => function (Ormawa $crudExample) use ($additionalParams) {
+            'action' => function (Ormawa $crudExample) use ($additionalParams) {
                 $isAjaxYajra = Route::is('crud-examples.index-ajax-yajra') || request('isAjaxYajra') == 1;
                 $data = array_merge($additionalParams ? $additionalParams : [], [
-                    'item'        => $crudExample,
+                    'item' => $crudExample,
                     'isAjaxYajra' => $isAjaxYajra,
                 ]);
+
                 return view('stisla.includes.forms.buttons.btn-action', $data);
-            }
+            },
         ];
         $params = [
             'editColumns' => $editColumns,
-            'rawColumns'  => ['tags', 'file', 'color', 'action', 'image', 'barcode', 'qr_code'],
-            'addColumns'  => [
+            'rawColumns' => ['tags', 'file', 'color', 'action', 'image', 'barcode', 'qr_code'],
+            'addColumns' => [
                 'created_by' => function (Ormawa $item) {
                     return $item->createdBy ? $item->createdBy->name : '-';
                 },
                 'last_updated_by' => function (Ormawa $item) {
                     return $item->lastUpdatedBy ? $item->lastUpdatedBy->name : '-';
-                }
-            ]
+                },
+            ],
         ];
+
         return $this->generateDataTables($query, $params);
     }
 
@@ -80,10 +84,10 @@ class OrmawaRepository extends Repository
     {
         return json_encode([
             [
-                'data'       => 'DT_RowIndex',
-                'name'       => 'DT_RowIndex',
+                'data' => 'DT_RowIndex',
+                'name' => 'DT_RowIndex',
                 'searchable' => false,
-                'orderable'  => false
+                'orderable' => false,
             ],
             ['data' => 'text', 'name' => 'text'],
             ['data' => 'barcode', 'name' => 'barcode'],
@@ -113,7 +117,7 @@ class OrmawaRepository extends Repository
                 'data' => 'action',
                 'name' => 'action',
                 'orderable' => false,
-                'searchable' => false
+                'searchable' => false,
             ],
         ]);
     }
@@ -121,7 +125,7 @@ class OrmawaRepository extends Repository
     /**
      * get full data with relations
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getFullData()
     {

@@ -8,13 +8,10 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class MODELNAMEImport implements ToCollection, WithHeadingRow
 {
-
     /**
      * To collection
-     *
-     * @return void
      */
-    public function collection(Collection $rows)
+    public function collection(Collection $rows): void
     {
         $dateTime = date('Y-m-d H:i:s');
         foreach ($rows->chunk(30) as $chunkData) {

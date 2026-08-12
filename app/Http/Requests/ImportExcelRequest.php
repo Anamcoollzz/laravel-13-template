@@ -24,7 +24,7 @@ class ImportExcelRequest extends FormRequest
     public function rules()
     {
         return [
-            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ];
     }
 }

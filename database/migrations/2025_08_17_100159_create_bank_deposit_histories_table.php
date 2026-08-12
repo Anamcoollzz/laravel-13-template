@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!in_array('bank_deposit_histories', config('stisla.table_excludes')))
+        if (! in_array('bank_deposit_histories', config('stisla.table_excludes'))) {
             Schema::create('bank_deposit_histories', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('bank_deposit_id')->nullable();
@@ -34,6 +34,7 @@ return new class extends Migration
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->timestamps();
             });
+        }
     }
 
     /**

@@ -3,12 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\FacultyLeader;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 class FacultyLeaderRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -16,13 +18,13 @@ class FacultyLeaderRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new FacultyLeader();
+        $this->model = new FacultyLeader;
     }
 
     /**
      * get data for yajra datatables
      *
-     * @param mixed $params
+     * @param  mixed  $params
      * @return Response
      */
     public function getYajraDataTables($additionalParams = null)
@@ -32,42 +34,44 @@ class FacultyLeaderRepository extends Repository
         })
             ->with(['createdBy', 'lastUpdatedBy']);
         $editColumns = [
-            'currency'         => fn(FacultyLeader $item) => dollar($item->currency),
-            'currency_idr'     => fn(FacultyLeader $item) => rp($item->currency_idr),
+            'currency' => fn (FacultyLeader $item) => dollar($item->currency),
+            'currency_idr' => fn (FacultyLeader $item) => rp($item->currency_idr),
             'select2_multiple' => '{{implode(", ", $select2_multiple)}}',
-            'checkbox'         => '{{implode(", ", $checkbox)}}',
-            'checkbox2'        => '{{implode(", ", $checkbox2)}}',
-            'tags'             => 'stisla.crud-examples.tags',
-            'file'             => 'stisla.crud-examples.file',
-            'image'            => fn(FacultyLeader $item) => view('stisla.crud-examples.image', ['file' => $item->image, 'item' => $item]),
-            'barcode'          => fn(FacultyLeader $item) => \Milon\Barcode\Facades\DNS1DFacade::getBarcodeHTML($item->barcode, 'C39', 1, 10),
-            'qr_code'          => fn(FacultyLeader $item) => \Milon\Barcode\Facades\DNS2DFacade::getBarcodeHTML($item->qr_code, 'QRCODE', 3, 3),
-            'color'            => 'stisla.crud-examples.color',
-            'created_at'       => '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}',
-            'updated_at'       => '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'checkbox' => '{{implode(", ", $checkbox)}}',
+            'checkbox2' => '{{implode(", ", $checkbox2)}}',
+            'tags' => 'stisla.crud-examples.tags',
+            'file' => 'stisla.crud-examples.file',
+            'image' => fn (FacultyLeader $item) => view('stisla.crud-examples.image', ['file' => $item->image, 'item' => $item]),
+            'barcode' => fn (FacultyLeader $item) => DNS1DFacade::getBarcodeHTML($item->barcode, 'C39', 1, 10),
+            'qr_code' => fn (FacultyLeader $item) => DNS2DFacade::getBarcodeHTML($item->qr_code, 'QRCODE', 3, 3),
+            'color' => 'stisla.crud-examples.color',
+            'created_at' => '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'updated_at' => '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}',
             // 'created_by'       => fn(FacultyLeader $crudExample) => $crudExample->createdBy ? $crudExample->createdBy->name : '-',
             // 'last_updated_by'  => fn(FacultyLeader $crudExample) => $crudExample->lastUpdatedBy ? $crudExample->lastUpdatedBy->name : '-',
-            'action'           => function (FacultyLeader $crudExample) use ($additionalParams) {
+            'action' => function (FacultyLeader $crudExample) use ($additionalParams) {
                 $isAjaxYajra = Route::is('crud-examples.index-ajax-yajra') || request('isAjaxYajra') == 1;
                 $data = array_merge($additionalParams ? $additionalParams : [], [
-                    'item'        => $crudExample,
+                    'item' => $crudExample,
                     'isAjaxYajra' => $isAjaxYajra,
                 ]);
+
                 return view('stisla.includes.forms.buttons.btn-action', $data);
-            }
+            },
         ];
         $params = [
             'editColumns' => $editColumns,
-            'rawColumns'  => ['tags', 'file', 'color', 'action', 'image', 'barcode', 'qr_code'],
-            'addColumns'  => [
+            'rawColumns' => ['tags', 'file', 'color', 'action', 'image', 'barcode', 'qr_code'],
+            'addColumns' => [
                 'created_by' => function (FacultyLeader $item) {
                     return $item->createdBy ? $item->createdBy->name : '-';
                 },
                 'last_updated_by' => function (FacultyLeader $item) {
                     return $item->lastUpdatedBy ? $item->lastUpdatedBy->name : '-';
-                }
-            ]
+                },
+            ],
         ];
+
         return $this->generateDataTables($query, $params);
     }
 
@@ -80,10 +84,10 @@ class FacultyLeaderRepository extends Repository
     {
         return json_encode([
             [
-                'data'       => 'DT_RowIndex',
-                'name'       => 'DT_RowIndex',
+                'data' => 'DT_RowIndex',
+                'name' => 'DT_RowIndex',
                 'searchable' => false,
-                'orderable'  => false
+                'orderable' => false,
             ],
             ['data' => 'text', 'name' => 'text'],
             ['data' => 'barcode', 'name' => 'barcode'],
@@ -113,7 +117,7 @@ class FacultyLeaderRepository extends Repository
                 'data' => 'action',
                 'name' => 'action',
                 'orderable' => false,
-                'searchable' => false
+                'searchable' => false,
             ],
         ]);
     }
@@ -121,7 +125,7 @@ class FacultyLeaderRepository extends Repository
     /**
      * get full data with relations
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getFullData()
     {

@@ -24,15 +24,15 @@ class MenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'menu_name'                 => 'required',
-            'route_name'                => $this->uri ? 'nullable' : 'required',
-            'icon'                      => 'required',
-            'parent_menu_id'            => 'nullable|numeric',
-            'permission'                => 'required',
+            'menu_name' => 'required',
+            'route_name' => $this->uri ? 'nullable' : 'required',
+            'icon' => 'required',
+            'parent_menu_id' => 'nullable|numeric',
+            'permission' => 'required',
             'is_active_if_url_includes' => 'required',
-            'is_blank'                  => 'required',
-            'uri'                       => $this->route_name ? 'nullable' : 'required',
-            'menu_group_id'             => 'required|numeric',
+            'is_blank' => 'required',
+            'uri' => $this->route_name ? 'nullable' : 'required',
+            'menu_group_id' => 'required|numeric',
         ];
     }
 }

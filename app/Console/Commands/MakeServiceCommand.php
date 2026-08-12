@@ -38,27 +38,28 @@ class MakeServiceCommand extends Command
     public function handle()
     {
         $name = $this->ask('Service name? (without Service suffix)');
-        if (!$name)
+        if (! $name) {
             $this->error('Name required!');
-        else {
+        } else {
             $serviceFile = file_get_contents(app_path('Console/Commands/data/NameService.php.dummy'));
-            $serviceFile = str_replace('NameService', $name . 'Service', $serviceFile);
-            if ($this->confirm('Do you wish to continue? (' . $name . 'Service)')) {
-                $filepath = app_path('Services\\' . $name . 'Service.php');
+            $serviceFile = str_replace('NameService', $name.'Service', $serviceFile);
+            if ($this->confirm('Do you wish to continue? ('.$name.'Service)')) {
+                $filepath = app_path('Services\\'.$name.'Service.php');
                 if (file_exists($filepath)) {
                     if ($this->confirm('File is exist, do you want to replace?')) {
                         file_put_contents($filepath, $serviceFile);
-                        $this->info($name . 'Service.php has been created in ' . $filepath);
+                        $this->info($name.'Service.php has been created in '.$filepath);
                     } else {
                         $this->info('Canceled!');
                     }
                 } else {
                     file_put_contents($filepath, $serviceFile);
-                    $this->info($name . 'Service.php has been created in ' . $filepath);
+                    $this->info($name.'Service.php has been created in '.$filepath);
                 }
             } else {
                 $this->info('Canceled!');
             }
+
             return 0;
         }
     }

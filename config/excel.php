@@ -1,5 +1,6 @@
 <?php
 
+use Maatwebsite\Excel\DefaultValueBinder;
 use Maatwebsite\Excel\Excel;
 
 return [
@@ -14,7 +15,7 @@ return [
         | Here you can specify how big the chunk should be.
         |
         */
-        'chunk_size'             => 1000,
+        'chunk_size' => 1000,
 
         /*
         |--------------------------------------------------------------------------
@@ -41,13 +42,13 @@ return [
         | Configure e.g. delimiter, enclosure and line ending for CSV exports.
         |
         */
-        'csv'                    => [
-            'delimiter'              => ',',
-            'enclosure'              => '"',
-            'line_ending'            => PHP_EOL,
-            'use_bom'                => false,
+        'csv' => [
+            'delimiter' => ',',
+            'enclosure' => '"',
+            'line_ending' => PHP_EOL,
+            'use_bom' => false,
             'include_separator_line' => false,
-            'excel_compatibility'    => false,
+            'excel_compatibility' => false,
         ],
 
         /*
@@ -58,20 +59,20 @@ return [
         | Configure e.g. default title, creator, subject,...
         |
         */
-        'properties'             => [
-            'creator'        => '',
+        'properties' => [
+            'creator' => '',
             'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
-            'manager'        => '',
-            'company'        => '',
+            'title' => '',
+            'description' => '',
+            'subject' => '',
+            'keywords' => '',
+            'category' => '',
+            'manager' => '',
+            'company' => '',
         ],
     ],
 
-    'imports'            => [
+    'imports' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -120,12 +121,12 @@ return [
         | Configure e.g. delimiter, enclosure and line ending for CSV imports.
         |
         */
-        'csv'         => [
-            'delimiter'        => ',',
-            'enclosure'        => '"',
+        'csv' => [
+            'delimiter' => ',',
+            'enclosure' => '"',
             'escape_character' => '\\',
-            'contiguous'       => false,
-            'input_encoding'   => 'UTF-8',
+            'contiguous' => false,
+            'input_encoding' => 'UTF-8',
         ],
 
         /*
@@ -136,16 +137,16 @@ return [
         | Configure e.g. default title, creator, subject,...
         |
         */
-        'properties'  => [
-            'creator'        => '',
+        'properties' => [
+            'creator' => '',
             'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
-            'manager'        => '',
-            'company'        => '',
+            'title' => '',
+            'description' => '',
+            'subject' => '',
+            'keywords' => '',
+            'category' => '',
+            'manager' => '',
+            'company' => '',
         ],
 
     ],
@@ -160,21 +161,21 @@ return [
     |
     */
     'extension_detector' => [
-        'xlsx'     => Excel::XLSX,
-        'xlsm'     => Excel::XLSX,
-        'xltx'     => Excel::XLSX,
-        'xltm'     => Excel::XLSX,
-        'xls'      => Excel::XLS,
-        'xlt'      => Excel::XLS,
-        'ods'      => Excel::ODS,
-        'ots'      => Excel::ODS,
-        'slk'      => Excel::SLK,
-        'xml'      => Excel::XML,
+        'xlsx' => Excel::XLSX,
+        'xlsm' => Excel::XLSX,
+        'xltx' => Excel::XLSX,
+        'xltm' => Excel::XLSX,
+        'xls' => Excel::XLS,
+        'xlt' => Excel::XLS,
+        'ods' => Excel::ODS,
+        'ots' => Excel::ODS,
+        'slk' => Excel::SLK,
+        'xml' => Excel::XML,
         'gnumeric' => Excel::GNUMERIC,
-        'htm'      => Excel::HTML,
-        'html'     => Excel::HTML,
-        'csv'      => Excel::CSV,
-        'tsv'      => Excel::TSV,
+        'htm' => Excel::HTML,
+        'html' => Excel::HTML,
+        'csv' => Excel::CSV,
+        'tsv' => Excel::TSV,
 
         /*
         |--------------------------------------------------------------------------
@@ -185,7 +186,7 @@ return [
         | Available options: Excel::MPDF | Excel::TCPDF | Excel::DOMPDF
         |
         */
-        'pdf'      => Excel::DOMPDF,
+        'pdf' => Excel::DOMPDF,
     ],
 
     /*
@@ -206,7 +207,7 @@ return [
     |
     */
     'value_binder' => [
-        'default' => Maatwebsite\Excel\DefaultValueBinder::class,
+        'default' => DefaultValueBinder::class,
     ],
 
     'cache' => [
@@ -226,7 +227,7 @@ return [
         | Drivers: memory|illuminate|batch
         |
         */
-        'driver'     => 'memory',
+        'driver' => 'memory',
 
         /*
         |--------------------------------------------------------------------------
@@ -238,7 +239,7 @@ return [
         | Here you can tweak the memory limit to your liking.
         |
         */
-        'batch'     => [
+        'batch' => [
             'memory_limit' => 60000,
         ],
 
@@ -289,7 +290,7 @@ return [
         | storing reading or downloading. Here you can customize that path.
         |
         */
-        'local_path'          => storage_path('framework/laravel-excel'),
+        'local_path' => storage_path('framework/laravel-excel'),
 
         /*
         |--------------------------------------------------------------------------
@@ -305,8 +306,8 @@ return [
         | in conjunction with queued imports and exports.
         |
         */
-        'remote_disk'         => null,
-        'remote_prefix'       => null,
+        'remote_disk' => null,
+        'remote_prefix' => null,
 
         /*
         |--------------------------------------------------------------------------

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!in_array('faculty_leaders', config('stisla.table_excludes')))
+        if (! in_array('faculty_leaders', config('stisla.table_excludes'))) {
             Schema::create('faculty_leaders', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('user_id')->nullable();
@@ -26,6 +26,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

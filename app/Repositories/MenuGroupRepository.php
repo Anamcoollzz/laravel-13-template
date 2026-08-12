@@ -6,7 +6,6 @@ use App\Models\MenuGroup;
 
 class MenuGroupRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -14,6 +13,6 @@ class MenuGroupRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new MenuGroup();
+        $this->model = new MenuGroup;
     }
 }

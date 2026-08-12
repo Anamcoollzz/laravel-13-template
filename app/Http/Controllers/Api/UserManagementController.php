@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class UserManagementController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -33,27 +32,27 @@ class UserManagementController extends StislaController
     public function index()
     {
         $data = $this->userRepository->getPaginateUsers(request('perPage'));
-        $successMessage = successMessageLoadData("Pengguna");
+        $successMessage = successMessageLoadData('Pengguna');
+
         return response200($data, $successMessage);
     }
 
     /**
      * get detail user
      *
-     * @param mixed $userId
      * @return JsonResponse
      */
     public function show(mixed $userId)
     {
         $data = $this->userRepository->findWithOrFail($userId, ['roles.permissions']);
-        $successMessage = successMessageLoadData("Pengguna");
+        $successMessage = successMessageLoadData('Pengguna');
+
         return response200($data, $successMessage);
     }
 
     /**
      * save new user to db
      *
-     * @param UserRequest $request
      * @return Response
      */
     public function store(UserRequest $request)
@@ -61,7 +60,7 @@ class UserManagementController extends StislaController
         $user = $this->userRepository->create(
             array_merge(
                 [
-                    'password' => bcrypt($request->password)
+                    'password' => bcrypt($request->password),
                 ],
                 $request->only([
                     'name',
@@ -74,15 +73,14 @@ class UserManagementController extends StislaController
         );
         $user->assignRole($request->role);
         logCreate('Pengguna', $user);
-        $successMessage = successMessageCreate("Pengguna");
+        $successMessage = successMessageCreate('Pengguna');
+
         return response200($user, $successMessage);
     }
 
     /**
      * update user to db
      *
-     * @param UserRequest $request
-     * @param mixed $userId
      * @return Response
      */
     public function update(UserRequest $request, mixed $userId)
@@ -99,14 +97,14 @@ class UserManagementController extends StislaController
         $userNew = $this->userRepository->update($data, $user->id);
         $this->userRepository->syncRoles($userNew, $request->role);
         logUpdate('Pengguna', $user, $userNew);
-        $successMessage = successMessageUpdate("Pengguna");
+        $successMessage = successMessageUpdate('Pengguna');
+
         return response200($userNew, $successMessage);
     }
 
     /**
      * delete user from db
      *
-     * @param mixed $userId
      * @return Response
      */
     public function destroy(mixed $userId)
@@ -114,15 +112,15 @@ class UserManagementController extends StislaController
         $user = $this->userRepository->findOrFail($userId);
         $deleted = $this->userRepository->delete($userId);
         logDelete('Pengguna', $user);
-        $successMessage = successMessageDelete("Pengguna");
+        $successMessage = successMessageDelete('Pengguna');
+
         return response200($deleted, $successMessage);
     }
 
     /**
      * update password user to db
      *
-     * @param UserRequest $request
-     * @param mixed $userId
+     * @param  mixed  $userId
      * @return Response
      */
     public function updatePassword(UserRequest $request, $userId)
@@ -131,6 +129,7 @@ class UserManagementController extends StislaController
         $data = ['password' => bcrypt($request->new_password)];
         $userNew = $this->userRepository->update($data, $userId);
         logUpdate(logTitleUpdate('Kata Sandi Pengguna'), $user->password, $userNew->password);
+
         return response200(true, __('Berhasil memperbarui kata sandi pengguna'));
     }
 }

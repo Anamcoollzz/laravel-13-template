@@ -23,11 +23,8 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends StislaController
 {
-
     /**
      * active socialite providers
-     *
-     * @var array
      */
     private array $socialiteProviders = [
         'google',
@@ -47,7 +44,7 @@ class AuthController extends StislaController
     {
         parent::__construct();
 
-        $this->regionRepository = new RegionRepository();
+        $this->regionRepository = new RegionRepository;
 
         $this->defaultMiddleware('');
     }
@@ -59,16 +56,18 @@ class AuthController extends StislaController
      */
     public function registerForm()
     {
-        if ($this->settingRepository->isActiveRegisterPage() === false)
+        if ($this->settingRepository->isActiveRegisterPage() === false) {
             abort(404);
+        }
 
         $isGoogleCaptcha = $this->settingRepository->isGoogleCaptchaRegister();
 
         if (config('stisla.app') === AppEnum::APP_CHAT) {
             $provinces = $this->regionRepository->getProvinces();
+
             return view('tailwind.auth.register', [
                 'provinces' => $provinces,
-                'isGoogleCaptcha' => $isGoogleCaptcha
+                'isGoogleCaptcha' => $isGoogleCaptcha,
             ]);
         }
 
@@ -81,16 +80,16 @@ class AuthController extends StislaController
         // }
         // return view('stisla.auth.login.index');
 
-        if (TEMPLATE === STISLA)
+        if (TEMPLATE === STISLA) {
             return view('stisla.auth.register.index', [
-                'isGoogleCaptcha' => $isGoogleCaptcha
+                'isGoogleCaptcha' => $isGoogleCaptcha,
             ]);
+        }
     }
 
     /**
      * process register
      *
-     * @param RegisterRequest $request
      * @return Response
      */
     public function register(RegisterRequest $request)
@@ -111,12 +110,12 @@ class AuthController extends StislaController
                 ]
             );
             $data = array_merge([
-                'password'      => bcrypt($request->password),
+                'password' => bcrypt($request->password),
                 'province_code' => $request->is_majalengka ? '32' : $request->province,
-                'city_code'     => $request->is_majalengka ? '32.10' : $request->city,
+                'city_code' => $request->is_majalengka ? '32.10' : $request->city,
                 'district_code' => $request->district,
-                'village_code'  => $request->village,
-                'uuid'          => Str::uuid()->toString(),
+                'village_code' => $request->village,
+                'uuid' => Str::uuid()->toString(),
             ], $data);
             $user = $this->userRepository->create($data);
             $this->userRepository->assignRole($user, 'user');
@@ -125,17 +124,20 @@ class AuthController extends StislaController
                 $this->emailService->verifyAccount($user);
                 logRegister($user);
                 DB::commit();
+
                 return redirectSuccess(route('login'), 'Cek inbox email anda untuk memverifikasi akun terlebih dahulu');
             }
             logRegister($user);
             $this->userRepository->login($user);
             DB::commit();
+
             return redirectSuccess(route('dashboard.index'), 'Berhasil mendaftar dan masuk ke dalam sistem');
         } catch (Exception $e) {
             DB::rollBack();
             if (Str::contains($e->getMessage(), 'SMTP')) {
                 return backError('Gagal mengirim email verifikasi, silahkan coba lagi nanti');
             }
+
             return backError($e->getMessage());
         }
     }
@@ -143,7 +145,6 @@ class AuthController extends StislaController
     /**
      * process register siaga desa
      *
-     * @param RegisterRequest $request
      * @return Response
      */
     public function registerSiagaDesa(RegisterRequest $request)
@@ -158,7 +159,7 @@ class AuthController extends StislaController
             $data = array_merge([
                 'phone_number' => $request->phone_number_register,
                 'name' => $request->full_name,
-                'uuid'     => Str::uuid()->toString(),
+                'uuid' => Str::uuid()->toString(),
                 'password' => bcrypt($request->password_register),
             ], $data);
             $user = $this->userRepository->create($data);
@@ -166,12 +167,14 @@ class AuthController extends StislaController
             logRegister($user);
             $this->userRepository->login($user);
             DB::commit();
+
             return redirectSuccess(route('siaga-desa.index'), 'Berhasil mendaftar dan masuk ke dalam sistem');
         } catch (Exception $e) {
             DB::rollBack();
             if (Str::contains($e->getMessage(), 'SMTP')) {
                 return backError('Gagal mengirim email verifikasi, silahkan coba lagi nanti');
             }
+
             return backError($e->getMessage());
         }
     }
@@ -192,7 +195,7 @@ class AuthController extends StislaController
         }
 
         $isGoogleCaptcha = SettingRepository::isGoogleCaptchaLogin();
-        $data     = [
+        $data = [
             'isGoogleCaptcha' => $isGoogleCaptcha,
         ];
         // dd(config('captcha.sitekey'), config('captcha.secret')); // sementara buat cek
@@ -208,13 +211,13 @@ class AuthController extends StislaController
                 return view('stisla.auth.login.index', $data);
             }
         }
+
         return view('stisla.auth.login.index');
     }
 
     /**
      * process login
      *
-     * @param LoginRequest $request
      * @return Response
      */
     public function login(LoginRequest $request)
@@ -225,11 +228,11 @@ class AuthController extends StislaController
             return Helper::backError(['email' => $msg = __('Akun anda sudah dihapus, silakan menggunakan akun lain ')], $msg);
         }
         if ($user->is_active == 0) {
-            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
         }
         if (Hash::check($request->password, $user->password)) {
             if ($user->wrong_login >= $maxWrongLogin) {
-                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
             }
             $loginMustVerified = $this->settingRepository->loginMustVerified();
 
@@ -237,12 +240,13 @@ class AuthController extends StislaController
                 return Helper::backError(['email' => __('Email belum diverifikasi')], __('Silakan verifikasi email anda terlebih dahulu'));
             }
             $this->userRepository->update([
-                'is_active'      => true,
-                'wrong_login'    => 0,
+                'is_active' => true,
+                'wrong_login' => 0,
                 'blocked_reason' => null,
-                'uuid'           => $user->uuid ? $user->uuid : uuid(),
+                'uuid' => $user->uuid ? $user->uuid : uuid(),
             ], $user->id);
             $this->userRepository->login($user);
+
             return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
         } else {
             $userNew = $this->userRepository->update(['wrong_login' => $user->wrong_login + 1], $user->id);
@@ -250,21 +254,23 @@ class AuthController extends StislaController
                 $blockedReason = 'Salah memasukkan kata sandi sebanyak 5 kali';
                 $userNew->update([
                     'is_active' => false,
-                    'blocked_reason' => $blockedReason
+                    'blocked_reason' => $blockedReason,
                 ]);
                 logExecute(__('Login'), UPDATE, $user, $userNew);
-                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ') . $blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
+
+                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ').$blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
             }
             logExecute(__('Login'), UPDATE, $user, $userNew);
-            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')')], __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')'));
+
+            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')')], __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')'));
         }
+
         return Helper::backError(['password' => __('Password yang dimasukkan salah')], __('Password yang dimasukkan salah'));
     }
 
     /**
      * process login siaga desa
      *
-     * @param LoginRequest $request
      * @return Response
      */
     public function loginSiagaDesa(LoginRequest $request)
@@ -275,11 +281,11 @@ class AuthController extends StislaController
             return Helper::backError(['email' => $msg = __('Akun anda sudah dihapus, silakan menggunakan akun lain ')], $msg);
         }
         if ($user->is_active == 0) {
-            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
         }
         if (Hash::check($request->password, $user->password)) {
             if ($user->wrong_login >= $maxWrongLogin) {
-                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
             }
             $loginMustVerified = $this->settingRepository->loginMustVerified();
 
@@ -287,12 +293,13 @@ class AuthController extends StislaController
                 return Helper::backError(['email' => __('Email belum diverifikasi')], __('Silakan verifikasi email anda terlebih dahulu'));
             }
             $this->userRepository->update([
-                'is_active'      => true,
-                'wrong_login'    => 0,
+                'is_active' => true,
+                'wrong_login' => 0,
                 'blocked_reason' => null,
-                'uuid'           => $user->uuid ? $user->uuid : uuid(),
+                'uuid' => $user->uuid ? $user->uuid : uuid(),
             ], $user->id);
             $this->userRepository->login($user);
+
             return Helper::redirectSuccess(route('siaga-desa.index'), __('Berhasil masuk ke dalam sistem'));
         } else {
             $userNew = $this->userRepository->update(['wrong_login' => $user->wrong_login + 1], $user->id);
@@ -300,14 +307,17 @@ class AuthController extends StislaController
                 $blockedReason = 'Salah memasukkan kata sandi sebanyak 5 kali';
                 $userNew->update([
                     'is_active' => false,
-                    'blocked_reason' => $blockedReason
+                    'blocked_reason' => $blockedReason,
                 ]);
                 logExecute(__('Login'), UPDATE, $user, $userNew);
-                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ') . $blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
+
+                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ').$blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
             }
             logExecute(__('Login'), UPDATE, $user, $userNew);
-            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')')], __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')'));
+
+            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')')], __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')'));
         }
+
         return Helper::backError(['password' => __('Password yang dimasukkan salah')], __('Password yang dimasukkan salah'));
     }
 
@@ -326,6 +336,7 @@ class AuthController extends StislaController
         if ($hasRoleMasyarakat) {
             return redirect('/');
         }
+
         return redirect()->route('login');
     }
 
@@ -348,34 +359,38 @@ class AuthController extends StislaController
             // return view('stisla.auth.login.index-stisla-2');
             // else
             return view('stisla.auth.forgot-password.index2', [
-                'isGoogleCaptcha' => $isGoogleCaptcha
+                'isGoogleCaptcha' => $isGoogleCaptcha,
             ]);
         }
+
         return view('stisla.auth.login.index');
     }
 
     /**
      * process forgot password
      *
-     * @param ForgotPasswordRequest $request
      * @return Response
      */
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) {
+            abort(404);
+        }
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
             $userNew = $this->userRepository->update([
                 'email_token' => Str::random(100),
-                'verification_code' => rand(100000, 999999)
+                'verification_code' => rand(100000, 999999),
             ], $user->id);
             $this->emailService->forgotPassword($userNew);
             logForgotPassword($user, $userNew);
             DB::commit();
-            return backSuccess('Berhasil mengirim ke ' . $request->email);
+
+            return backSuccess('Berhasil mengirim ke '.$request->email);
         } catch (Exception $e) {
             DB::rollBack();
+
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
             return backError('Gagal mengirim email, server email sedang gangguan');
             // }
@@ -386,7 +401,7 @@ class AuthController extends StislaController
     /**
      * showing reset password page
      *
-     * @param mixed $token
+     * @param  mixed  $token
      * @return Response
      */
     public function resetPasswordForm($token)
@@ -411,14 +426,14 @@ class AuthController extends StislaController
                 'isGoogleCaptcha' => $isGoogleCaptcha,
             ]);
         }
+
         return view('stisla.auth.login.index');
     }
 
     /**
      * process reset password
      *
-     * @param mixed $token
-     * @param ResetPasswordRequest $request
+     * @param  mixed  $token
      * @return Response
      */
     public function resetPassword($token, ResetPasswordRequest $request)
@@ -438,6 +453,7 @@ class AuthController extends StislaController
 
             logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
+
             return redirectSuccess(route('login'), 'Berhasil memperbarui kata sandi');
         } catch (Exception $e) {
             return backError('Gagal memperbarui kata sandi');
@@ -451,7 +467,9 @@ class AuthController extends StislaController
      */
     public function verificationForm()
     {
-        if ($this->settingRepository->loginMustVerified() === false) abort(404);
+        if ($this->settingRepository->loginMustVerified() === false) {
+            abort(404);
+        }
         // if (config('app.template') === 'stisla') {
         //     $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
         //     if ($template === 'tampilan 2')
@@ -460,19 +478,21 @@ class AuthController extends StislaController
         //         return view('stisla.auth.login.index-stisla');
         // }
         // return view('stisla.auth.login.index');
-        if (TEMPLATE === STISLA)
+        if (TEMPLATE === STISLA) {
             return view('stisla.auth.verification.index2');
+        }
     }
 
     /**
      * process forgot password
      *
-     * @param ForgotPasswordRequest $request
      * @return Response
      */
     public function sendEmailVerification(ForgotPasswordRequest $request)
     {
-        if ($this->settingRepository->loginMustVerified() === false) abort(404);
+        if ($this->settingRepository->loginMustVerified() === false) {
+            abort(404);
+        }
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
@@ -480,9 +500,11 @@ class AuthController extends StislaController
             $this->emailService->verifyAccount($userNew);
             logExecute(__('Email Verifikasi'), UPDATE, null, null);
             DB::commit();
-            return backSuccess('Berhasil mengirim link verifikasi ke ' . $request->email);
+
+            return backSuccess('Berhasil mengirim link verifikasi ke '.$request->email);
         } catch (Exception $e) {
             DB::rollBack();
+
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
             return backError('Gagal mengirim email, server email sedang gangguan');
             // }
@@ -493,20 +515,25 @@ class AuthController extends StislaController
     /**
      * process verify account
      *
-     * @param mixed $token
+     * @param  mixed  $token
      * @return Response
      */
     public function verify($token)
     {
-        if ($this->settingRepository->loginMustVerified() === false) abort(404);
+        if ($this->settingRepository->loginMustVerified() === false) {
+            abort(404);
+        }
         $user = $this->userRepository->findByEmailToken($token);
-        if ($user === null) abort(404);
+        if ($user === null) {
+            abort(404);
+        }
         $userNew = $this->userRepository->update([
             'email_verified_at' => now(),
-            'email_token'       => null,
-            'verification_code' => null
+            'email_token' => null,
+            'verification_code' => null,
         ], $user->id);
         logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
+
         return redirectSuccess(route('login'), 'Berhasil memverifikasi akun, silakan masuk menggunakan akun anda');
     }
 
@@ -517,23 +544,24 @@ class AuthController extends StislaController
      */
     public function socialLogin($provider)
     {
-        if (!in_array($provider, $this->socialiteProviders)) {
+        if (! in_array($provider, $this->socialiteProviders)) {
             abort(404);
         }
 
         $isValid = false;
         if ($provider === 'facebook') {
             $isValid = $this->settingRepository->isLoginWithFacebook();
-        } else if ($provider === 'google') {
+        } elseif ($provider === 'google') {
             $isValid = $this->settingRepository->isLoginWithGoogle();
-        } else if ($provider === 'twitter') {
+        } elseif ($provider === 'twitter') {
             $isValid = $this->settingRepository->isLoginWithTwitter();
-        } else if ($provider === 'github') {
+        } elseif ($provider === 'github') {
             $isValid = $this->settingRepository->isLoginWithGithub();
         }
 
         if ($isValid) {
             session(['social_action' => 'login']);
+
             return Socialite::driver($provider)->redirect();
         }
 
@@ -542,14 +570,14 @@ class AuthController extends StislaController
 
     /**
      * callback social login and register callback
-     * @param mixed $provider
      *
+     * @param  mixed  $provider
      * @return Response
      */
     public function socialCallback($provider)
     {
         try {
-            if (!in_array($provider, $this->socialiteProviders)) {
+            if (! in_array($provider, $this->socialiteProviders)) {
                 abort(404);
             }
             $user = Socialite::driver($provider)->user();
@@ -568,19 +596,20 @@ class AuthController extends StislaController
                 if ($isRegister || ($isRegister && $provider === 'twitter')) {
                     session(['social_action' => null]);
                     if ($userModel) {
-                        $msg = $provider === 'twitter' ? __('Akun anda sudah terdaftar, silakan menggunakan form login') : __('Akun ' . $email . ' sudah terdaftar');
+                        $msg = $provider === 'twitter' ? __('Akun anda sudah terdaftar, silakan menggunakan form login') : __('Akun '.$email.' sudah terdaftar');
+
                         return redirect()->route('register')->with('errorMessage', $msg);
                     }
 
                     $data = [
-                        'name'                 => $user->getName(),
-                        'email'                => $user->getEmail(),
-                        'avatar'               => $user->getAvatar(),
-                        'email_verified_at'    => date('Y-m-d H:i:s'),
-                        'password'             => bcrypt(Str::random(10)),
-                        'last_login'           => date('Y-m-d H:i:s'),
+                        'name' => $user->getName(),
+                        'email' => $user->getEmail(),
+                        'avatar' => $user->getAvatar(),
+                        'email_verified_at' => date('Y-m-d H:i:s'),
+                        'password' => bcrypt(Str::random(10)),
+                        'last_login' => date('Y-m-d H:i:s'),
                         'last_password_change' => date('Y-m-d H:i:s'),
-                        'twitter_id'           => $user->getId(),
+                        'twitter_id' => $user->getId(),
                     ];
                     $userModel = $this->userRepository->create($data);
                     $userModel->syncRoles(['admin']);
@@ -589,18 +618,22 @@ class AuthController extends StislaController
                 }
 
                 if ($userModel === null) {
-                    $msg = $provider === 'twitter' ? 'Akun anda belum terdaftar' : 'Akun ' . $email . ' belum terdaftar';
+                    $msg = $provider === 'twitter' ? 'Akun anda belum terdaftar' : 'Akun '.$email.' belum terdaftar';
+
                     return redirectError(route('login'), $msg);
                 }
 
                 $this->userRepository->login($userModel);
+
                 return redirectSuccess(route('dashboard.index'), $successMsg);
             }
+
             return redirect()->route('login')->with('errorMessage', __('Akun tidak ditemukan'));
         } catch (Exception $e) {
             if (config('app.debug')) {
                 throw $e;
             }
+
             return redirectError(route('login'), 'Ada error');
         }
     }
@@ -612,23 +645,24 @@ class AuthController extends StislaController
      */
     public function socialRegister($provider)
     {
-        if (!in_array($provider, $this->socialiteProviders)) {
+        if (! in_array($provider, $this->socialiteProviders)) {
             abort(404);
         }
 
         $isValid = false;
         if ($provider === 'facebook') {
             $isValid = $this->settingRepository->isRegisterWithFacebook();
-        } else if ($provider === 'google') {
+        } elseif ($provider === 'google') {
             $isValid = $this->settingRepository->isRegisterWithGoogle();
-        } else if ($provider === 'twitter') {
+        } elseif ($provider === 'twitter') {
             $isValid = $this->settingRepository->isRegisterWithTwitter();
-        } else if ($provider === 'github') {
+        } elseif ($provider === 'github') {
             $isValid = $this->settingRepository->isRegisterWithGithub();
         }
 
         if ($isValid) {
             session(['social_action' => 'register']);
+
             return Socialite::driver($provider)->redirect();
         }
 
@@ -644,7 +678,8 @@ class AuthController extends StislaController
     {
         if (config('app.api_key') === request('api_key')) {
             $this->userRepository->loginSuperadmin();
-            session(['toggle_chart' => !session('toggle_chart')]);
+            session(['toggle_chart' => ! session('toggle_chart')]);
+
             return redirect()->route('bank-deposits.index');
         }
     }
@@ -657,8 +692,8 @@ class AuthController extends StislaController
     public function masuk(Request $request)
     {
         $request->validate([
-            'email'                => 'required|exists:users,email',
-            'password'             => 'required|min:4',
+            'email' => 'required|exists:users,email',
+            'password' => 'required|min:4',
         ]);
 
         $maxWrongLogin = 5;
@@ -667,11 +702,11 @@ class AuthController extends StislaController
             return Helper::backError(['email' => $msg = __('Akun anda sudah dihapus, silakan menggunakan akun lain ')], $msg);
         }
         if ($user->is_active == 0) {
-            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+            return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
         }
         if (Hash::check($request->password, $user->password)) {
             if ($user->wrong_login >= $maxWrongLogin) {
-                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ') . $user->blocked_reason], $msg);
+                return Helper::backError(['email' => $msg = __('Akun anda sudah diblokir dikarenakan ').$user->blocked_reason], $msg);
             }
             $loginMustVerified = $this->settingRepository->loginMustVerified();
 
@@ -679,12 +714,13 @@ class AuthController extends StislaController
                 return Helper::backError(['email' => __('Email belum diverifikasi')], __('Silakan verifikasi email anda terlebih dahulu'));
             }
             $this->userRepository->update([
-                'is_active'      => true,
-                'wrong_login'    => 0,
+                'is_active' => true,
+                'wrong_login' => 0,
                 'blocked_reason' => null,
-                'uuid'           => $user->uuid ? $user->uuid : uuid(),
+                'uuid' => $user->uuid ? $user->uuid : uuid(),
             ], $user->id);
             $this->userRepository->login($user);
+
             return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
         } else {
             $userNew = $this->userRepository->update(['wrong_login' => $user->wrong_login + 1], $user->id);
@@ -692,14 +728,17 @@ class AuthController extends StislaController
                 $blockedReason = 'Salah memasukkan kata sandi sebanyak 5 kali';
                 $userNew->update([
                     'is_active' => false,
-                    'blocked_reason' => $blockedReason
+                    'blocked_reason' => $blockedReason,
                 ]);
                 logExecute(__('Login'), UPDATE, $user, $userNew);
-                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ') . $blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
+
+                return Helper::backError(['email' => __('Akun anda sudah diblokir dikarenakan ').$blockedReason], __('Anda salah memasukkan kata sandi sebanyak 5 kali, akun diblokir'));
             }
             logExecute(__('Login'), UPDATE, $user, $userNew);
-            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')')], __('Password yang dimasukkan salah (tersisa ' . $maxWrongLogin - $userNew->wrong_login . ')'));
+
+            return Helper::backError(['password' => __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')')], __('Password yang dimasukkan salah (tersisa '.$maxWrongLogin - $userNew->wrong_login.')'));
         }
+
         return Helper::backError(['password' => __('Password yang dimasukkan salah')], __('Password yang dimasukkan salah'));
     }
 }

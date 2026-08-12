@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!in_array('school_classes', config('stisla.table_excludes')))
+        if (! in_array('school_classes', config('stisla.table_excludes'))) {
             Schema::create('school_classes', function (Blueprint $table) {
                 $table->id();
                 $table->string('class_name', 50)->comment('Nama Kelas');
@@ -24,6 +24,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

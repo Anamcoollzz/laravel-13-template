@@ -15,11 +15,14 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PicaController extends StislaController
 {
-
     protected PocariFunctionRepository $pocariFunctionRepository;
+
     protected WorkFieldRepository $workFieldRepository;
+
     protected StatusRepository $statusRepository;
+
     protected CategoryRepository $categoryRepository;
+
     protected UserRepository $userRepository;
 
     /**
@@ -33,20 +36,20 @@ class PicaController extends StislaController
 
         parent::__construct();
 
-        $this->icon         = 'fa fa-note-sticky';
-        $this->repository   = new PicaRepository;
-        $this->prefix       = $this->viewFolder = 'picas';
+        $this->icon = 'fa fa-note-sticky';
+        $this->repository = new PicaRepository;
+        $this->prefix = $this->viewFolder = 'picas';
 
         // ini sesuaiin sama kebutuhan masing-masing, soalnya kalau A1 kan gede banget
         $this->pdfPaperSize = 'A3';
-        $this->isAppCrud    = true;
-        $this->request      = new PicaRequest;
-        $this->fileColumns  = [
+        $this->isAppCrud = true;
+        $this->request = new PicaRequest;
+        $this->fileColumns = [
             'file',
             'image',
             'avatar',
         ];
-        $this->htmlColumns  = [
+        $this->htmlColumns = [
             'summernote',
             'summernote_simple',
             'tinymce',
@@ -120,26 +123,33 @@ class PicaController extends StislaController
             }
         }
 
-        if ($request->has('currency') && in_array('currency', $columns))
+        if ($request->has('currency') && in_array('currency', $columns)) {
             $data['currency'] = idr_to_double($request->currency);
+        }
 
-        if ($request->has('currency_idr') && in_array('currency_idr', $columns))
+        if ($request->has('currency_idr') && in_array('currency_idr', $columns)) {
             $data['currency_idr'] = rp_to_double($request->currency_idr);
+        }
 
-        if ($request->hasFile('file') && in_array('file', $columns))
+        if ($request->hasFile('file') && in_array('file', $columns)) {
             $data['file'] = $this->fileUtil->uploadToFolder($request->file('file'), 'picas/files');
+        }
 
-        if ($request->hasFile('attachment') && in_array('attachment', $columns))
+        if ($request->hasFile('attachment') && in_array('attachment', $columns)) {
             $data['attachment'] = $this->fileUtil->uploadToFolder($request->file('attachment'), 'picas/attachments');
+        }
 
-        if ($request->hasFile('evidence') && in_array('evidence', $columns))
+        if ($request->hasFile('evidence') && in_array('evidence', $columns)) {
             $data['evidence'] = $this->fileUtil->uploadToFolder($request->file('evidence'), 'picas/evidences');
+        }
 
-        if ($request->password  && in_array('password', $columns))
+        if ($request->password && in_array('password', $columns)) {
             $data['password'] = bcrypt($request->password);
+        }
 
-        if (in_array('is_active', $columns))
+        if (in_array('is_active', $columns)) {
             $data['is_active'] = $request->filled('is_active');
+        }
 
         if (Route::is('picas.store')) {
             $data['status_id'] = Status::STATUS_OPEN;
@@ -181,8 +191,6 @@ class PicaController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {
@@ -195,17 +203,15 @@ class PicaController extends StislaController
 
     /**
      * get form data
-     *
-     * @return array
      */
     protected function formData(): array
     {
         return [
-            'function_id_options'   => $this->pocariFunctionRepository->getSelectOptions(),
+            'function_id_options' => $this->pocariFunctionRepository->getSelectOptions(),
             'work_field_id_options' => $this->workFieldRepository->getSelectOptions(),
-            'status_id_options'     => $this->statusRepository->getSelectOptionsApproval(),
-            'category_id_options'   => $this->categoryRepository->getSelectOptions(),
-            'assigned_to_options'   => $this->userRepository->getSelectOptions(),
+            'status_id_options' => $this->statusRepository->getSelectOptionsApproval(),
+            'category_id_options' => $this->categoryRepository->getSelectOptions(),
+            'assigned_to_options' => $this->userRepository->getSelectOptions(),
         ];
     }
 

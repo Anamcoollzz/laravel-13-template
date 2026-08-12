@@ -46,15 +46,15 @@ class BankDepositRequest extends FormRequest
             // "barcode"           => "required",
             // "qr_code"           => "required",
 
-            'bank_id'        => 'required|exists:banks,id',
-            'per_anum'       => 'required|numeric',
-            'amount'         => 'required',
+            'bank_id' => 'required|exists:banks,id',
+            'per_anum' => 'required|numeric',
+            'amount' => 'required',
             'tax_percentage' => 'required|numeric',
             // 'estimation'     => 'required|numeric',
-            'time_period'    => 'required',
-            'due_date'       => 'required|date',
-            'status'         => 'required|in:Aktif,Tidak Aktif',
-            'realization'    => 'nullable|numeric',
+            'time_period' => 'required',
+            'due_date' => 'required|date',
+            'status' => 'required|in:Aktif,Tidak Aktif',
+            'realization' => 'nullable|numeric',
             // 'difference'     => 'required|numeric',
         ];
     }

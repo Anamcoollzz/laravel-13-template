@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 
 class CrudController extends Controller
 {
-
     /**
      * showing page crud generator
      *
@@ -17,14 +16,15 @@ class CrudController extends Controller
      */
     public function index()
     {
-        if (auth_user()->hasRole('superadmin'))
+        if (auth_user()->hasRole('superadmin')) {
             return view('stisla.crud-generators.index');
+        }
         abort(404);
     }
 
     public function generateJson(Request $request)
     {
-        if (!auth_user()->hasRole('superadmin')) {
+        if (! auth_user()->hasRole('superadmin')) {
             abort(404);
         }
         $columns = [];
@@ -39,24 +39,24 @@ class CrudController extends Controller
                 $updateValidations = array_merge($updateValidations, explode('|', $custom));
             }
 
-            if ($column['type'] === 'bigIncrements')
+            if ($column['type'] === 'bigIncrements') {
                 $columns[] = [
-                    'type' => 'ai'
+                    'type' => 'ai',
                 ];
-            else if (
+            } elseif (
                 // $column['type'] === 'date' ||
                 // $column['type'] === 'time' ||
                 // $column['type'] === 'datetime' ||
                 // $column['type'] === 'datetime'
                 $column['type'] !== 'varchar'
-            )
+            ) {
                 $columns[] = [
                     'name' => $column['name'],
                     'type' => $column['type'],
                     'label' => $column['form']['label'],
                     'form' => [
                         'type' => $column['form']['type'],
-                        'required' => 2
+                        'required' => 2,
                     ],
                     'validations' => [
                         'store' => $storeValidations,
@@ -64,9 +64,9 @@ class CrudController extends Controller
                     ],
                     'nullable' => $column['nullable'] ?? false,
                     'unique' => $column['unique'] ?? false,
-                    'foreign' => ($column['foreign']['on'] ?? false) ? $column['foreign'] : null
+                    'foreign' => ($column['foreign']['on'] ?? false) ? $column['foreign'] : null,
                 ];
-            else if ($column['type'] === 'varchar')
+            } elseif ($column['type'] === 'varchar') {
                 $columns[] = [
                     'name' => $column['name'],
                     'type' => $column['type'],
@@ -74,7 +74,7 @@ class CrudController extends Controller
                     'label' => $column['form']['label'],
                     'form' => [
                         'type' => $column['form']['type'],
-                        'required' => 2
+                        'required' => 2,
                     ],
                     'validations' => [
                         'store' => $storeValidations,
@@ -82,30 +82,31 @@ class CrudController extends Controller
                     ],
                     'nullable' => $column['nullable'] ?? false,
                     'unique' => $column['unique'] ?? false,
-                    'foreign' => ($column['foreign']['on'] ?? false) ? $column['foreign'] : null
+                    'foreign' => ($column['foreign']['on'] ?? false) ? $column['foreign'] : null,
                 ];
+            }
         }
         if ($request->timestamps) {
             $columns[] = [
-                'type' => 'timestamps'
+                'type' => 'timestamps',
             ];
         }
         $jsonData = [
             'title' => $request->title,
             'icon' => $request->icon,
             'model' => $request->modelName,
-            'columns' => $columns
+            'columns' => $columns,
         ];
         $json = json_encode($jsonData);
         $filename = Str::slug($request->modelName);
-        $fullpath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
+        $fullpath = app_path('Console/Commands/data/crud/files/'.$filename.'.json');
         file_put_contents($fullpath, $json);
 
         $artisan = Artisan::call('make:crud', [
             'filename' => $filename,
         ]);
 
-        $path = app_path('Console/Commands/data/crud/logs/' . $filename . '.json');
+        $path = app_path('Console/Commands/data/crud/logs/'.$filename.'.json');
         $response = json_decode(file_get_contents($path));
 
         return response200($response, 'Crud Berhasil');

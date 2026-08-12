@@ -23,8 +23,6 @@ class RestoreAllData extends Command
 
     /**
      * File service
-     *
-     * @var FileService
      */
     protected FileService $fileService;
 
@@ -53,6 +51,7 @@ class RestoreAllData extends Command
         } else {
             $this->error($results[1]);
         }
+
         return 0;
     }
 }

@@ -7,11 +7,9 @@ use Illuminate\Support\Facades\Validator;
 
 class Helper
 {
-
     /**
      * back with error message
      *
-     * @param array $errorMessages
      * @return RedirectResponse
      */
     public static function backError(array $errorMessages, $msg = null)
@@ -20,14 +18,13 @@ class Helper
         foreach ($errorMessages as $key => $value) {
             $validator->getMessageBag()->add($key, $value);
         }
+
         return redirect()->back()->withInput()->withErrors($validator)->with('errorMessage', $msg);
     }
 
     /**
      * redirectWithSuccess
      *
-     * @param string $route
-     * @param string $message
      * @return RedirectResponse
      */
     public static function redirectSuccess(string $route, string $message)

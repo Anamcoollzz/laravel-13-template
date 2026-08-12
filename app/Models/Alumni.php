@@ -2,13 +2,7 @@
 
 namespace App\Models;
 
-class Alumni extends Student
-{
+use Illuminate\Database\Eloquent\Attributes\Table;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'students';
-}
+#[Table('students')]
+class Alumni extends Student {}

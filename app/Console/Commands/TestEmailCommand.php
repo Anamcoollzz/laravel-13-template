@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\EmailService;
 use Illuminate\Console\Command;
 
 class TestEmailCommand extends Command
@@ -25,7 +26,7 @@ class TestEmailCommand extends Command
      */
     public function handle()
     {
-        $emailService = app(\App\Services\EmailService::class);
+        $emailService = app(EmailService::class);
         $emailService->sendBrevo(
             'hairulanam21@gmail.com',
             'Hairul Anam',

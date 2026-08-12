@@ -29,59 +29,63 @@ class UserRequest extends FormRequest
         if ($this->isMethod('put')) {
             if (Route::is('api.users.update-password')) {
                 $user = (new UserRepository)->find($this->user->id ?? $this->user);
+
                 return [
-                    'current_password'          => [
+                    'current_password' => [
                         'required',
                         'min:6',
                         function ($attribute, $value, $fail) use ($user) {
-                            if (!Hash::check($value, $user->password)) {
+                            if (! Hash::check($value, $user->password)) {
                                 $fail('Kata sandi yang dimasukkan salah.');
                             }
                         },
                     ],
-                    'new_password'              => 'required|min:6|confirmed',
+                    'new_password' => 'required|min:6|confirmed',
                     'new_password_confirmation' => 'required|min:6',
                 ];
             }
             if (Route::is('api.users.update')) {
                 $user = (new UserRepository)->find($this->user->id ?? $this->user);
+
                 return [
-                    'name'  => 'required',
-                    'email' => 'required|email|unique:users,email,' . ($user->id ?? null) . ',id',
-                    'role'  => 'required',
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users,email,'.($user->id ?? null).',id',
+                    'role' => 'required',
                 ];
             }
 
-            if ($this->email)
+            if ($this->email) {
                 $user = (new UserRepository)->findByEmail($this->email);
+            }
 
             if (is_app_dataku()) {
                 return [
-                    'name'  => 'required',
-                    'email' => 'nullable|email|unique:users,email,' . ($user->id ?? null) . ',id',
-                    'role'  => 'required'
+                    'name' => 'required',
+                    'email' => 'nullable|email|unique:users,email,'.($user->id ?? null).',id',
+                    'role' => 'required',
                 ];
             }
 
             return [
-                'name'  => 'required',
-                'email' => 'required|email|unique:users,email,' . ($user->id ?? null) . ',id',
-                'role'  => 'required'
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,'.($user->id ?? null).',id',
+                'role' => 'required',
             ];
         }
         if (Route::is('api.users.store')) {
             return [
-                'name'                  => 'required',
-                'email'                 => 'required|unique:users,email',
-                'role'                  => 'required',
-                'password'              => 'required|min:6|confirmed',
+                'name' => 'required',
+                'email' => 'required|unique:users,email',
+                'role' => 'required',
+                'password' => 'required|min:6|confirmed',
                 'password_confirmation' => 'required|min:6',
             ];
         }
+
         return [
-            'name'  => 'required',
+            'name' => 'required',
             'email' => 'required|unique:users,email',
-            'role'  => 'required'
+            'role' => 'required',
         ];
     }
 }

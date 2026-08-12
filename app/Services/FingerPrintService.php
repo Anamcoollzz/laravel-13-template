@@ -3,17 +3,16 @@
 namespace App\Services;
 
 use App\Models\FingerprintMachine;
+use Illuminate\Support\Collection;
 
 class FingerPrintService
 {
-
     const NO_IP = 'no_ip';
+
     const ERROR_CONNECT = 'error_connect';
 
     /**
      * get log dari mesin sidik jari X105 ID
-     *
-     * @return string
      */
     public function getUserLog105Id(): string
     {
@@ -37,31 +36,34 @@ class FingerPrintService
             }
 
             $soap_request = '<GetUserInfo>
-                                <ArgComKey Xsi:type="xsd:integer"> ' . $Key . ' </ArgComKey>
+                                <ArgComKey Xsi:type="xsd:integer"> '.$Key.' </ArgComKey>
                                 <Arg>
                                 <PIN Xsi:type="xsd:integer"> 10005 </PIN>
                                 </Arg>
                                 </GetUserInfo>';
 
-            $Connect = fsockopen($IP, "80", $errno, $errstr, 1);
+            $Connect = fsockopen($IP, '80', $errno, $errstr, 1);
             if ($Connect) {
                 $newLine = "\r\n";
-                fputs($Connect, "POST /iWsService HTTP/1.0" . $newLine);
-                fputs($Connect, "Content-Type: text/xml" . $newLine);
-                fputs($Connect, "Content-Length: " . strlen($soap_request) . $newLine . $newLine);
-                fputs($Connect, $soap_request . $newLine);
-                $buffer = "";
+                fwrite($Connect, 'POST /iWsService HTTP/1.0'.$newLine);
+                fwrite($Connect, 'Content-Type: text/xml'.$newLine);
+                fwrite($Connect, 'Content-Length: '.strlen($soap_request).$newLine.$newLine);
+                fwrite($Connect, $soap_request.$newLine);
+                $buffer = '';
                 while ($Response = fgets($Connect, 1024)) {
-                    $buffer = $buffer . $Response;
+                    $buffer = $buffer.$Response;
                 }
+
                 return $buffer;
             }
+
             return self::ERROR_CONNECT;
         }
+
         return self::NO_IP;
     }
 
-    public function getAttendanceLog105Id(?bool $isDummy = false, FingerprintMachine $fingerprintMachine = null): string
+    public function getAttendanceLog105Id(?bool $isDummy = false, ?FingerprintMachine $fingerprintMachine = null): string
     {
 
         if ($isDummy) {
@@ -71,8 +73,8 @@ class FingerPrintService
         if ($fingerprintMachine) {
             $IP = request('ip', $fingerprintMachine->ip);
             $Key = request('key', $fingerprintMachine->key);
-            $id  = request('id', $fingerprintMachine->machine_id);
-            $fn  = request('fn', $fingerprintMachine->fn);
+            $id = request('id', $fingerprintMachine->machine_id);
+            $fn = request('fn', $fingerprintMachine->fn);
 
             if ($IP == '') {
                 $IP = '192.168.1.201';
@@ -86,25 +88,29 @@ class FingerPrintService
             if ($fn == '') {
                 $fn = '0';
             }
-            $Connect = fsockopen($IP, "80", $errno, $errstr, 1);
+            $Connect = fsockopen($IP, '80', $errno, $errstr, 1);
             if ($Connect) {
-                $soap_request = "<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">" . $Key . "</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">All</PIN></Arg></GetAttLog>";
+                $soap_request = '<GetAttLog><ArgComKey xsi:type="xsd:integer">'.$Key.'</ArgComKey><Arg><PIN xsi:type="xsd:integer">All</PIN></Arg></GetAttLog>';
                 $newLine = "\r\n";
-                fputs($Connect, "POST /iWsService HTTP/1.0" . $newLine);
-                fputs($Connect, "Content-Type: text/xml" . $newLine);
-                fputs($Connect, "Content-Length: " . strlen($soap_request) . $newLine . $newLine);
-                fputs($Connect, $soap_request . $newLine);
-                $buffer = "";
+                fwrite($Connect, 'POST /iWsService HTTP/1.0'.$newLine);
+                fwrite($Connect, 'Content-Type: text/xml'.$newLine);
+                fwrite($Connect, 'Content-Length: '.strlen($soap_request).$newLine.$newLine);
+                fwrite($Connect, $soap_request.$newLine);
+                $buffer = '';
                 while ($Response = fgets($Connect, 1024)) {
-                    $buffer = $buffer . $Response;
+                    $buffer = $buffer.$Response;
                 }
+
                 return $buffer;
-            } else return 'error_connect';
+            } else {
+                return 'error_connect';
+            }
         }
+
         return 'no_ip';
     }
 
-    public function parseAll(string $log = ''): \Illuminate\Support\Collection
+    public function parseAll(string $log = ''): Collection
     {
         if ($log) {
             $buffer = $log;
@@ -119,10 +125,10 @@ class FingerPrintService
         $raw = $buffer; // isi full dari mesin
 
         // ambil isi di dalam <GetAttLogResponse>...</GetAttLogResponse>
-        $buffer = $this->parse($raw, "<GetAttLogResponse>", "</GetAttLogResponse>");
+        $buffer = $this->parse($raw, '<GetAttLogResponse>', '</GetAttLogResponse>');
         // dd($buffer);
         // Biar jadi XML valid, kasih root tambahan
-        $xmlString = "<Root><GetAttLogResponse>" . $buffer . "</GetAttLogResponse></Root>";
+        $xmlString = '<Root><GetAttLogResponse>'.$buffer.'</GetAttLogResponse></Root>';
 
         $xml = simplexml_load_string($xmlString);
 
@@ -143,40 +149,42 @@ class FingerPrintService
         // $logs udah array enak buat di-insert ke DB
         $arr = [];
         for ($a = 0; $a < count($buffer); $a++) {
-            $data     = $this->parse($buffer[$a], "<Row>", "</Row>");
-            $PIN      = $this->parse($data, "<PIN>", "</PIN>");
-            $DateTime = $this->parse($data, "<DateTime>", "</DateTime>");
-            $Verified = $this->parse($data, "<Verified>", "</Verified>");
-            $Status   = $this->parse($data, "<Status>", "</Status>");
-            $arr[]    = [
+            $data = $this->parse($buffer[$a], '<Row>', '</Row>');
+            $PIN = $this->parse($data, '<PIN>', '</PIN>');
+            $DateTime = $this->parse($data, '<DateTime>', '</DateTime>');
+            $Verified = $this->parse($data, '<Verified>', '</Verified>');
+            $Status = $this->parse($data, '<Status>', '</Status>');
+            $arr[] = [
                 'pin' => $PIN,
                 'date_time' => $DateTime,
                 'verified' => $Verified,
                 'status' => $Status,
             ];
         }
+
         return collect($arr);
     }
 
     /**
      * parse string antara dua parameter
      *
-     * @param string $data
-     * @param string $p1
-     * @param string $p2
+     * @param  string  $data
+     * @param  string  $p1
+     * @param  string  $p2
      * @return string
      */
     private function parse($data, $p1, $p2)
     {
-        $data = " " . $data;
-        $hasil = "";
+        $data = ' '.$data;
+        $hasil = '';
         $awal = strpos($data, $p1);
-        if ($awal != "") {
+        if ($awal != '') {
             $akhir = strpos(strstr($data, $p1), $p2);
-            if ($akhir != "") {
+            if ($akhir != '') {
                 $hasil = substr($data, $awal + strlen($p1), $akhir - strlen($p1));
             }
         }
+
         return $hasil;
     }
 }

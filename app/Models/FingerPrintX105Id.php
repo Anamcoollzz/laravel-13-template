@@ -3,93 +3,82 @@
 namespace App\Models;
 
 use App\Traits\UserTrait;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[Fillable([
+    // ini bisa dicomment kalau gak dipakai
+    'text',
+    'email',
+    'number',
+    'currency',
+    'currency_idr',
+    'select',
+    'select2',
+    'select2_multiple',
+    'textarea',
+    'radio',
+    'checkbox',
+    'checkbox2',
+    'tags',
+    'file',
+    'image',
+    'date',
+    'time',
+    'color',
+    'summernote_simple',
+    'summernote',
+    'barcode',
+    'qr_code',
+    'name',
+    'phone_number',
+    'birthdate',
+    'address',
+    'avatar',
+    'password',
+    'tinymce',
+    'ckeditor',
+    'is_active',
+
+    // ini hasil generate dari create:module command
+
+    'machine_id',
+    'pin',
+    'date_time',
+    'verified',
+    'status',
+    'work_code',
+    'created_by_id',
+    'last_updated_by_id',
+    'deleted_at',
+])]
 class FingerPrintX105Id extends Model
 {
     use HasFactory, UserTrait;
 
-    //softdeletes
-
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'finger_print_x105_ids';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        // ini bisa dicomment kalau gak dipakai
-        "text",
-        "email",
-        "number",
-        "currency",
-        "currency_idr",
-        "select",
-        "select2",
-        "select2_multiple",
-        "textarea",
-        "radio",
-        "checkbox",
-        "checkbox2",
-        "tags",
-        "file",
-        "image",
-        "date",
-        "time",
-        "color",
-        "summernote_simple",
-        "summernote",
-        "barcode",
-        "qr_code",
-        'name',
-        'phone_number',
-        'birthdate',
-        'address',
-        'avatar',
-        'password',
-        'tinymce',
-        'ckeditor',
-        'is_active',
-
-
-
-        // ini hasil generate dari create:module command
-
-        'machine_id',
-        'pin',
-        'date_time',
-        'verified',
-        'status',
-        'work_code',
-        "created_by_id",
-        "last_updated_by_id",
-        'deleted_at',
-    ];
+    // softdeletes
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'checkbox'         => 'array',
-        'checkbox2'        => 'array',
-        'select2_multiple' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'checkbox' => 'array',
+            'checkbox2' => 'array',
+            'select2_multiple' => 'array',
+        ];
+    }
 
     /**
      * Get the machine that owns the FingerPrintX105Id
      */
-    public function machine(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function machine(): BelongsTo
     {
         return $this->belongsTo(FingerprintMachine::class, 'machine_id');
     }

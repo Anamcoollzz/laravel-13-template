@@ -3,12 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\Region;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Schema;
 
 class RegionRepository extends Repository
 {
-
     /**
      * constructor method
      *
@@ -16,19 +15,20 @@ class RegionRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new Region();
+        $this->model = new Region;
     }
 
     /**
      * getProvinces
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return Collection|static[]
      */
     public function getProvinces()
     {
-        if (!Schema::hasTable('regions')) {
+        if (! Schema::hasTable('regions')) {
             return collect([]);
         }
+
         return $this->model->query()->whereRaw('LENGTH(code) = 2')->get();
     }
 
@@ -45,18 +45,18 @@ class RegionRepository extends Repository
     /**
      * getCities
      *
-     * @param  mixed $provinceId
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  mixed  $provinceId
+     * @return Collection|static[]
      */
     public function getCities($provinceId)
     {
-        return $this->model->query()->where('code', 'like', $provinceId . '%')->whereRaw('LENGTH(code) = 5')->get();
+        return $this->model->query()->where('code', 'like', $provinceId.'%')->whereRaw('LENGTH(code) = 5')->get();
     }
 
     /**
      * getCitiesOptions
      *
-     * @param  mixed $provinceId
+     * @param  mixed  $provinceId
      * @return array
      */
     public function getCitiesOptions($provinceId)
@@ -67,18 +67,18 @@ class RegionRepository extends Repository
     /**
      * getDistricts
      *
-     * @param  mixed $cityId
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  mixed  $cityId
+     * @return Collection|static[]
      */
     public function getDistricts($cityId)
     {
-        return $this->model->query()->where('code', 'like', $cityId . '%')->whereRaw('LENGTH(code) = 8')->get();
+        return $this->model->query()->where('code', 'like', $cityId.'%')->whereRaw('LENGTH(code) = 8')->get();
     }
 
     /**
      * getDistrictsOptions
      *
-     * @param  mixed $cityId
+     * @param  mixed  $cityId
      * @return array
      */
     public function getDistrictsOptions($cityId)
@@ -89,18 +89,18 @@ class RegionRepository extends Repository
     /**
      * getVillages
      *
-     * @param  mixed $districtId
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  mixed  $districtId
+     * @return Collection|static[]
      */
     public function getVillages($districtId)
     {
-        return $this->model->query()->where('code', 'like', $districtId . '%')->whereRaw('LENGTH(code) = 13')->get();
+        return $this->model->query()->where('code', 'like', $districtId.'%')->whereRaw('LENGTH(code) = 13')->get();
     }
 
     /**
      * getVillagesOptions
      *
-     * @param  mixed $districtId
+     * @param  mixed  $districtId
      * @return array
      */
     public function getVillagesOptions($districtId)

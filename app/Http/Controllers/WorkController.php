@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class WorkController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -22,9 +21,9 @@ class WorkController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-bag';
+        $this->icon = 'fa fa-bag';
         $this->repository = new WorkRepository;
-        $this->prefix     = $this->viewFolder            = 'works';
+        $this->prefix = $this->viewFolder = 'works';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new WorkImport;
 
@@ -66,7 +65,6 @@ class WorkController extends StislaController
     /**
      * showing data page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -77,7 +75,6 @@ class WorkController extends StislaController
     /**
      * showing add new data page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
@@ -88,7 +85,6 @@ class WorkController extends StislaController
     /**
      * save new data to db
      *
-     * @param WorkRequest $request
      * @return Response
      */
     public function store(WorkRequest $request)
@@ -99,8 +95,6 @@ class WorkController extends StislaController
     /**
      * showing edit data page
      *
-     * @param Request $request
-     * @param Work $work
      * @return Response
      */
     public function edit(Request $request, Work $work)
@@ -111,8 +105,6 @@ class WorkController extends StislaController
     /**
      * update data to db
      *
-     * @param WorkRequest $request
-     * @param Work $work
      * @return Response
      */
     public function update(WorkRequest $request, Work $work)
@@ -123,8 +115,6 @@ class WorkController extends StislaController
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param Work $work
      * @return Response
      */
     public function show(Request $request, Work $work)
@@ -135,7 +125,6 @@ class WorkController extends StislaController
     /**
      * delete data from db
      *
-     * @param Work $work
      * @return Response
      */
     public function destroy(Work $work)
@@ -146,8 +135,6 @@ class WorkController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

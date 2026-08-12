@@ -20,6 +20,7 @@ class RegisterRequest extends FormRequest
         if (Route::is('siaga-desa.register')) {
             return true;
         }
+
         return (new SettingRepository)->isActiveRegisterPage();
     }
 
@@ -33,20 +34,20 @@ class RegisterRequest extends FormRequest
         // dd($this->all());
         if (Route::is('api.register')) {
             return [
-                'name'                  => 'required',
-                'email'                 => 'required|email|unique:users,email',
-                'password'              => 'required|min:4|confirmed',
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:4|confirmed',
                 'password_confirmation' => 'required|min:4',
-                'phone_number'          => 'nullable|numeric',
+                'phone_number' => 'nullable|numeric',
             ];
         }
 
         if (Route::is('siaga-desa.register')) {
             return [
-                'full_name'                      => 'required',
-                'phone_number_register'          => 'required|numeric|unique:users,phone_number',
-                'dusun_rt_rw'                    => 'required',
-                'password_register'              => 'required|min:4',
+                'full_name' => 'required',
+                'phone_number_register' => 'required|numeric|unique:users,phone_number',
+                'dusun_rt_rw' => 'required',
+                'password_register' => 'required|min:4',
             ];
         }
 
@@ -54,15 +55,15 @@ class RegisterRequest extends FormRequest
         $isChat = config('stisla.app') === AppEnum::APP_CHAT;
 
         return [
-            'name'                  => 'required',
-            'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|min:4|confirmed',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:4|confirmed',
             'password_confirmation' => 'required|min:4',
-            'g-recaptcha-response'  => $isGoogleCaptcha ? 'required|captcha' : 'nullable',
-            'phone_number'          => 'nullable|numeric',
-            'nik'                   => $isChat ? 'required|numeric|unique:users,nik' : 'nullable|numeric|unique:users,nik',
-            'birth_date'            => $isChat ? 'required|date' : 'nullable|date',
-            'gender'                => $isChat ? 'required|in:' . User::GENDER_MALE . ',' . User::GENDER_FEMALE : 'nullable|in:' . User::GENDER_MALE . ',' . User::GENDER_FEMALE,
+            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable',
+            'phone_number' => 'nullable|numeric',
+            'nik' => $isChat ? 'required|numeric|unique:users,nik' : 'nullable|numeric|unique:users,nik',
+            'birth_date' => $isChat ? 'required|date' : 'nullable|date',
+            'gender' => $isChat ? 'required|in:'.User::GENDER_MALE.','.User::GENDER_FEMALE : 'nullable|in:'.User::GENDER_MALE.','.User::GENDER_FEMALE,
             'nik' => $isChat ? [
                 'required',
                 'digits:16',

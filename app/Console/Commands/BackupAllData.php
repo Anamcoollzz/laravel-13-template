@@ -23,8 +23,6 @@ class BackupAllData extends Command
 
     /**
      * File service
-     *
-     * @var FileService
      */
     protected FileService $fileService;
 
@@ -48,10 +46,12 @@ class BackupAllData extends Command
     {
         $date = $this->argument('date') ?? date('Y-m-d');
         $results = $this->fileService->backupDatabase($date);
-        if ($results[0])
+        if ($results[0]) {
             $this->info($results[1]);
-        else
+        } else {
             $this->error($results[1]);
+        }
+
         return 0;
     }
 }

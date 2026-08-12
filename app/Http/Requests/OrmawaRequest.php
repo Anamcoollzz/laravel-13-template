@@ -52,8 +52,7 @@ class OrmawaRequest extends FormRequest
             // 'password'          => $this->isMethod('put') ? 'nullable|min:6' : 'required|min:6',
             // 'avatar'            => $this->isMethod('put') ? 'nullable|image' : 'required|image',
 
-
-            'name'        => 'required|string|regex:/^[\pL\s.,]+$/u|max:50',
+            'name' => 'required|string|regex:/^[\pL\s.,]+$/u|max:50',
         ];
     }
 }

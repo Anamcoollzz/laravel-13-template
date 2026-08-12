@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class RepositoryAbstract
 {
-
     protected Model $model;
 
     /**
@@ -21,13 +20,11 @@ abstract class RepositoryAbstract
      *
      * @return Collection
      */
-    abstract function getLatest();
+    abstract public function getLatest();
 
     /**
      * get all data order by created at desc
      *
-     * @param string $column
-     * @param string $method
      * @return Collection
      */
     abstract public function getOrderBy(string $column, string $method = 'asc');
@@ -35,7 +32,6 @@ abstract class RepositoryAbstract
     /**
      * store data to db
      *
-     * @param array $data
      * @return Model
      */
     abstract public function create(array $data);
@@ -43,7 +39,6 @@ abstract class RepositoryAbstract
     /**
      * store data to db
      *
-     * @param array $data
      * @return Model
      */
     abstract public function store(array $data);
@@ -51,7 +46,7 @@ abstract class RepositoryAbstract
     /**
      * find data by id
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Model
      */
     abstract public function find($id);
@@ -59,8 +54,6 @@ abstract class RepositoryAbstract
     /**
      * update data by id
      *
-     * @param array $data
-     * @param int $id
      * @return Model
      */
     abstract public function update(array $data, int $id);
@@ -68,7 +61,6 @@ abstract class RepositoryAbstract
     /**
      * delete data by id
      *
-     * @param int $id
      * @return Model
      */
     abstract public function delete(int $id);
@@ -76,7 +68,6 @@ abstract class RepositoryAbstract
     /**
      * delete data by id
      *
-     * @param int $id
      * @return Model
      */
     abstract public function destroy(int $id);

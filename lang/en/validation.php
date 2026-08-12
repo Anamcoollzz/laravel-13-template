@@ -190,7 +190,7 @@ return [
     */
 
     'attributes' => [
-        'g-recaptcha-response' => 'google captcha'
+        'g-recaptcha-response' => 'google captcha',
     ],
 
 ];

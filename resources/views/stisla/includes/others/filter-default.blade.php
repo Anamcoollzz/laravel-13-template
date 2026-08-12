@@ -159,7 +159,7 @@
                 @include('stisla.includes.forms.selects.select', [
                     'id' => 'filter_created_by_id',
                     'name' => 'filter_created_by_id',
-                    'options' => $users->pluck('name', 'id')->toArray(),
+                    'options' => is_array($users) ? $users : $users->pluck('name', 'id')->toArray(),
                     'label' => 'Created By',
                     'required' => false,
                     'with_all' => true,
@@ -170,7 +170,7 @@
                 @include('stisla.includes.forms.selects.select', [
                     'id' => 'filter_last_updated_by_id',
                     'name' => 'filter_last_updated_by_id',
-                    'options' => $users->pluck('name', 'id')->toArray(),
+                    'options' => is_array($users) ? $users : $users->pluck('name', 'id')->toArray(),
                     'label' => 'Last Updated By',
                     'required' => false,
                     'with_all' => true,

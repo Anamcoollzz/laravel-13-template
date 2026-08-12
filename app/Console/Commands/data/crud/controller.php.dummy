@@ -6,10 +6,12 @@ use App\Http\Requests\REQUESTNAME;
 use App\Models\MODELNAME;
 use App\Repositories\REPOSITORYNAME;
 use App\Services\FileService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Helpers\Helper;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Barryvdh\DomPDF\Facade as PDF;
 
 class CONTROLLERNAME extends Controller
@@ -47,9 +49,9 @@ class CONTROLLERNAME extends Controller
     /**
      * showing data page
      *
-     * @return Response
+        * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('stisla.FOLDERVIEW.index', [
             'data' => $this->VARREPOSITORYNAME->getLatest(),
@@ -59,9 +61,9 @@ class CONTROLLERNAME extends Controller
     /**
      * show add new data page
      *
-     * @return Response
+        * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('stisla.FOLDERVIEW.form', [
 
@@ -72,9 +74,9 @@ class CONTROLLERNAME extends Controller
      * save new data to db
      *
      * @param REQUESTNAME $request
-     * @return Response
+        * @return RedirectResponse
      */
-    public function store(REQUESTNAME $request)
+    public function store(REQUESTNAME $request): RedirectResponse
     {
         $this->VARREPOSITORYNAME->create(
             array_merge(
@@ -93,9 +95,9 @@ class CONTROLLERNAME extends Controller
      * showing edit page
      *
      * @param MODELNAME $VARMODELNAME
-     * @return Response
+        * @return View
      */
-    public function edit(MODELNAME $VARMODELNAME)
+    public function edit(MODELNAME $VARMODELNAME): View
     {
         return view('stisla.FOLDERVIEW.form', [
             'd' => $VARMODELNAME,
@@ -107,9 +109,9 @@ class CONTROLLERNAME extends Controller
      *
      * @param REQUESTNAME $request
      * @param MODELNAME $VARMODELNAME
-     * @return Response
+        * @return RedirectResponse
      */
-    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
+    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME): RedirectResponse
     {
         $this->VARREPOSITORYNAME->update(
             array_merge(
@@ -129,9 +131,9 @@ class CONTROLLERNAME extends Controller
      * delete from db
      *
      * @param MODELNAME $VARMODELNAME
-     * @return Response
+        * @return RedirectResponse
      */
-    public function destroy(MODELNAME $VARMODELNAME)
+    public function destroy(MODELNAME $VARMODELNAME): RedirectResponse
     {
         $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
         return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
@@ -153,9 +155,9 @@ class CONTROLLERNAME extends Controller
      * import excel file to db
      *
      * @param \Illuminate\Http\Request $request
-     * @return Response
+        * @return RedirectResponse
      */
-    public function importExcel(\Illuminate\Http\Request $request)
+    public function importExcel(\Illuminate\Http\Request $request): RedirectResponse
     {
         $request->validate([
             'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -169,7 +171,7 @@ class CONTROLLERNAME extends Controller
      *
      * @return Response
      */
-    public function json()
+    public function json(): Response
     {
         $data = $this->VARREPOSITORYNAME->getLatest();
         return $this->fileService->downloadJson($data, 'FOLDERVIEWs.json');
@@ -180,7 +182,7 @@ class CONTROLLERNAME extends Controller
      *
      * @return Response
      */
-    public function excel()
+    public function excel(): Response
     {
         $data = $this->VARREPOSITORYNAME->getLatest();
         return (new MODELNAMEExport($data))->download('FOLDERVIEWs.xlsx', \Maatwebsite\Excel\Excel::XLSX);
@@ -191,7 +193,7 @@ class CONTROLLERNAME extends Controller
      *
      * @return Response
      */
-    public function csv()
+    public function csv(): Response
     {
         $data = $this->VARREPOSITORYNAME->getLatest();
         return (new MODELNAMEExport($data))->download('FOLDERVIEWs.csv', \Maatwebsite\Excel\Excel::CSV);
@@ -202,7 +204,7 @@ class CONTROLLERNAME extends Controller
      *
      * @return Response
      */
-    public function pdf()
+    public function pdf(): Response
     {
         $data = $this->VARREPOSITORYNAME->getLatest();
         return PDF::setPaper('Letter', 'landscape')

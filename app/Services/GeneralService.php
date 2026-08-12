@@ -15,7 +15,7 @@ class GeneralService
      */
     public function __construct()
     {
-        $this->agent = new Agent();
+        $this->agent = new Agent;
     }
 
     /**
@@ -51,7 +51,7 @@ class GeneralService
     /**
      * check if user is using mobile device
      *
-     * @return boolean
+     * @return bool
      */
     public function isMobile()
     {
@@ -61,7 +61,7 @@ class GeneralService
     /**
      * check if user is using desktop device
      *
-     * @return boolean
+     * @return bool
      */
     public function isDesktop()
     {

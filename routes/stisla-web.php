@@ -3,15 +3,16 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\YoutubeController;
 use Illuminate\Support\Facades\Route;
 
-# DASHBOARD
+// DASHBOARD
 Route::get('/', [DashboardController::class, 'home'])->name('home');
 
-# AUTH
+// AUTH
 Route::get('auth/login', [AuthController::class, 'loginForm'])->name('login');
 Route::get('autentikasi/masuk', [AuthController::class, 'formMasuk'])->name('form-masuk');
 Route::post('autentikasi/masuk', [AuthController::class, 'masuk']);
@@ -35,22 +36,22 @@ Route::post('siaga-desa/auth/register', [AuthController::class, 'registerSiagaDe
 Route::post('siaga-desa/auth/logout', [AuthController::class, 'logout'])->middleware('auth')->name('siaga-desa.logout-post');
 Route::get('siaga-desa/auth/logout', [AuthController::class, 'logout'])->middleware('auth')->name('siaga-desa.logout-get');
 
-# SOCIAL LOGIN AND REGISTER
+// SOCIAL LOGIN AND REGISTER
 Route::get('auth/social-login/{provider}', [AuthController::class, 'socialLogin'])->name('social-login');
 Route::get('auth/social-register/{provider}', [AuthController::class, 'socialRegister'])->name('social-register');
 Route::get('auth/social/{provider}/callback', [AuthController::class, 'socialCallback'])->name('social-callback');
 
-# CRUD GENERATOR
+// CRUD GENERATOR
 Route::get('crud-generator', [CrudController::class, 'index'])->middleware('auth');
 Route::post('crud-generator', [CrudController::class, 'generateJson'])->middleware('auth');
 
-# YOUTUBE
+// YOUTUBE
 Route::get('youtube/view-sync', [YoutubeController::class, 'viewSync'])->name('youtube.view-sync')->middleware('auth');
 
-# TEST
+// TEST
 Route::get('test', [TestingController::class, 'test'])->name('test');
 
-Route::get('select-education-level', [\App\Http\Controllers\EducationLevelController::class, 'select'])->name('select-education-level.index');
-Route::get('set-education-level/{education_level_id}', [\App\Http\Controllers\EducationLevelController::class, 'set'])->name('set-education-level');
+Route::get('select-education-level', [EducationLevelController::class, 'select'])->name('select-education-level.index');
+Route::get('set-education-level/{education_level_id}', [EducationLevelController::class, 'set'])->name('set-education-level');
 
 Route::get('users/contoh-impor-xlxs2222', [UserManagementController::class, 'importExcelExample2'])->name('user-management.users.import-excel-example');

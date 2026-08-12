@@ -46,9 +46,8 @@ class StudyProgramRequest extends FormRequest
             // "barcode"           => "required",
             // "qr_code"           => "required",
 
-
-            'name'        => 'required',
-            'faculty_id'        => 'required|numeric|exists:faculties,id',
+            'name' => 'required',
+            'faculty_id' => 'required|numeric|exists:faculties,id',
         ];
     }
 }

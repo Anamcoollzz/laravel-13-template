@@ -54,5 +54,5 @@ return [
         'roles' => ['superadmin', 'admin'],
         'group' => 'Alumni',
         'table' => 'students',
-    ]
+    ],
 ];

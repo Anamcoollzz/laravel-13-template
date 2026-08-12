@@ -30,10 +30,11 @@ class TestingController extends Controller
         // $content = file_get_contents(database_path('seeders/data/settings.json'));
         // $content = file_get_contents(database_path('seeders/data/users.json'));
         $content = file_get_contents(database_path('seeders/data/settings2.json'));
-        $content = str_replace(":", " =>", $content);
+        $content = str_replace(':', ' =>', $content);
         $content = str_replace('"', "'", $content);
-        $content = str_replace("}", "]", $content);
-        $content = str_replace("{", "[", $content);
-        return '<pre>' . $content . '</pre>';
+        $content = str_replace('}', ']', $content);
+        $content = str_replace('{', '[', $content);
+
+        return '<pre>'.$content.'</pre>';
     }
 }

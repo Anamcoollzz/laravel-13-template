@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class StudentController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -24,9 +23,9 @@ class StudentController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-users';
+        $this->icon = 'fa fa-users';
         $this->repository = new StudentRepository;
-        $this->prefix     = $this->viewFolder            = 'students';
+        $this->prefix = $this->viewFolder = 'students';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new StudentImport;
 
@@ -42,28 +41,29 @@ class StudentController extends StislaController
     {
         $request = request();
         $data = request()->only([
-            "name",
-            "nim",
+            'name',
+            'nim',
             // "birth_date",
-            "study_program_id",
+            'study_program_id',
             // "user_id",
-            "class_year",
-            "student_status",
+            'class_year',
+            'student_status',
             // "graduation_year",
         ]);
 
         if (is_mahasiswa()) {
             $request = request();
             $data = request()->only([
-                "name",
+                'name',
             ]);
         }
 
         // $data['currency']     = idr_to_double($request->currency);
         // $data['currency_idr'] = rp_to_double($request->currency_idr);
 
-        if ($request->hasFile('photo'))
+        if ($request->hasFile('photo')) {
             $data['photo'] = $this->fileService->uploadPhoto($request->file('photo'));
+        }
 
         // if ($request->hasFile('image'))
         //     $data['image'] = $this->fileService->uploadStudentFile($request->file('image'));
@@ -83,7 +83,6 @@ class StudentController extends StislaController
     /**
      * showing student page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -94,7 +93,6 @@ class StudentController extends StislaController
     /**
      * showing add new student page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
@@ -105,27 +103,25 @@ class StudentController extends StislaController
     /**
      * save new student to db
      *
-     * @param StudentRequest $request
      * @return Response
      */
     public function store(StudentRequest $request)
     {
         $data = $this->userRepository->create([
-            'name'         => $request->name,
-            'email'        => $request->email,
-            'password'     => bcrypt($request->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
             'phone_number' => $request->phone_number,
-            'birth_date'   => $request->birth_date,
-            'address'      => $request->address,
+            'birth_date' => $request->birth_date,
+            'address' => $request->address,
         ]);
+
         return $this->executeStore($request, withUser: true, data: ['user_id' => $data->id]);
     }
 
     /**
      * showing edit student page
      *
-     * @param Request $request
-     * @param Student $student
      * @return Response
      */
     public function edit(Request $request, Student $student)
@@ -133,16 +129,15 @@ class StudentController extends StislaController
         if (auth_user()->hasRole('mahasiswa') && $student->user_id != auth_id()) {
             abort(404);
         }
+
         return $this->prepareDetailForm($request, $student, false, [
-            'prodi_options' => (new StudyProgramRepository)->getSelectOptions()
+            'prodi_options' => (new StudyProgramRepository)->getSelectOptions(),
         ]);
     }
 
     /**
      * update data to db
      *
-     * @param StudentRequest $request
-     * @param Student $student
      * @return Response
      */
     public function update(StudentRequest $request, Student $student)
@@ -151,21 +146,20 @@ class StudentController extends StislaController
             abort(404);
         }
         $this->userRepository->update([
-            'name'         => $request->name,
-            'email'        => $request->email,
-            'password'     => $request->password ? bcrypt($request->password) : $student->user?->password,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password ? bcrypt($request->password) : $student->user?->password,
             'phone_number' => $request->phone_number,
-            'birth_date'   => $request->birth_date,
-            'address'      => $request->address,
+            'birth_date' => $request->birth_date,
+            'address' => $request->address,
         ], $student->user_id);
+
         return $this->executeUpdate($request, $student, withUser: true);
     }
 
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param Student $student
      * @return Response
      */
     public function show(Request $request, Student $student)
@@ -173,13 +167,13 @@ class StudentController extends StislaController
         if (auth_user()->hasRole('mahasiswa') && $student->user_id != auth_id()) {
             abort(404);
         }
+
         return $this->prepareDetailForm($request, $student, true, ['prodi_options' => (new StudyProgramRepository)->getSelectOptions()]);
     }
 
     /**
      * delete student from db
      *
-     * @param Student $student
      * @return Response
      */
     public function destroy(Student $student)
@@ -187,14 +181,13 @@ class StudentController extends StislaController
         if (auth_user()->hasRole('mahasiswa') && $student->user_id != auth_id()) {
             abort(404);
         }
+
         // $this->fileService->deleteStudentFile($student);
         return $this->executeDestroy($student);
     }
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

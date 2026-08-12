@@ -6,11 +6,8 @@ use App\Models\ModelName;
 
 class NameRepository extends Repository
 {
-
     /**
-     * constructor method
-     *
-     * @return void
+     * Create a new repository instance.
      */
     public function __construct()
     {

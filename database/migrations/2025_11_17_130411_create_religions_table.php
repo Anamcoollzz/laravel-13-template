@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::dropIfExists('religions');
-        if (!in_array('religions', config('stisla.table_excludes')))
+        if (! in_array('religions', config('stisla.table_excludes'))) {
             Schema::create('religions', function (Blueprint $table) {
                 $table->id();
                 $table->string('religion_name', 50)->comment('Nama Agama');
@@ -25,6 +25,7 @@ return new class extends Migration
                 $table->foreign('created_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
                 $table->foreign('last_updated_by_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
             });
+        }
     }
 
     /**

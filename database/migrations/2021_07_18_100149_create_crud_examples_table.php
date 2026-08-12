@@ -13,7 +13,7 @@ class CreateCrudExamplesTable extends Migration
      */
     public function up()
     {
-        if (!in_array('crud_examples', config('stisla.table_excludes'))) {
+        if (! in_array('crud_examples', config('stisla.table_excludes'))) {
             Schema::dropIfExists('crud_examples');
             Schema::create('crud_examples', function (Blueprint $table) {
                 $table->id();

@@ -3,8 +3,8 @@
 /**
  * format number to rp format
  *
- * @param float|int $number
- * @param int $decimals
+ * @param  float|int  $number
+ * @param  int  $decimals
  * @return string
  */
 function rp($number, $decimals = 0)
@@ -15,8 +15,8 @@ function rp($number, $decimals = 0)
 /**
  * format number to dollar format
  *
- * @param float|int $number
- * @param int $decimals
+ * @param  float|int  $number
+ * @param  int  $decimals
  * @return string
  */
 function dollar($number, $decimals = 0)
@@ -27,8 +27,8 @@ function dollar($number, $decimals = 0)
 /**
  * format number to idr format
  *
- * @param float|int $number
- * @param int $decimals
+ * @param  float|int  $number
+ * @param  int  $decimals
  * @return string
  */
 function idr($number, $decimals = 0)
@@ -39,7 +39,7 @@ function idr($number, $decimals = 0)
 /**
  * convert idr to double
  *
- * @param string $value
+ * @param  string  $value
  * @return float
  */
 function idr_to_double($value)
@@ -50,7 +50,7 @@ function idr_to_double($value)
 /**
  * convert rp to double
  *
- * @param string $value
+ * @param  string  $value
  * @return float
  */
 function rp_to_double($value)

@@ -49,8 +49,8 @@ class BankRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-                $this->isMethod('put') ? 'unique:banks,name,' . $this->bank->id : 'unique:banks,name'
-            ]
+                $this->isMethod('put') ? 'unique:banks,name,'.$this->bank->id : 'unique:banks,name',
+            ],
         ];
     }
 }

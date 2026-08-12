@@ -59,7 +59,7 @@ class LaravelVersionCheckerService
     public function isOutdated(): bool
     {
         $current = $this->getCurrentVersion();
-        $latest  = $this->getLatestVersion();
+        $latest = $this->getLatestVersion();
 
         if (! $latest) {
             return false; // kalau gagal cek, jangan ganggu user

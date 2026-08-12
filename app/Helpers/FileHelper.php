@@ -1,32 +1,33 @@
 <?php
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * getFileNamesFromDir
  *
- * @param string $path
- * @return \Illuminate\Support\Collection
+ * @return Collection
  */
 function getFileNamesFromDir(string $path)
 {
     $files = File::files($path);
     $files = collect($files);
-    $fileNames = $files->map(function (\Symfony\Component\Finder\SplFileInfo $file) {
+    $fileNames = $files->map(function (SplFileInfo $file) {
         return $file->getRelativePathname();
     });
+
     return $fileNames;
 }
 
 /**
  * create folder
  *
- * @param string $folderName
  * @return void
  */
 function createFolder(string $folderName)
 {
-    if (!file_exists($folderName)) {
+    if (! file_exists($folderName)) {
         mkdir($folderName);
     }
 }

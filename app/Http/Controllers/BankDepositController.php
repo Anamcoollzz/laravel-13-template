@@ -16,8 +16,6 @@ class BankDepositController extends StislaController
 {
     /**
      * bank deposit repository
-     *
-     * @var BankRepository
      */
     private BankRepository $bankRepository;
 
@@ -30,11 +28,11 @@ class BankDepositController extends StislaController
     {
         parent::__construct();
 
-        $this->icon           = 'fa fa-dollar';
-        $this->repository     = new BankDepositRepository;
+        $this->icon = 'fa fa-dollar';
+        $this->repository = new BankDepositRepository;
         $this->bankRepository = new BankRepository;
-        $this->prefix         = $this->viewFolder = 'bank-deposits';
-        $this->pdfPaperSize   = 'A3';
+        $this->prefix = $this->viewFolder = 'bank-deposits';
+        $this->pdfPaperSize = 'A3';
         // $this->import     = new GeneralImport;
 
         $this->defaultMiddleware($this->title = 'Deposito Bank');
@@ -64,14 +62,15 @@ class BankDepositController extends StislaController
         $perAnum = $data['per_anum'];
         $amount = $data['amount'] = rp_to_double($request->amount);
 
-        if ($data['time_period'] === '1 Bulan')
-            $perMonth           = $amount * $perAnum / 100 / 12;
-        else if ($data['time_period'] === '14 Hari')
-            $perMonth           = $amount * $perAnum / 100 / 12 / 2;
-        else if ($data['time_period'] === '7 Hari')
-            $perMonth           = $amount * $perAnum / 100 / 12 / 2 / 2;
+        if ($data['time_period'] === '1 Bulan') {
+            $perMonth = $amount * $perAnum / 100 / 12;
+        } elseif ($data['time_period'] === '14 Hari') {
+            $perMonth = $amount * $perAnum / 100 / 12 / 2;
+        } elseif ($data['time_period'] === '7 Hari') {
+            $perMonth = $amount * $perAnum / 100 / 12 / 2 / 2;
+        }
 
-        $data['tax']        = $tax = $perMonth * ($data['tax_percentage'] / 100);
+        $data['tax'] = $tax = $perMonth * ($data['tax_percentage'] / 100);
         $data['estimation'] = $perMonth - $tax;
 
         if ($request->realization) {
@@ -92,7 +91,6 @@ class BankDepositController extends StislaController
     /**
      * showing bank deposit page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -101,25 +99,25 @@ class BankDepositController extends StislaController
         $data = $this->repository->getFullDataWith(['bank:id,name,bank_type'], orderBy: ['due_date' => 'asc'], where: [
             'status' => $request->status ?? 'Aktif',
         ]);
+
         return $this->prepareIndex($request, ['data' => $data]);
     }
 
     /**
      * showing add new bank deposit page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
     {
         $bank_options = $this->bankRepository->getSelectOptions();
+
         return $this->prepareCreateForm($request, ['bank_options' => $bank_options]);
     }
 
     /**
      * save new bank deposit to db
      *
-     * @param BankDepositRequest $request
      * @return Response
      */
     public function store(BankDepositRequest $request)
@@ -130,21 +128,18 @@ class BankDepositController extends StislaController
     /**
      * showing edit bank deposit page
      *
-     * @param Request $request
-     * @param BankDeposit $bankDeposit
      * @return Response
      */
     public function edit(Request $request, BankDeposit $bankDeposit)
     {
         $bank_options = $this->bankRepository->getSelectOptions();
+
         return $this->prepareDetailForm($request, $bankDeposit, false, ['bank_options' => $bank_options]);
     }
 
     /**
      * update data to db
      *
-     * @param BankDepositRequest $request
-     * @param BankDeposit $bankDeposit
      * @return Response
      */
     public function update(BankDepositRequest $request, BankDeposit $bankDeposit)
@@ -155,8 +150,6 @@ class BankDepositController extends StislaController
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param BankDeposit $bankDeposit
      * @return Response
      */
     public function show(Request $request, BankDeposit $bankDeposit)
@@ -167,7 +160,6 @@ class BankDepositController extends StislaController
     /**
      * delete bank deposit from db
      *
-     * @param BankDeposit $bankDeposit
      * @return Response
      */
     public function destroy(BankDeposit $bankDeposit)
@@ -178,8 +170,6 @@ class BankDepositController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {
@@ -192,12 +182,11 @@ class BankDepositController extends StislaController
 
     /**
      * save bank deposit to history
-     *
-     * @return RedirectResponse
      */
     public function saveToHistory(): RedirectResponse
     {
         $this->repository->saveToHistory();
+
         return backSuccess('Berhasil menyimpan data ke riwayat deposito bank');
     }
 }

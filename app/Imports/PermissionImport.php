@@ -11,18 +11,13 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionImport implements ToCollection, WithHeadingRow
 {
-
     /**
      * Permission repository
-     *
-     * @var PermissionRepository
      */
     private PermissionRepository $permissionRepository;
 
     /**
      * Permission group repository
-     *
-     * @var PermissionGroupRepository
      */
     private PermissionGroupRepository $permissionGroupRepository;
 
@@ -33,8 +28,8 @@ class PermissionImport implements ToCollection, WithHeadingRow
      */
     public function __construct()
     {
-        $this->permissionRepository      = new PermissionRepository();
-        $this->permissionGroupRepository = new PermissionGroupRepository();
+        $this->permissionRepository = new PermissionRepository;
+        $this->permissionGroupRepository = new PermissionGroupRepository;
     }
 
     /**

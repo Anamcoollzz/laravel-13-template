@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AlumniController extends StislaController
 {
-
     /**
      * constructor method
      *
@@ -22,9 +21,9 @@ class AlumniController extends StislaController
     {
         parent::__construct();
 
-        $this->icon       = 'fa fa-users';
+        $this->icon = 'fa fa-users';
         $this->repository = new AlumniRepository;
-        $this->prefix     = $this->viewFolder            = 'alumnis';
+        $this->prefix = $this->viewFolder = 'alumnis';
         $this->pdfPaperSize = 'A2';
         // $this->import     = new AlumniImport;
 
@@ -65,7 +64,6 @@ class AlumniController extends StislaController
     /**
      * showing data page
      *
-     * @param Request $request
      * @return Response
      */
     public function index(Request $request)
@@ -86,7 +84,6 @@ class AlumniController extends StislaController
     /**
      * showing add new data page
      *
-     * @param Request $request
      * @return Response
      */
     public function create(Request $request)
@@ -97,7 +94,6 @@ class AlumniController extends StislaController
     /**
      * save new data to db
      *
-     * @param AlumniRequest $request
      * @return Response
      */
     public function store(AlumniRequest $request)
@@ -108,8 +104,6 @@ class AlumniController extends StislaController
     /**
      * showing edit data page
      *
-     * @param Request $request
-     * @param Alumni $alumni
      * @return Response
      */
     public function edit(Request $request, Alumni $alumni)
@@ -120,8 +114,6 @@ class AlumniController extends StislaController
     /**
      * update data to db
      *
-     * @param AlumniRequest $request
-     * @param Alumni $alumni
      * @return Response
      */
     public function update(AlumniRequest $request, Alumni $alumni)
@@ -132,8 +124,6 @@ class AlumniController extends StislaController
     /**
      * show detail page
      *
-     * @param Request $request
-     * @param Alumni $alumni
      * @return Response
      */
     public function show(Request $request, Alumni $alumni)
@@ -144,7 +134,6 @@ class AlumniController extends StislaController
     /**
      * delete data from db
      *
-     * @param Alumni $alumni
      * @return Response
      */
     public function destroy(Alumni $alumni)
@@ -155,8 +144,6 @@ class AlumniController extends StislaController
 
     /**
      * download import example
-     *
-     * @return BinaryFileResponse
      */
     public function importExcelExample(): BinaryFileResponse
     {

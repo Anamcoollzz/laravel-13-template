@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Work;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
@@ -10,11 +11,10 @@ use Illuminate\Support\Str;
 
 class WorkSeeder extends Seeder
 {
-
     /**
      * Generate a gravatar image URL based on the email address.
      *
-     * @param string $email
+     * @param  string  $email
      * @return string
      */
     public function generateImage($email)
@@ -25,7 +25,7 @@ class WorkSeeder extends Seeder
         $hash = hash('sha256', $address);
 
         // Grab the actual image URL
-        return 'https://gravatar.com/avatar/' . $hash;
+        return 'https://gravatar.com/avatar/'.$hash;
     }
 
     /**
@@ -35,13 +35,15 @@ class WorkSeeder extends Seeder
      */
     public function run()
     {
-        if (!Schema::hasTable('works')) return;
+        if (! Schema::hasTable('works')) {
+            return;
+        }
         Schema::disableForeignKeyConstraints();
-        $data         = [];
-        $faker        = \Faker\Factory::create('id_ID');
-        $options      = array_values(get_options());
+        $data = [];
+        $faker = Factory::create('id_ID');
+        $options = array_values(get_options());
         $radioOptions = array_values(get_options(4));
-        $now          = now();
+        $now = now();
         $pass = bcrypt('password');
         $jobs = file_get_contents(database_path('seeders/data/jobs.json'));
         $jobs = json_decode($jobs, true);
@@ -49,27 +51,27 @@ class WorkSeeder extends Seeder
         $data[] = [
             'job_name' => 'Belum Bekerja',
             'department' => null,
-            'created_at'         => $now,
-            'updated_at'         => $now,
-            'created_by_id'      => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+            'created_by_id' => 1,
             'last_updated_by_id' => null,
         ];
         foreach ($jobs as $job) {
             $data[] = [
                 'job_name' => $job['pekerjaan'],
                 'department' => $job['departemen'] ?? null,
-                'created_at'         => $now,
-                'updated_at'         => $now,
-                'created_by_id'      => 1,
+                'created_at' => $now,
+                'updated_at' => $now,
+                'created_by_id' => 1,
                 'last_updated_by_id' => null,
             ];
         }
         $data[] = [
             'job_name' => 'Lainnya',
             'department' => null,
-            'created_at'         => $now,
-            'updated_at'         => $now,
-            'created_by_id'      => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+            'created_by_id' => 1,
             'last_updated_by_id' => null,
         ];
         // foreach (range(1, 100) as $i) {

@@ -9,20 +9,18 @@ class GeneralController extends Controller
 {
     /**
      * Repository $repository
-     *
-     * @var Repository
      */
     private Repository $repository;
 
     /**
      * constructor method
      *
-     * @param Repository $repository
+     * @param  Repository  $repository
      * @return void
      */
     public function __construct()
     {
-        $this->repository = new Repository();
+        $this->repository = new Repository;
     }
 
     /**
@@ -34,7 +32,7 @@ class GeneralController extends Controller
 
         return response()->json([
             'message' => 'Data berhasil ditampilkan',
-            'data'    => $result
+            'data' => $result,
         ]);
     }
 
@@ -47,7 +45,7 @@ class GeneralController extends Controller
 
         return response()->json([
             'message' => 'Data berhasil ditambahkan',
-            'data'    => $result
+            'data' => $result,
         ]);
     }
 
@@ -60,7 +58,7 @@ class GeneralController extends Controller
 
         return response()->json([
             'message' => 'Data berhasil ditampilkan',
-            'data'    => $result
+            'data' => $result,
         ]);
     }
 
@@ -73,7 +71,7 @@ class GeneralController extends Controller
 
         return response()->json([
             'message' => 'Data berhasil diperbarui',
-            'data'    => $result
+            'data' => $result,
         ]);
     }
 
@@ -86,7 +84,7 @@ class GeneralController extends Controller
 
         return response()->json([
             'message' => 'Data berhasil dihapus',
-            'data'    => $result
+            'data' => $result,
         ]);
     }
 }
