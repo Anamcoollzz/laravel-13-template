@@ -64,7 +64,7 @@ class CONTROLLERNAME extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $data = $this->VARREPOSITORYNAME->getPaginate();
         $successMessage = successMessageLoadData("TITLE");
@@ -77,7 +77,7 @@ class CONTROLLERNAME extends Controller
      * @param MODELNAME $VARMODELNAME
      * @return JsonResponse
      */
-    public function show(MODELNAME $VARMODELNAME)
+    public function show(MODELNAME $VARMODELNAME): JsonResponse
     {
         $successMessage = successMessageLoadData("TITLE");
         return response200($VARMODELNAME, $successMessage);
@@ -89,7 +89,7 @@ class CONTROLLERNAME extends Controller
      * @param REQUESTNAME $request
      * @return JsonResponse
      */
-    public function store(REQUESTNAME $request)
+    public function store(REQUESTNAME $request): JsonResponse
     {
         $request = request();
 $data = request()->only([
@@ -127,7 +127,7 @@ COLUMNS
      * @param MODELNAME $VARMODELNAME
      * @return JsonResponse
      */
-    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
+    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME): JsonResponse
     {
         $request = request();
 $data = request()->only([
@@ -165,7 +165,7 @@ COLUMNS
      * @param MODELNAME $VARMODELNAME
      * @return JsonResponse
      */
-    public function destroy(MODELNAME $VARMODELNAME)
+    public function destroy(MODELNAME $VARMODELNAME): JsonResponse
     {
         $deletedRow = $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
 

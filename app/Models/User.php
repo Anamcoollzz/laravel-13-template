@@ -220,12 +220,12 @@ class User extends Authenticatable implements JWTSubject
             if (StringHelper::isUrl($this->avatar)) {
                 return $this->avatar;
             }
-            if (Storage::exists('public/avatars/' . $this->avatar)) {
-                return asset('storage/avatars/' . $this->avatar);
+            if (Storage::exists('public/avatars/'.$this->avatar)) {
+                return asset('storage/avatars/'.$this->avatar);
             }
         }
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random&size=128';
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=random&size=128';
 
         return null;
     }

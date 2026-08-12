@@ -396,7 +396,7 @@ Route::delete('$prefix-truncate', [\App\Http\Controllers\\{$name}Controller::cla
         // exec('cp ' . $model . ' ' . ($path = base_path('app/Models/' . $name . '.php')));
         $this->copy($model, $path = base_path('app/Models/'.$name.'.php'));
         file_put_contents($path, str_replace('CrudExample', $name, file_get_contents($path)));
-        file_put_contents($path, str_replace('//columns', "\n            ".implode("\n            ", array_map(fn ($col) => "'$col',", $columnsArray)), file_get_contents($path)));
+        file_put_contents($path, str_replace('FILLABLES', "\n            ".implode("\n            ", array_map(fn ($col) => "'$col',", $columnsArray)), file_get_contents($path)));
         file_put_contents($path, str_replace(', SoftDeletes', '', file_get_contents($path)));
         if ($softDeletes) {
             file_put_contents($path, str_replace('//softdeletes', 'use SoftDeletes;', file_get_contents($path)));

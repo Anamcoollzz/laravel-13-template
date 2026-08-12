@@ -66,7 +66,7 @@ class ChatMessage extends Model
                 return $this->fromUser->avatar_url;
             }
 
-            return url('stisla') . '/assets/img/avatar/avatar-1.png';
+            return url('stisla').'/assets/img/avatar/avatar-1.png';
         }
         if ($this->toUser && $this->toUser->avatar_url) {
             // dd($this->toUser->avatar_url);
@@ -74,7 +74,7 @@ class ChatMessage extends Model
         }
 
         // Return a default avatar or implement logic to fetch user avatar
-        return url('stisla') . '/assets/img/avatar/avatar-3.png';
+        return url('stisla').'/assets/img/avatar/avatar-3.png';
     }
 
     /**
